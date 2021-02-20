@@ -1,11 +1,20 @@
-//mport {three_axis} from '../../objects/axis.js';
+//import {three_axis} from '../../objects/axis.js';
 //import {stade} from '../js/stade.js';
+import * as THREE from '../lib/node_modules/three/build/three.module.js';
+import { OrbitControls } from '../lib/node_modules/three/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from '../lib/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+import {ColladaLoader} from '../lib/node_modules/three/examples/jsm/loaders/ColladaLoader.js';
+import Stats from '../lib/node_modules/three/examples/jsm/libs/stats.module.js';
+
+import Menu from '../js/menu.js';
+import Level from '../js/level.js';
+
+//import essai from './essai.js';
 
 let container, w, h, scene, camera, controls, renderer, stats, light;
 let loop = {}; // info de la boucle du jeu
 let axis, grid
 let keyboard = new THREEx.KeyboardState();
-
 let geometry, material;
 
 //camera
@@ -13,13 +22,18 @@ let lockCam = true;
 
 //variables pour les aliens
 let aliens;
-let aliensColumns, aliensRows;
+//let aliensColumns, aliensRows;
 let posAlien = true; //position des aliens
 let aliensSize;//taille en x, y, z
 let alienTab = []; //contient le groupe d'alien dans un tableau
 let missileAliens, missileAliensTire = false;
 let cptAliens;
 let nbLives = 3;
+let vitesseAliens = 0.05;
+
+
+let loadObject = false;
+let box;
 
 //variables pour le vaisseau
 let spaceship;
@@ -36,13 +50,22 @@ let bunkTab = [];
 
 //Variables pour la partie
 let partieFinie = false;
+let partiePrete = true;
 
-let box;
+//variable menu
+let menu;
+
+//variable pour les niveaux
+let lvl;
+let level = 1;
 
 window.addEventListener('load', go);
 window.addEventListener('resize', resize);
 
-function createAlien(aliensColumns, nbAliens){
+
+async function createAlien(aliensColumns, nbAliens){
+  partiePrete = false;
+  //Chargement des models
   cptAliens = nbAliens;
   let nbColumns = nbAliens/aliensColumns;
   aliens = new THREE.Group();
@@ -51,44 +74,62 @@ function createAlien(aliensColumns, nbAliens){
     let nb = parseInt(i/aliensColumns);
     posZ = nb;
     posX = i%aliensColumns - ((aliensColumns-1)/2);
-    /*if(nb == 0){
-      let rounard;
-      let loader = new THREE.ColladaLoader();
-      loader.load('../src/medias/models/Crazy_Redd/Crazy_Redd.dae', (res) => {
-        rounard = res.scene;
-        rounard.scale.set(0.1,0.1,0.1);
-        rounard.position.set( posX*2, 0, posZ*2 );
-        rounard.rotation.z = 15.7;
-        aliens.add(rounard);
-        alienTab.push(rounard);
-      });
-
-    }else if(nb == 1){
-      let tm;
-      let loader = new THREE.ColladaLoader();
-      loader.load('../src/medias/models/Timmy and Tommy/Timmy & Tommy Nook.dae', (res) => {
-        tm = res.scene;
-        tm.scale.set(0.1,0.1,0.1);
-        tm.position.set( posX*2, 0, posZ*2 );
-        tm.rotation.z = 15.7;
-        aliens.add(tm);
-        alienTab.push(tm);
-      });
-    }else{*/
+    if(nb == 0){
       geometry = new THREE.BoxGeometry( 1, 1, 1 );
-      material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent : true, opacity: 1.0} );
-      const cube = new THREE.Mesh( geometry, material );
+      material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent : true, opacity: 0.0} );
+      let cube = new THREE.Mesh( geometry, material );
       cube.position.set( posX*2, 0, posZ*2 );
+      const loader = new GLTFLoader();
+      const loadedData = await loader.loadAsync('../src/medias/models/tom_nook/scene.gltf');
+      let object = loadedData.scene;
+      console.log('2');
+      object.scale.set(0.5,0.5,0.5);
+      object.rotation.y = 15.7;
+      object.name = "Tom Nook";
+      object.visible = true;
+      cube.add(object);
       aliens.add(cube);
       alienTab.push(cube);
-    //}
+    }else if(nb == 1){
+      geometry = new THREE.BoxGeometry( 1, 1, 1 );
+      material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent : true, opacity: 0.0} );
+      const cubeTorti = new THREE.Mesh( geometry, material );
+      cubeTorti.position.set( posX*2, 0, posZ*2 );
+      const loader = new GLTFLoader();
+      const loadedData2 = await loader.loadAsync('../src/medias/models/Tortimer/ttl/tortimer.gltf');
+      let object = loadedData2.scene;
+      object.scale.set(0.05,0.05,0.05);
+      object.rotation.x = 89.5;
+      object.rotation.z = 15.5;
+      object.name = "Tortimer";
+      object.visible = true;
+      cubeTorti.add(object);
+      aliens.add(cubeTorti);
+      alienTab.push(cubeTorti);
+    }else if(nb == 2){
+      geometry = new THREE.BoxGeometry( 1, 1, 1 );
+      material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent : true, opacity: 0.0} );
+      const cubeRounard = new THREE.Mesh( geometry, material );
+      cubeRounard.position.set( posX*2, 0, posZ*2 );
+      const loader2 = new ColladaLoader();
+      const loadedData3 = await loader2.loadAsync('../src/medias/models/Crazy_Redd/Crazy_Redd.dae');
+      let object = loadedData3.scene;
+      object.scale.set(0.15,0.15,0.15);
+      object.rotation.z = 15.5;
+      object.name = "Rounard";
+      object.visible = true;
+      cubeRounard.add(object);
+      aliens.add(cubeRounard);
+      alienTab.push(cubeRounard);
+    }
   }
   let xSize = aliensColumns * 2 - 1, ySize = 1, zSize = nbAliens / aliensColumns;
   aliensSize = {x: xSize, y: ySize, z: zSize};
   aliens.position.z = 10;
   scene.add(aliens);
   box = new THREE.Box3().setFromObject(aliens);
-  console.log(box);
+  loadObject = true;
+  partiePrete = true;
 }
 
 function createMissileAliens(){
@@ -138,6 +179,8 @@ function createBunker(){
 }
 
 function go() {
+  menu = new Menu();
+  menu.loadMenu();
   init();
   gameLoop();
 }
@@ -152,7 +195,7 @@ function init() {
   camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 100);
   camera.position.set(0, 8, -20);
 
-  controls = new THREE.OrbitControls(camera, container, container);
+  controls = new OrbitControls(camera, container);
   controls.target = new THREE.Vector3(0, 0, 0);
   controls.panSpeed = 0.3;
 
@@ -165,9 +208,8 @@ function init() {
 
   // add Stats.js - https://github.com/mrdoob/stats.js
   stats = new Stats();
-  stats.domElement.style.position	= 'absolute';
-  stats.domElement.style.bottom	= '0px';
-  stats.domElement.style.right = '0px';
+  stats.domElement.style.removeProperty('top');
+  stats.domElement.style.bottom = '0px';
   document.body.appendChild( stats.domElement );
 
   grid = new THREE.GridHelper( 100, 100 );
@@ -184,14 +226,16 @@ function init() {
   light.position.set( -10,10,-10 ).normalize();
   scene.add(light);
 
+
   //Création des aliens
-  createAlien(6,12);
+  createAlien(6,18);
 
   //création du vaisseau
   createSpaceship();
 
   //création des bunkers
   createBunker();
+
 
   //Création du missile
   geometry = new THREE.BoxGeometry(0.2,0.2,0.6);
@@ -238,7 +282,9 @@ function gameLoop() {
   loop.dt = loop.dt + Math.min(1, (loop.now - loop.last) / 1000);
   while(loop.dt > loop.slowStep) {
     loop.dt = loop.dt - loop.slowStep;
-    update(loop.step); // déplace les objets d'une fraction de seconde
+    if(loadObject){
+      update(loop.step); // déplace les objets d'une fraction de seconde
+    }
   }
   renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;
@@ -250,22 +296,23 @@ function gameLoop() {
 }
 
 function update(step) {
-  cameraBind();
-  if(!partieFinie){
-    moveSpaceShip();
-    moveAlien();
-    if(missileTire){
-      moveMissile();
-      touchBunker();
-      touchAliens();
-    }
-    if(!missileAliensTire){
-      aliensAttack();
-
-    }else {
-      moveMissileAliens();
-      aliensTouchBunk();
-      aliensTouchSpaceship();
+  if(!menu.isActive()){
+    cameraBind();
+    if(!partieFinie && partiePrete){
+      moveSpaceShip(step);
+      moveAlien();
+      if(missileTire){
+        moveMissile();
+        touchBunker();
+        touchAliens();
+      }
+      if(!missileAliensTire){
+        aliensAttack();
+      }else {
+        moveMissileAliens();
+        aliensTouchBunk();
+        aliensTouchSpaceship();
+      }
     }
   }
 }
@@ -284,29 +331,29 @@ function timestamp() {
 
 function moveAlien(){
   box = new THREE.Box3().setFromObject(aliens);
-  console.log(box.max.x);
   if( box.max.x >= 15 || box.min.x <= -15){
     posAlien = !posAlien;
     aliens.position.z -= 1;
     finPartie();
   }
   if(posAlien){
-    aliens.position.x += 0.05;
+    aliens.position.x += vitesseAliens;
   }else{
-    aliens.position.x -= 0.05;
+    aliens.position.x -= vitesseAliens;
   }
 }
 
-function moveSpaceShip(){
+function moveSpaceShip(param){
   if(keyboard.pressed("right")){
-      spaceship.position.x -= 0.15;
+      spaceship.position.x -= 5 * param;
       if(!lockCam){
         camera.position.set(spaceship.position.x, 1, -2);
         controls.target = new THREE.Vector3(spaceship.position.x, 0, 20);
       }
   }
   if(keyboard.pressed("left")){
-    spaceship.position.x += 0.15;
+    //spaceship.position.x += 0.15;
+    spaceship.position.x += 5 * param;
     if(!lockCam){
       camera.position.set(spaceship.position.x, 1, -2);
       controls.target = new THREE.Vector3(spaceship.position.x, 0, 20);
@@ -358,18 +405,18 @@ function touchAliens(){
   ray.set(missile.position, vect);
 
   //Calcule les objets coupant le rayon de prélèvement
-  var intersect = ray.intersectObjects(alienTab, true);
+  var intersect = ray.intersectObjects(alienTab);
   if(intersect.length > 0){
-    if(intersect[0].object.material.opacity != 0){
-      intersect[0].object.material.opacity = 0;
+    if(intersect[0].object.visible != false){
+      intersect[0].object.visible = false;
       missileTire = false;
       missile.visible = false;
-      if(intersect[0].object.material.opacity <= 0){
-        alienTab.splice(alienTab.indexOf(intersect[0].object),1);
-        aliens.remove(intersect[0].object);
-        cptAliens --;
-        finPartie();
-      }
+    }
+    if(intersect[0].object.visible == false){
+      alienTab.splice(alienTab.indexOf(intersect[0].object),1);
+      aliens.remove(intersect[0].object);
+      cptAliens --;
+      finPartie();
     }
   }
 }
@@ -378,44 +425,23 @@ function finPartie(){
   if(cptAliens == 0){
     console.log('Le joueur à gagné');
     partieFinie = true;
+    missileAliensTire = false;
+    scene.remove(aliens);
+    scene.remove(bunk)
+    level ++;
+    newWaveAliens(level, vitesseAliens, vitesseMissAliens)
   }
-  if(nbLives == 0){
+  else if(nbLives == 0){
     console.log('les aliens ont gagnés');
     partieFinie = true;
+    //scene.remove(aliens);
   }
-  if(aliens.position.z == spaceship.position.z){
+  else if(aliens.position.z == spaceship.position.z){
     console.log('les aliens ont gagnés(raquette)');
     partieFinie = true;
+    //scene.remove(aliens);
   }
 }
-
-/*function touchAliens(){
-  if(missileTire){
-    if((missile.position.z + 0.3) >= aliens.position.z - aliensSize.z/2){
-      if((missile.position.x - 0.1) < (aliens.position.x + aliensSize.x/2) && (missile.position.x + 0.1) > (aliens.position.x - aliensSize.x/2)){
-        let x, z;
-        x = missile.position.x - aliens.position.x;
-        z = missile.position.z + missile.geometry.parameters.depth/2 - aliens.position.z;
-        console.log('groupe touche', 'x='+x, 'z='+z);
-        for(let i = 0; i < aliens.children.length; i++){
-          if(aliens.children[i].material.opacity != 0){
-            if((z + missile.geometry.parameters.depth/2) >= aliens.position.z){ // Si ca touche sa coule
-              if(x - 0.1 < aliens.children[i].position.x + 0.5 && x + 0.1 > aliens.children[i].position.x - 0.5){
-                // Refaire le cube avec moins d'opacite
-                console.log(aliens.children[i]);
-                aliens.children[i].material.opacity = 0;
-                missileTire = false;
-                missile.visible = false;
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-}*/
 
 function touchBunker(){
   if((missile.position.z + 0.3) >= (bunk.position.z - bunkSize.z/2)){
@@ -442,12 +468,14 @@ function aliensAttack(){
   //Permet de générer un chiffre entre 0 à 11 --> correspond au nb d'aliens
   var generAliens = Math.floor(Math.random() * alienTab.length);
   var random = Math.random();
-  if(random > 0.8){
-    missileAliens.visible = true;
-    missileAliensTire = true;
-    missileAliens.position.z = aliens.position.z + alienTab[generAliens].position.z;
-    missileAliens.position.x = aliens.position.x + alienTab[generAliens].position.x;
-    vitesseMissAliens += 0.01;
+  if(alienTab[generAliens] != undefined){
+    if(random > 0.8){
+      missileAliens.visible = true;
+      missileAliensTire = true;
+      missileAliens.position.z = aliens.position.z + alienTab[generAliens].position.z;
+      missileAliens.position.x = aliens.position.x + alienTab[generAliens].position.x;
+      vitesseMissAliens += 0.01;
+    }
   }
 }
 
@@ -483,4 +511,13 @@ function aliensTouchSpaceship(){
     nbLives --;
     finPartie();
   }
+}
+
+function newWaveAliens(level, vAliens, vMissAliens){
+  partieFinie = false;
+  lvl = new Level("Level" + level, vAliens, vMissAliens);
+  lvl.changementLevel();
+  createAlien(6,18);
+  createBunker()
+  console.log(partieFinie);
 }

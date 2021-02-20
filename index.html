@@ -6,27 +6,49 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="src/css/siapp.css" />
+  
+
   <!--<script type="application/javascript" src="src/lib/three.js"></script>-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.js"></script>
-  <script type="application/javascript" src="src/lib/Stats.min.js"></script>
-  <script type="application/javascript" src="src/lib/dat.gui.js"></script>
-	<script type="application/javascript" src="src/lib/OrbitControls.js"></script>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.module.js"></script>
+  <script src="http://threejs.org/examples/jsm/libs/stats.module.js"></script>
+  <script src="http://threejs.org/examples/jsm/libs/dat.gui.module.js"></script>
+	<script src="http://threejs.org/examples/jsm/controls/OrbitControls.js"></script>-->
   <script type="application/javascript" src="src/lib/threex.keyboardstate.js"></script>
-  <script type="text/javascript" src="src/lib/ColladaLoader.js"></script>
+  <!--<script src="http://threejs.org/examples/jsm/loaders/GLTFLoader.js"></script>
+  <script src="http://threejs.org/examples/jsm/loaders/ColladaLoader.js"></script>-->
+  <!--<script type="text/javascript" src="src/lib/ColladaLoader.js"></script>-->
+  
   <script type="module" src="src/js/siapp.js"></script>
 </head>
 
 <body>
-  <!--<div id="menu">
+  <div id="menu">
     <div id="title-menu">
-      <img src="src/medias/images/menu/Logo-acnh-pong.png" alt="logo" style="width: 30%; position: absolute; top: 20%; left: 50%; transform: translate(-50%, -50%);">
+      <img src="src/medias/images/menu/Logo-acnh-sp.png" alt="logo">
     </div>
-    <div id="single-player">
-      <a href="">1 joueur</a>
+    <div id="commandes">
+      <h1 style="color: white">Commandes :</h1>
+      <p><i class="fal fa-arrow-square-left"></i>&nbsp; Gauche |&nbsp;<i class="fal fa-arrow-square-right"></i>&nbsp; Droite &nbsp;| &nbsp;<i class="far fa-horizontal-rule"></i> &nbsp;Tirer</p>
     </div>
-  </div>-->
+    <div id="play-game">
+      <!--<img src="./src/medias/images/menu/buttonBackground.png" alt="" id="background-play">-->
+      <!--<a href="" onclick="mainMenu()">Jouer</a>-->
+      <button id="button-play">Jouer</button>
+    </div>
+    <h1 style="justify-content: center; text-align: center; font-family: Fink Heavy; margin-top: -5px; color: white;">Scores :</h1>
+    <div id="points">
+      <p><img src="./src/medias/images/menu/rounard.png" alt="" style="width: 90px;"> = 10 points</p>
+      <p><img src="./src/medias/images/menu/tomnook.png" alt="" style="width: 90px;"> = 10 points</p>
+      <p><img src="./src/medias/images/menu/porcelette.png" alt="" style="width: 90px;"> = 10 points</p>
+    </div>
+  </div>
   <div id="SIApp">
+    <div id="trans">
+      <div id="title-trans">
+      </div>
+    </div>
   </div>
 </body>
 
