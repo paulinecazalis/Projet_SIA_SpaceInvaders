@@ -1,4 +1,4 @@
-import {three_axis} from '../../objects/axis.js';
+//mport {three_axis} from '../../objects/axis.js';
 //import {stade} from '../js/stade.js';
 
 let container, w, h, scene, camera, controls, renderer, stats, light;
@@ -36,6 +36,8 @@ let bunkTab = [];
 
 //Variables pour la partie
 let partieFinie = false;
+
+let box;
 
 window.addEventListener('load', go);
 window.addEventListener('resize', resize);
@@ -85,10 +87,12 @@ function createAlien(aliensColumns, nbAliens){
   aliensSize = {x: xSize, y: ySize, z: zSize};
   aliens.position.z = 10;
   scene.add(aliens);
+  box = new THREE.Box3().setFromObject(aliens);
+  console.log(box);
 }
 
 function createMissileAliens(){
-  geometry = new THREE.CubeGeometry(0.2,0.2,0.6);
+  geometry = new THREE.BoxGeometry(0.2,0.2,0.6);
   material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)'} );
   missileAliens = new THREE.Mesh(geometry, material);
   missileAliens.visible = false;
@@ -189,22 +193,28 @@ function init() {
   //création des bunkers
   createBunker();
 
-  /*let rounard;
-
-  let loader = new THREE.ColladaLoader();
-  loader.load('../src/medias/models/Crazy_Redd/Crazy_Redd.dae', (res) => {
-    rounard = res.scene;
-    rounard.scale.set(0.3,0.3,0.3);
-    rounard.rotation.z = 15.7;
-    scene.add(rounard);
-  });*/
-
   //Création du missile
-  geometry = new THREE.CubeGeometry(0.2,0.2,0.6);
+  geometry = new THREE.BoxGeometry(0.2,0.2,0.6);
   material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)'} );
   missile = new THREE.Mesh(geometry, material);
   missile.visible = false;
   scene.add(missile);
+
+  geometry = new THREE.BoxGeometry(0.2,0.2,10);
+  material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)'} );
+  const essai = new THREE.Mesh(geometry, material);
+  essai.visible = true;
+  essai.position.x = -15
+  essai.position.z = 8;
+  scene.add(essai);
+
+  geometry = new THREE.BoxGeometry(0.2,0.2,10);
+  material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)'} );
+  const essai2 = new THREE.Mesh(geometry, material);
+  essai2.visible = true;
+  essai2.position.x = 15
+  essai2.position.z = 8;
+  scene.add(essai2);
 
   //Création du missile des aliens
   createMissileAliens();
@@ -273,18 +283,18 @@ function timestamp() {
 }
 
 function moveAlien(){
-  if(posAlien){
-    aliens.position.x += 0.1;
-  }else{
-    aliens.position.x -= 0.1;
-  }
-
-  if( aliens.position.x >= 10 || aliens.position.x <= -10){
+  box = new THREE.Box3().setFromObject(aliens);
+  console.log(box.max.x);
+  if( box.max.x >= 15 || box.min.x <= -15){
     posAlien = !posAlien;
     aliens.position.z -= 1;
     finPartie();
   }
-
+  if(posAlien){
+    aliens.position.x += 0.05;
+  }else{
+    aliens.position.x -= 0.05;
+  }
 }
 
 function moveSpaceShip(){
@@ -355,8 +365,8 @@ function touchAliens(){
       missileTire = false;
       missile.visible = false;
       if(intersect[0].object.material.opacity <= 0){
-        scene.remove(intersect[0].object);
         alienTab.splice(alienTab.indexOf(intersect[0].object),1);
+        aliens.remove(intersect[0].object);
         cptAliens --;
         finPartie();
       }
@@ -366,15 +376,15 @@ function touchAliens(){
 
 function finPartie(){
   if(cptAliens == 0){
-    console.log('Le joueur à gagné trop bien (pas eddy)');
+    console.log('Le joueur à gagné');
     partieFinie = true;
   }
   if(nbLives == 0){
-    console.log('les aliens ont gagnés (pas eddy)');
+    console.log('les aliens ont gagnés');
     partieFinie = true;
   }
   if(aliens.position.z == spaceship.position.z){
-    console.log('les aliens ont gagnés(raquette) (pas eddy)');
+    console.log('les aliens ont gagnés(raquette)');
     partieFinie = true;
   }
 }
