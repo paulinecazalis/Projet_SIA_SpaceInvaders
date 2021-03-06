@@ -2,6 +2,7 @@ import * as THREE from '../lib/node_modules/three/build/three.module.js';
 import {ColladaLoader} from '../lib/node_modules/three/examples/jsm/loaders/ColladaLoader.js';
 import {GLTFLoader} from '../lib/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import Level from '../js/level.js';
+
 export default class PlayerClass{
     constructor(){
         this._missilePlayerActive = false;
@@ -23,7 +24,7 @@ export default class PlayerClass{
         let geometry = new THREE.BoxGeometry( 2, 0.8, 0.4 );
         let material = new THREE.MeshLambertMaterial( {color: 0x660000, transparent : true, opacity: 0.0} );
         this._spaceship = new THREE.Mesh( geometry, material );
-        const vill1 = await this.chargerModeleGLTF('../src/medias/models/villageoise.gltf');
+        const vill1 = await PlayerClass.chargerModeleGLTF('../src/medias/models/villageoise.gltf');
         const vill1Space = vill1.scene;
         vill1Space.scale.set(0.15,0.15,0.15);
         vill1Space.rotation.x = 14.2;
@@ -32,7 +33,7 @@ export default class PlayerClass{
         return this._spaceship;
     }
 
-    async createBunker(){
+    static async createBunker(){
         let bunker = new THREE.Group();
         
         for(let i = 0 ; i <= 4; i++){
@@ -47,11 +48,11 @@ export default class PlayerClass{
             bunker.add(cubBunk);
             bunker.position.x = -6;
             bunker.position.z = 2;*/
-            const tree = await this.chargerModeleGLTF('../src/medias/models/Tree/scene.gltf');
+            const tree = await PlayerClass.chargerModeleGLTF('../src/medias/models/Cedar Tree/scene.gltf');
             const treeBunk = tree.scene;
             treeBunk.position.x = i * 3;
-            treeBunk.scale.set(10,10,10);
-            treeBunk.rotation.x = 45.5;
+            treeBunk.scale.set(0.5,0.5,0.5);
+            //treeBunk.rotation.x = 45.5;
             bunker.add(treeBunk);
             bunker.position.x = -6;
             bunker.position.z = 2;
@@ -62,7 +63,7 @@ export default class PlayerClass{
     async createMissilePlayer(){
         let geometry = new THREE.BoxGeometry(0.4,0.3,0.6);
         let material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)', transparent : true, opacity: 0.0} );
-        const loadedData4 = await this.chargerModele('../src/medias/models/Bell_bag/Bell_Bag.dae');
+        const loadedData4 = await PlayerClass.chargerModele('../src/medias/models/Bell_bag/Bell_Bag.dae');
         this._missile = new THREE.Mesh(geometry, material);
         const geoMissile = loadedData4.scene;
         geoMissile.scale.set(0.1,0.1,0.1);
@@ -77,14 +78,14 @@ export default class PlayerClass{
         
     }
 
-    chargerModele(url){
+    static chargerModele(url){
         let loader = new ColladaLoader();
         return new Promise((resolve, reject) => {
             loader.load(url, data=> resolve(data), null, reject);
         });
     }
 
-    chargerModeleGLTF(url){
+    static chargerModeleGLTF(url){
         let loader = new GLTFLoader();
         return new Promise((resolve, reject) => {
             loader.load(url, data=> resolve(data), null, reject);
@@ -107,7 +108,7 @@ export default class PlayerClass{
             }
             //this._spaceship.position.x -= 5 * step;
             if(!this._lockCam){
-              camera.position.set(this._spaceship.position.x, 1, -2);
+              camera.position.set(this._spaceship.position.x, 2.5, -2);
               controls.target = new THREE.Vector3(this._spaceship.position.x, 0, 20);
             }
         }
@@ -117,7 +118,7 @@ export default class PlayerClass{
             }
           
           if(!this._lockCam){
-            camera.position.set(this._spaceship.position.x, 1, -2);
+            camera.position.set(this._spaceship.position.x, 2.5, -2);
             controls.target = new THREE.Vector3(this._spaceship.position.x, 0, 20);
           }
         }
@@ -152,7 +153,10 @@ export default class PlayerClass{
     playerTouchBunk = (bunkTab) =>{
         /*var ray = new THREE.Raycaster();
         //var vect = new THREE.Vector3(1, 0, 1);
+
+        //si arbre mesh
         var vect = new THREE.Vector3(0, 0, 1);
+
         ray.set(this._missile.position, vect);
       
         //Calcule les objets coupant le rayon de prélèvement
@@ -170,7 +174,8 @@ export default class PlayerClass{
         }*/
 
         var ray = new THREE.Raycaster();
-        var vect = new THREE.Vector3(0, 0, 1);
+        var vect = new THREE.Vector3(0, 3, 1); //pour toucher les feuilles de l'arbre et non le tronc
+        vect.normalize();
         ray.set(this._missile.position, vect);
       
         //Calcule les objets coupant le rayon de prélèvement
@@ -180,10 +185,12 @@ export default class PlayerClass{
             intersect[0].object.material.opacity -= 0.5;
             this.setMissileActive(false);
             this._missile.visible = false;
-            console.log(intersect[0].object.material.opacity);
-            if(intersect[0].object.material.opacity < 0){
+            if(intersect[0].object.material.opacity <= 0){
+                console.log('ok');
+                console.log(bunkTab);
+                intersect[0].object.visible = false;
               //scene.remove(intersect[0].object);
-              bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
+              //bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
             }
           }
         }
@@ -197,7 +204,7 @@ export default class PlayerClass{
         }
         if(this._keyboard.pressed("1")){
           this._lockCam = false;
-          camera.position.set(spaceship.position.x, 1, -2);
+          camera.position.set(spaceship.position.x, 2.5, -2);
           controls.target = new THREE.Vector3(spaceship.position.x, 0, 20);
         }
     }

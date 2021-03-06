@@ -1,3 +1,6 @@
+import Level from "./level.js";
+import NewGame from "./newGame.js";
+
 export default class Menu{
     constructor(){
         this._active = true;
@@ -15,6 +18,10 @@ export default class Menu{
         let btn = document.getElementById("button-play")
         btn.onclick = () => {
             this.discardMenu();
+            Level.menuLevel();
+            Level.resetLives();
+            //NewGame.loadNewGame();
+            
         }
     }
 
@@ -36,7 +43,8 @@ export default class Menu{
             setTimeout(() => {
                 document.getElementById('trans').style.display = "none";
                 this.setActive(false);
+                Level.setPartieActive(false);
             }, duration);
         }
-      }
+    }
 }

@@ -8,6 +8,8 @@ import Menu from '../js/menu.js';
 import PlayerClass from '../js/playerClass.js';
 import Alien from '../js/alienClass.js';
 import Level from '../js/level.js';
+import Sound from '../js/sound.js';
+import NewGame from '../js/newGame.js'
 
 
 import {stade} from '../js/decor.js';
@@ -41,7 +43,7 @@ let bunkTab = [];
 let element = new PlayerClass();
 let alienElement = new Alien();
 //Variables pour la partie
-let partieFinie = false;
+//let partieFinie = false;
 
 //variable menu
 let menu;
@@ -59,6 +61,7 @@ window.addEventListener('resize', resize);
 function go() {
   menu = new Menu();
   menu.loadMenu();
+  Sound.volumeMusic();
   init();
   gameLoop();
 }
@@ -72,6 +75,7 @@ async function init() {
 
   camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 100);
   camera.position.set(0, 8, -20);
+  camera.add( Sound.listener );
 
   controls = new OrbitControls(camera, container);
   controls.target = new THREE.Vector3(0, 0, 0);
@@ -122,10 +126,15 @@ async function init() {
   light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
   light.position.set( 10,10,10 ).normalize();
   scene.add(light);
-  await element.createBunker().then((value) => {
+
+
+  await PlayerClass.createBunker().then((value) => {
     bunkObject = value;
     scene.add(value);
   })
+
+  /*bunkObject = element.createBunker();
+  scene.add(bunkObject);*/
   
   initBunkTab();
 
@@ -139,6 +148,7 @@ async function init() {
     scene.add(value);
   });
 
+
   //scene.add(Alien.createMissileAliens());
   await Alien.createMissileAliens().then((value) => {
     scene.add(value);
@@ -146,9 +156,21 @@ async function init() {
 
   scene.add(stade);
 
-  
+  const dir = new THREE.Vector3( 0, 0.5, 1 );
 
+  //normalize the direction vector (convert to vector of length 1)
+  dir.normalize();
+
+  const origin = new THREE.Vector3( 0, 0, 0 );
+  const length = 1;
+  const hex = 0xffff00;
+
+  const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+  scene.add( arrowHelper );
   triche();
+
+  Sound.audioLoader();
+  
   
 
   const fps  = 30;
@@ -184,7 +206,7 @@ function gameLoop() {
 function update(step) {
   if(!menu.isActive()){
     element.cameraBind(camera, controls, spaceshipObject);
-    if(!partieFinie){
+    if(!Level.isPartieActive()){
       element.moveSpaceShip(step, camera, controls);
       Alien.moveAlien(step, aliens);
       if(element.isMissileActive()){
@@ -223,7 +245,6 @@ function initBunkTab(){
 function playerShoot(){
   element.moveMissilePlayer();
   element.playerTouchBunk(bunkTab);
-  console.log(bunkTab);
   element.touchAliens(Alien._alienTab, aliens);
   if(Alien._alienTab == 0){
     scene.remove(aliens);
@@ -232,7 +253,7 @@ function playerShoot(){
     Alien._missileAliens.visible = false;
     bunkTab.length = 0;
     scene.remove(bunkObject);
-    partieFinie = true;
+    Level.setPartieActive(true);
     nbLevel++;
     Level.changementLevel(nbLevel);
     newGame();
@@ -245,11 +266,22 @@ function aliensShoot(){
   nbLives = Alien.aliensTouchSpaceship(spaceshipObject, nbLives);
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
-    partieFinie = true;
+    Level.setPartieActive(true);
+    scene.remove(aliens);
+    Alien._alienTab.length = 0;
+    Alien.setMissileAliensTire(false);
+    Alien._missileAliens.visible = false;
+    bunkTab.length = 0;
+    scene.remove(bunkObject);
+    Level.gameOver("Game Over !");
+    nbLives = 3;
+    //console.log(aliens.length);
+    newGameMenu();
   }
   else if(aliens.position.z == spaceshipObject.position.z){
     console.log('les aliens ont gagnés(raquette)');
-    partieFinie = true;
+    Level.setPartieActive(true);
+    //Level.gameOver("Game Over !");
   }
 }
 
@@ -262,7 +294,7 @@ function triche(){
       Alien._missileAliens.visible = false;
       bunkTab.length = 0;
       scene.remove(bunkObject);
-      partieFinie = true;
+      Level.setPartieActive(true);
       nbLevel++;
       Level.changementLevel(nbLevel);
       newGame();
@@ -273,17 +305,35 @@ function triche(){
 
 async function newGame(){
   spaceshipObject.position.x = 0;
-  bunkObject = element.createBunker();
-  scene.add(bunkObject);
+  await PlayerClass.createBunker().then((value) => {
+    bunkObject = value;
+    scene.add(value);
+  })
+  //scene.add(bunkObject);
   initBunkTab();
-  await Alien.createAlien(6, 18).then((value) => {
+  await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
     scene.add(value);
   });
-  partieFinie = false;
+  Level.setPartieActive(false);
   menu.setActive(true);
   setTimeout(() => {
     menu.setActive(false);
   }, 3000);
 }
+
+async function newGameMenu(){
+  spaceshipObject.position.x = 0;
+  await PlayerClass.createBunker().then((value) => {
+    bunkObject = value;
+    scene.add(value);
+  })
+  //scene.add(bunkObject);
+  initBunkTab();
+  await Alien.createAlien(6, 30).then((value) => {
+    aliens = value;
+    scene.add(value);
+  });
+}
+
 

@@ -149,13 +149,15 @@ export default class Alien{
             Alien.setMissileAliensTire(false);
             Alien._missileAliens.visible = false;
             nbLives --;
+            Level.removeLives(nbLives);
         }
         return nbLives;
     }
 
     static aliensTouchBunk = (bunkTab) =>{
         var ray = new THREE.Raycaster();
-        var vect = new THREE.Vector3(0, 0, 1);
+        var vect = new THREE.Vector3(0, 3, 1);
+        vect.normalize();
         ray.set(Alien._missileAliens.position, vect);
       
         //Calcule les objets coupant le rayon de prélèvement
@@ -167,7 +169,8 @@ export default class Alien{
             Alien._missileAliens.visible = false;
             if(intersect[0].object.material.opacity <= 0){
               //scene.remove(intersect[0].object);
-              bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
+              //bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
+              intersect[0].object.visible = false;
             }
           }
         }
