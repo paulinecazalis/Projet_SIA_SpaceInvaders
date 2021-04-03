@@ -3,13 +3,16 @@
 import * as THREE from '../lib/node_modules/three/build/three.module.js';
 import { OrbitControls } from '../lib/node_modules/three/examples/jsm/controls/OrbitControls.js';
 import Stats from '../lib/node_modules/three/examples/jsm/libs/stats.module.js';
+import { EffectComposer } from '../lib/node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from '../lib/node_modules/three/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from '../lib/node_modules/three/examples/jsm/postprocessing/GlitchPass.js';
 
 import Menu from '../js/menu.js';
-import PlayerClass from '../js/playerClass.js';
-import Alien from '../js/alienClass.js';
+import Player from './player.js';
+import Alien from '../js/alien.js';
 import Level from '../js/level.js';
 import Sound from '../js/sound.js';
-import NewGame from '../js/newGame.js'
+import gameConfig from '../js/gameConfig.js';
 
 
 import {stade} from '../js/decor.js';
@@ -21,11 +24,9 @@ let container, w, h, scene, camera, controls, renderer, stats, light;
 let loop = {}; // info de la boucle du jeu
 let axis, grid
 
-//camera
-let lockCam = true;
-
 //variables pour les aliens
 let aliens;
+let aliensBonus;
 let aliensObject;
 
 //variables pour le vaisseau
@@ -38,10 +39,9 @@ let missileObject;
 
 //variables pour les bunkers
 let bunkObject;
-let bunkTab = [];
 
-let element = new PlayerClass();
-let alienElement = new Alien();
+let element = new Player();
+//let alienElement = new Alien();
 //Variables pour la partie
 //let partieFinie = false;
 
@@ -50,10 +50,9 @@ let menu;
 
 //variable pour les niveaux
 let lvl;
-//let level = new Level();
-let nbLevel = 1;
 
-let keyboard = new THREEx.KeyboardState();
+let composer;
+let glitchPass;
 
 window.addEventListener('load', go);
 window.addEventListener('resize', resize);
@@ -62,6 +61,8 @@ function go() {
   menu = new Menu();
   menu.loadMenu();
   Sound.volumeMusic();
+  //Sound.boolSound = !Sound.boolSound;
+  Sound.volumeSound();
   init();
   gameLoop();
 }
@@ -74,12 +75,13 @@ async function init() {
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 100);
-  camera.position.set(0, 8, -20);
+  camera.position.set(0, 8, -10);
   camera.add( Sound.listener );
 
   controls = new OrbitControls(camera, container);
-  controls.target = new THREE.Vector3(0, 0, 0);
+  controls.target = new THREE.Vector3(0, 0, 20);
   controls.panSpeed = 0.3;
+  //controls.enabled = false;
 
   const renderConfig = {antialias: true, alpha: true};
   renderer = new THREE.WebGLRenderer(renderConfig);
@@ -94,8 +96,8 @@ async function init() {
   stats.domElement.style.bottom = '0px';
   document.body.appendChild( stats.domElement );
 
-  grid = new THREE.GridHelper( 100, 100 );
-  scene.add(grid);
+  /*grid = new THREE.GridHelper( 100, 100 );
+  scene.add(grid);*/
 
   /*axis = three_axis;
   scene.add(axis);*/
@@ -103,23 +105,22 @@ async function init() {
   scene.add(light);
 
   //Background scene
-  const path = '../src/medias/images/skybox/penguins/';
+  const path = '../src/medias/images/Standard-Cube-Map2/';
   const format = '.png';
   const urls = [
-    path + 'indigo_ft' + format, path + 'indigo_bk' + format,
-    path + 'indigo_up' + format, path + 'indigo_dn' + format,
-    path + 'indigo_rt' + format, path + 'indigo_lf' + format,
+    path + 'px' + format, path + 'nx' + format,
+    path + 'py' + format, path + 'ny' + format,
+    path + 'pz' + format, path + 'nz' + format,
   ];
 
   const reflectionCube = new THREE.CubeTextureLoader().load( urls );
   const refractionCube = new THREE.CubeTextureLoader().load( urls );
   refractionCube.mapping = THREE.CubeRefractionMapping;
-
   scene.background = reflectionCube;
 
   /*spaceshipObject = element.createSpaceship();
   scene.add(spaceshipObject);*/
-  await element.createSpaceship().then((value) =>{
+  await Player.createSpaceship().then((value) =>{
     spaceshipObject = value;
     scene.add(value);
   })
@@ -128,17 +129,15 @@ async function init() {
   scene.add(light);
 
 
-  await PlayerClass.createBunker().then((value) => {
+  await Player.createBunker().then((value) => {
     bunkObject = value;
     scene.add(value);
   })
 
   /*bunkObject = element.createBunker();
   scene.add(bunkObject);*/
-  
-  initBunkTab();
 
-  await element.createMissilePlayer().then((value) => {
+  await Player.createMissilePlayer().then((value) => {
     missileObject = value;
     scene.add(value);
   });
@@ -146,6 +145,13 @@ async function init() {
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
     scene.add(value);
+  });
+  
+  await Alien.createAlienBonus().then((value) => {
+    setTimeout(() => {
+      aliensBonus = value;
+      scene.add(value);
+    }, 20000);
   });
 
 
@@ -161,15 +167,30 @@ async function init() {
   //normalize the direction vector (convert to vector of length 1)
   dir.normalize();
 
-  const origin = new THREE.Vector3( 0, 0, 0 );
+  const origin = new THREE.Vector3( 0, 0.5, 1 );
   const length = 1;
   const hex = 0xffff00;
 
   const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
   scene.add( arrowHelper );
   triche();
+  pauseMenu();
+  gameConfig.helpKey();
 
   Sound.audioLoader();
+  
+
+  // postprocessing pour epileptique
+
+  /*composer = new EffectComposer( renderer );
+  composer.addPass( new RenderPass( scene, camera ) );
+
+  glitchPass = new GlitchPass();
+  composer.addPass( glitchPass );*/
+
+  scene.add(Player.scoreGroup);
+
+
   
   
 
@@ -193,6 +214,7 @@ function gameLoop() {
   while(loop.dt > loop.slowStep) {
     loop.dt = loop.dt - loop.slowStep;
     update(loop.step); // déplace les objets d'une fraction de seconde
+    //composer.render();
   }
   renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;
@@ -204,11 +226,14 @@ function gameLoop() {
 }
 
 function update(step) {
-  if(!menu.isActive()){
-    element.cameraBind(camera, controls, spaceshipObject);
-    if(!Level.isPartieActive()){
+  if(!Menu.isActive()){
+    gameConfig.cameraBind(camera, controls, spaceshipObject);
+    if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
       element.moveSpaceShip(step, camera, controls);
       Alien.moveAlien(step, aliens);
+      if(Alien.isPositionAliensBonus() && aliensBonus != undefined){
+        Alien.moveAlienBonus(aliensBonus, scene);
+      }
       if(element.isMissileActive()){
         playerShoot();
       }
@@ -219,8 +244,6 @@ function update(step) {
       }
     }
   }
-  
-  
 }
 
 function resize() {
@@ -235,52 +258,49 @@ function timestamp() {
   return window.performance.now();
 }
 
-function initBunkTab(){
-  for(let i = 0; i < bunkObject.children.length; i++){
-    bunkTab.push(bunkObject.children[i]);
-  }
+function removeScene(){
+  scene.remove(aliens);
+  Alien.alienTab.length = 0;
+  scene.remove(aliensBonus);
+  Alien.alienBonusTab.length = 0;
+  Alien.setMissileAliensTire(false);
+  Alien._missileAliens.visible = false;
+  Player.bunkerTab.length = 0;
+  scene.remove(missileObject);
+  scene.remove(bunkObject);
+  gameConfig.setPartieActive(true);
 }
 
 
 function playerShoot(){
   element.moveMissilePlayer();
-  element.playerTouchBunk(bunkTab);
-  element.touchAliens(Alien._alienTab, aliens);
-  if(Alien._alienTab == 0){
-    scene.remove(aliens);
-    Alien._alienTab.length = 0;
-    Alien.setMissileAliensTire(false);
-    Alien._missileAliens.visible = false;
-    bunkTab.length = 0;
-    scene.remove(bunkObject);
-    Level.setPartieActive(true);
-    nbLevel++;
-    Level.changementLevel(nbLevel);
-    newGame();
+  element.playerTouchBunk();
+  element.touchAliens(aliens);
+  element.touchAlienBonus();
+  if(Alien.alienTab == 0){
+    removeScene();
+    gameConfig.level++;
+    document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
+    Level.changementLevel(gameConfig.level);
+    newGameAlien();
   }
 }
 
 function aliensShoot(){
   Alien.moveMissileAliens();
-  Alien.aliensTouchBunk(bunkTab);
+  Alien.aliensTouchBunk();
   nbLives = Alien.aliensTouchSpaceship(spaceshipObject, nbLives);
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
-    Level.setPartieActive(true);
-    scene.remove(aliens);
-    Alien._alienTab.length = 0;
-    Alien.setMissileAliensTire(false);
-    Alien._missileAliens.visible = false;
-    bunkTab.length = 0;
-    scene.remove(bunkObject);
+    removeScene();
     Level.gameOver("Game Over !");
     nbLives = 3;
-    //console.log(aliens.length);
-    newGameMenu();
+    newGameLoose();
+    gameConfig.level = 1;
   }
   else if(aliens.position.z == spaceshipObject.position.z){
     console.log('les aliens ont gagnés(raquette)');
-    Level.setPartieActive(true);
+    gameConfig.setPartieActive(true);
     //Level.gameOver("Game Over !");
   }
 }
@@ -288,51 +308,130 @@ function aliensShoot(){
 function triche(){
   document.addEventListener('keydown', (e) => {
     if(e.key == "k" || e.key == 'K'){
-      scene.remove(aliens);
-      Alien._alienTab.length = 0;
-      Alien.setMissileAliensTire(false);
-      Alien._missileAliens.visible = false;
-      bunkTab.length = 0;
-      scene.remove(bunkObject);
-      Level.setPartieActive(true);
-      nbLevel++;
-      Level.changementLevel(nbLevel);
-      newGame();
+      console.log(Level.isActive());
+      if(Level.isActive()){
+        removeScene();
+        gameConfig.level++;
+        document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
+        Level.changementLevel(gameConfig.level);
+        newGameAlien();
+      }
+    }
+    if(e.key == "i" || e.key == 'I'){
+      console.log('mode invincible');
+      gameConfig.setInvincible(!gameConfig.invincible);
+      if(gameConfig.invincible){
+        document.getElementById('invincible').innerHTML = "Invincible: oui";
+      }else{
+        document.getElementById('invincible').innerHTML = "Invincible: non";
+      }
+      
     }
   });
 }
 
-
-async function newGame(){
+//Créer une nouvelle vague d'alien + reset position spaceship + enlève triche et affiche bandeau niveau
+async function newGameAlien(){
   spaceshipObject.position.x = 0;
-  await PlayerClass.createBunker().then((value) => {
+  await Player.createBunker().then((value) => {
     bunkObject = value;
     scene.add(value);
   })
-  //scene.add(bunkObject);
-  initBunkTab();
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
     scene.add(value);
   });
-  Level.setPartieActive(false);
-  menu.setActive(true);
+  await Player.createMissilePlayer().then((value) => {
+    missileObject = value;
+    scene.add(value);
+  });
+  /*await Alien.createAlienBonus().then((value) => {
+    aliensBonus = value;
+    scene.add(value);
+  });*/
+  gameConfig.setPartieActive(false);
+  gameConfig.setInvincible(false);
+  document.getElementById('invincible').innerHTML = "Invincible: " + gameConfig.invincible;
+  Menu.setActive(true);
   setTimeout(() => {
-    menu.setActive(false);
+    Menu.setActive(false);
   }, 3000);
 }
 
-async function newGameMenu(){
+//Permet de réinitialiser la scene si la partie est perdue
+async function newGameLoose(){
   spaceshipObject.position.x = 0;
-  await PlayerClass.createBunker().then((value) => {
+  await Player.createBunker().then((value) => {
     bunkObject = value;
     scene.add(value);
   })
-  //scene.add(bunkObject);
-  initBunkTab();
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
     scene.add(value);
+  });
+  await Player.createMissilePlayer().then((value) => {
+    missileObject = value;
+    scene.add(value);
+  });
+  /*await Alien.createAlienBonus().then((value) => {
+    aliensBonus = value;
+    scene.add(value);
+  });*/
+  gameConfig.setInvincible(false);
+}
+
+//Menu Pause 
+function pauseMenu(){
+  document.addEventListener('keydown', (e) => {
+    if(e.key == "Escape"){
+      if(Level.isActive() && !Menu.isActive()){
+        gameConfig.setPauseGame(!gameConfig.pause);
+        console.log(gameConfig.isPauseGame());
+        if(gameConfig.pause){
+          document.getElementById('pause').style.display = 'block';
+
+          document.getElementById('continuer').onclick = () =>{
+            document.getElementById('pause').style.display = 'none';
+            gameConfig.setPauseGame(false);
+          };
+
+          document.getElementById('recom').onclick = () =>{
+            //document.getElementById('pause').style.display = 'none';
+            document.getElementById('recom-alert').style.display = "block";
+            document.getElementById('recom-non').onclick = () =>{
+              document.getElementById('recom-alert').style.display = "none";
+            }
+            document.getElementById('recom-oui').onclick = () =>{
+              document.getElementById('recom-alert').style.display = "none";
+              document.getElementById('pause').style.display = 'none';
+              removeScene();
+              gameConfig.resetLives();
+              gameConfig.level = 1;
+              Level.changementLevel(gameConfig.level);
+              gameConfig.scoreTotal = 0;
+              newGameAlien();
+              gameConfig.setPauseGame(false);
+            }
+          };
+
+          document.getElementById('quit').onclick = () =>{
+            document.getElementById('pause').style.display = 'none';
+            let menu = new Menu();
+            menu.loadMenu();
+            removeScene();
+            nbLives = 3;
+            newGameLoose();
+            gameConfig.level = 1;
+            gameConfig.vitesseAliens = gameConfig.level/20;
+            gameConfig.vitesseMissileAlien = gameConfig.level/10;
+            gameConfig.scoreTotal = 0;
+            gameConfig.setPauseGame(false);
+          };
+        }else{
+          document.getElementById('pause').style.display = 'none';
+        }
+      }
+    }
   });
 }
 

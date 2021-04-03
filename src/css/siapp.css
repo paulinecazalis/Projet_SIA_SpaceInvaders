@@ -7,6 +7,7 @@ html,body {
   margin: 0;
   width: 100%;
   height: 100%;
+  /*cursor: url('../medias/images/menu/essai.png'), default !important;*/
   
 }
 
@@ -26,8 +27,12 @@ canvas{
   width: 100%;
   height: 100%;
   display: block;
-  /*background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('../medias/images/menu/background.jpg');*/
-  background-color: black;
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('../medias/images/menu/page1.jpg') no-repeat center center fixed;
+  background-size: 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   font-family: Fink Heavy;
 }
 
@@ -39,6 +44,41 @@ canvas{
 
 #title-menu img{
   width: 30%;
+}
+
+#music-menu{
+  position: absolute;
+  height: 60px;
+  width: 150px;
+  left: 71%;
+  top: 70px;
+  border: 1px solid #ececeb;
+  box-shadow: 5px 5px 10px grey;
+  border-radius: 20px;
+  background-color: #eaeae6;
+}
+
+#volume-on{
+  /*position: absolute;
+  top: 10%;
+  left: 80%;
+  font-size: 50px;
+  color: white;*/
+  color: #85775A;
+  font-size: 30px;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+#music-on{
+  /*position: absolute;
+  top: 10%;
+  left: 70%;
+  font-size: 40px;
+  color: white;*/
+  color: #85775A;
+  font-size: 30px;
+  margin-left: 50px;
 }
 
 #auteur{
@@ -93,7 +133,7 @@ canvas{
   font-family: Fink Heavy;
   font-size: 40px;
   text-decoration: none;
-  cursor: pointer;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
   color: #85775A;
   width: 250px;
   height: 100px;
@@ -102,6 +142,19 @@ canvas{
   text-align: center;
   justify-content: center;
   padding-top: 10px;
+  /*opacity: 1;
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;*/
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+#play-game button:hover{
+  /*opacity: .5;*/
+  -webkit-transform: scale(1.2);
+	transform: scale(1.2);
 }
 
 #points{
@@ -151,32 +204,152 @@ canvas{
   text-align:center;
   display: table-cell;
   color:black ;
-  vertical-align:middle;
+  /*vertical-align:middle;*/
   font-size: 80px;
 }
 /*-----------------------------------------FIN LEVEL TRANSITION----------------------------------------------*/
 
-
+/*-----------------------------------------AFFICHAGE JEU----------------------------------------------*/
+#game-element{
+  visibility: hidden;
+  position: absolute;
+  top: 2%;
+  left: 71%;
+  border: 1px solid #ececeb;
+  box-shadow: 5px 5px 10px grey;
+  border-radius: 20px;
+  width: 400px;
+  height: 40px;
+  background-color: #eaeae6;
+}
+#lives{
+  visibility: hidden;
+  position: absolute;
+  top: -5%;
+  left: 15%;
+  width: 200px;
+  height: 70px;
+  
+}
 #life1 img{
   position: absolute;
-  top: 70px;
-  width: 70px;
+  top: 5%;
+  width: 40px;
 }
 
 #life2 img{
   position: absolute;
-  top: 70px;
-  width: 70px;
-  left: 60px;
+  top: 5%;
+  width: 40px;
+  left: 40px;
 }
 
 #life3 img{
   position: absolute;
-  top: 70px;
-  width: 70px;
-  left: 120px;
+  top: 5%;
+  width: 40px;
+  left: 80px;
 }
 
+#invincible{
+  display: none;
+  font-family: Fink Heavy; 
+  position: absolute; 
+  top: 29%; 
+  left: 50%;
+}
+
+#score-level{
+  display: none;
+  position: absolute;
+  top: 2%;
+  left: 1%;
+  border: 1px solid #ececeb;
+  box-shadow: 5px 5px 10px grey;
+  border-radius: 20px;
+  width: 250px;
+  height: 40px;
+  background-color: #eaeae6;
+}
+
+#score{
+  position: absolute;
+  font-family: Fink Heavy;
+  font-size: 23px;
+  top: 15%;
+  left: 6%;
+}
+
+#level{
+  position: absolute;
+  font-family: Fink Heavy;
+  font-size: 23px;
+  top: 15%;
+  left: 55%;
+}
+
+#volume-on-game{
+  position: absolute;
+  top: 29%;
+  left: 82%;
+  font-size: 20px;
+  color: black;
+}
+
+#help-commande{
+  visibility: hidden;
+  font-family: Fink Heavy;
+  position: absolute;
+  top: 90%;
+  left: 71%;
+  border: 1px solid #ececeb;
+  box-shadow: 5px 5px 10px grey;
+  border-radius: 20px;
+  width: 400px;
+  height: 40px;
+  background-color: #eaeae6;
+}
+/*-----------------------------------------FIN AFFICHAGE JEU----------------------------------------------*/
+
+/*-----------------------------------------GAME OVER----------------------------------------------*/
+
+#trans-gameover{
+  display: none;
+  background: rgba(0,191,255,0.3);
+  font-family: Fink Heavy;
+  z-index:5;
+  width:100%;
+  position:absolute;
+  bottom:50%;
+  min-height: 15%;
+  margin:0;
+  padding:0;
+}
+
+#title-trans-gameover{
+  z-index:5;
+  position:absolute;
+  margin:0px;
+  width:100%;
+  text-align:center;
+  display: table-cell;
+  color:black ;
+  /*vertical-align:middle;*/
+  font-size: 80px;
+}
+
+#score-final{
+  z-index:5;
+  position:absolute;
+  margin:0px;
+  width:100%;
+  text-align:center;
+  display: table-cell;
+  color:black ;
+  vertical-align:middle;
+  font-size: 40px;
+  top: 40%;
+}
 
 #return-menu{
   z-index:5;
@@ -185,7 +358,7 @@ canvas{
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  top: 50%;
+  top: 60%;
   text-align:center;
   display: table-cell;
   color:black ;
@@ -199,8 +372,115 @@ canvas{
   height: 100px;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
-  text-align: center;
   justify-content: center;
   padding-top: 10px;
   
 }
+
+/*-----------------------------------------FIN GAME OVER----------------------------------------------*/
+
+/*-----------------------------------------PAUSE----------------------------------------------*/
+
+#pause{
+  font-family: Fink Heavy;
+  display: none;
+  position: absolute;
+  color: white;
+  font-size: 50px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('../medias/images/wood.jpg');
+  text-align: center;
+  width: 30%;
+  height: auto;
+  border-radius: 3%;
+  box-shadow: 5px 5px 10px grey;
+  border: 1px solid greyk;
+}
+
+#continuer{
+  font-family: Fink Heavy;
+  font-size: 20px;
+  border: none;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
+  background-size: 100%;
+  text-decoration: none;
+  color: #85775A;
+  width: 200px;
+  height: 90px;
+}
+
+#recom{
+  font-family: Fink Heavy;
+  font-size: 20px;
+  border: none;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
+  background-size: 100%;
+  text-decoration: none;
+  color: #85775A;
+  width: 200px;
+  height: 90px;
+}
+
+#recom-alert{
+  font-family: Fink Heavy;
+  display: none;
+  position: absolute;
+  color: white;
+  font-size: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: url('../medias/images/wood.jpg');
+  text-align: center;
+  width: 60%;
+  height: 40%;
+  border-radius: 3%;
+  box-shadow: 5px 5px 10px grey;
+}
+
+#recom-non{
+  font-family: Fink Heavy;
+  font-size: 20px;
+  border: none;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
+  background-size: 100%;
+  text-decoration: none;
+  color: #85775A;
+  width: 150px;
+  height: 90px;
+}
+
+#recom-oui{
+  font-family: Fink Heavy;
+  font-size: 20px;
+  border: none;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
+  background-size: 100%;
+  text-decoration: none;
+  color: #85775A;
+  width: 150px;
+  height: 90px;
+}
+
+
+
+#quit{
+  font-family: Fink Heavy;
+  font-size: 20px;
+  border: none;
+  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
+  background-size: 100%;
+  text-decoration: none;
+  color: #85775A;
+  width: 200px;
+  height: 90px;
+  margin-bottom: 20px;
+}
+/*-----------------------------------------FIN PAUSE----------------------------------------------*/

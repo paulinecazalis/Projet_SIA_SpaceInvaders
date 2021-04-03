@@ -6,11 +6,11 @@ let stade;
 stade = new THREE.Group();
 
 //Création de la table de jeu
-geometry = new THREE.PlaneGeometry( 100, 100, 100, 10);
+geometry = new THREE.PlaneGeometry( 60, 60, 60, 10);
 
 //texture du sol
 let loader = new THREE.TextureLoader();
-let groundTexture = loader.load( '../src/medias/images/skybox/penguins/indigo_dn.jpg' );
+let groundTexture = loader.load( '../src/medias/images/plage3.png' );
 groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
 groundTexture.repeat.set( 2, 2 );
 //groundTexture.anisotropy = 16;

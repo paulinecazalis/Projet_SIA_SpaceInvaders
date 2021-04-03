@@ -1,84 +1,69 @@
+import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
 import NewGame from "./newGame.js";
-
+//Class qui permet de créer les différents niveaux + game over
 export default class Level{
+    static levelActive = true; //Booléen qui permet de contrôler si le niveau est actif ou non
     
-    static level = 1;
-    static vitesseAliens = 0.05;
-    static vitesseMissileAlien = 0.1;
-    static levelActive = true;
-    static scoreTotal = 0;
-    static partieFinie = false;
-    
-
+    //Permet de savoir l'état de levelActive
     static isActive = () => {
         return Level.levelActive;
     }
 
+    //Permet de changer l'état de levelActive
     static setActive = (bool) => {
         Level.levelActive = bool;
     }
 
-    static isPartieActive = () =>{
-        return Level.partieFinie;
-    }
-
-    static setPartieActive = (bool) =>{
-        Level.partieFinie = bool;
-    }
-
+    //Permet la transition de changement de niveau
     static changementLevel = (level) =>{
         Level.createTransition("Level " + level, 3000);
-        Level.vitesseAliens = level/20;
-        Level.vitesseMissileAlien = level/10;
+        gameConfig.vitesseAliens = level/20;
+        gameConfig.vitesseMissileAlien = level/10;
         
     }
 
+    //Permet de créer le bandeau de transition entre chaque niveaux
     static createTransition = (text, duration) => {
         document.getElementById('title-trans').innerHTML = text;
         //document.getElementById('trans').id = "trans";
         document.getElementById('trans').style.display = "block";
-        if(duration > 0){
-            setTimeout(() => {
-                document.getElementById('trans').style.display = "none";
-                Level.setActive(false);
-            }, duration);
-        }
+        Level.setActive(false);
+        setTimeout(() => {
+            document.getElementById('trans').style.display = "none";
+            Level.setActive(true);
+        }, duration);
+
     }
 
-    static menuLevel = () =>{
-        document.getElementById('life1').innerHTML = " <img src='../src/medias/images/apple.png'>"
-        document.getElementById('life2').innerHTML = " <img src='../src/medias/images/apple.png'>"
-        document.getElementById('life3').innerHTML = " <img src='../src/medias/images/apple.png'>"
-    }
-
-    static removeLives = (nbLives) =>{
-        nbLives == 2 ? document.getElementById('life3').style.visibility = 'hidden' : nbLives == 1 ? document.getElementById('life2').style.visibility = 'hidden' : document.getElementById('life1').style.visibility = 'hidden'
-    }
-
-    static resetLives = () =>{
-        document.getElementById('life3').style.visibility = 'visible';
-        document.getElementById('life2').style.visibility = 'visible';
-        document.getElementById('life1').style.visibility = 'visible';
-    }
-
-    static gameOver = (text/*, scene, aliens, bunkObject*/) =>{
-        document.getElementById('title-trans').innerHTML = text;
+    //Permet de faire le bandeau lorsque la partie est finie (perdue)
+    static gameOver = (text) =>{
+        document.getElementById('title-trans-gameover').innerHTML = text;
         //document.getElementById('trans').id = "trans";
-        document.getElementById('trans').style.display = "block";
-        document.getElementById('trans').style.minHeight = "25%";
+        document.getElementById('trans-gameover').style.display = "block";
+        document.getElementById('trans-gameover').style.minHeight = "30%";
+
+        var scoreFinal = document.createElement('p');
+        scoreFinal.innerHTML = "Score final : " + gameConfig.scoreTotal;
+        scoreFinal.id = "score-final";
+        document.getElementById('trans-gameover').appendChild(scoreFinal);
+
         var btnMenu = document.createElement('button');
         btnMenu.innerHTML = 'Retour menu';
         btnMenu.id = "return-menu";
         btnMenu.onclick = () =>{
             let menu = new Menu();
             menu.loadMenu();
-            document.getElementById('trans').style.display = "none";
-            //document.location.reload(); //recharge la page du menu
-            //NewGame.loadNewGame(scene, aliens, bunkObject);
+            document.getElementById('trans-gameover').style.display = "none";
+            document.getElementById('score-final').style.display = "none";
+            document.getElementById('score-level').style.display = "none";
+            gameConfig.vitesseAliens = gameConfig.level/20;
+            gameConfig.vitesseMissileAlien = gameConfig.level/10;
+            gameConfig.scoreTotal = 0;
 
         }
-        document.getElementById('trans').appendChild(btnMenu);
+        document.getElementById('trans-gameover').appendChild(btnMenu);
+        
     }
 
 

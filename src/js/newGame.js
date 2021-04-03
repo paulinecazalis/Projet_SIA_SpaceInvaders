@@ -1,6 +1,6 @@
-import Alien from "./alienClass.js"
+import Alien from "./alien.js"
 import Menu from "./menu.js";
-import PlayerClass from "./playerClass.js";
+import PlayerClass from "./player.js";
 
 export default class NewGame{
 

@@ -30,10 +30,13 @@
   <div id="menu">
     <div id="title-menu">
       <img src="src/medias/images/menu/Logo-acnh-sp.png" alt="logo">
-      <i class="fas fa-volume" id="volume-on" style="color: white"></i>
+    </div>
+    <div id="music-menu">
+      <i class="fas fa-volume" id="volume-on"></i>
+      <i class="fas fa-music" id="music-on"></i>
     </div>
     <div id="auteur">
-      <h3>Cazalis Pauline</h3>
+      <h2>Cazalis Pauline</h2>
     </div>
     <div id="commandes">
       <h1 style="color: white">Commandes :</h1>
@@ -44,7 +47,8 @@
       <!--<a href="" onclick="mainMenu()">Jouer</a>-->
       <button id="button-play">Jouer</button>
     </div>
-    <h1 style="justify-content: center; text-align: center; font-family: Fink Heavy; margin-top: -5px; color: white;">Scores :</h1>
+    <br>
+    <h1 style="justify-content: center; text-align: center; font-family: Fink Heavy; margin-top: -5px; color: white;">Points :</h1>
     <div id="points">
       <p><img src="./src/medias/images/menu/porcelette.png" alt="" style="width: 90px;"> = 10 points</p>
       <p><img src="./src/medias/images/menu/pascal.png" alt="" style="width: 90px;"> = 30 points</p>
@@ -60,9 +64,55 @@
       <div id="title-trans">
       </div>
     </div>
-    <div id="life1"></div>
-    <div id="life2"></div>
-    <div id="life3"></div>
+    <div id="trans-gameover">
+      <div id="title-trans-gameover">
+      </div>
+    </div>
+    <div id="game-element">
+      <p style="font-family: Fink Heavy; position: absolute; top: -10%; left: 5%;">Vies:</p>
+      <div id="lives">
+        <div id="life1">
+          <img src='../src/medias/images/apple.png'>
+        </div>
+        <div id="life2">
+          <img src='../src/medias/images/apple.png'>
+        </div>
+        <div id="life3">
+          <img src='../src/medias/images/apple.png'>
+        </div>
+      </div>
+      <div id="invincible"></div>
+      <i class="fas fa-volume" id="volume-on-game"></i>
+      <i class="fas fa-music" id="music-on-game"></i>
+    </div>
+    
+    <div id="score-level">
+      <div id="score"></div>
+      <div id="level"></div>
+    </div>
+    
+    <div id="help-commande">
+      <p style="position: absolute; top: -10%; left: 10%;">h: help &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k: kill all &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i: invincible mode</p>
+    </div>
+    
+
+    <div id="pause">
+      <div style="margin-top: 20px;">Pause</div>
+      <div id="button-continuer">
+        <button id="continuer">Continuer</button>
+      </div>
+      <div id="button-recom">
+        <button id="recom">Recommencer</button>
+      </div>
+      <div id="button-quit">
+        <button id="quit">Quitter</button>
+      </div>
+      <div id="recom-alert">
+        <p>Êtes-vous sûr de vouloir recommencer ?</p>
+        <button id="recom-non">Non</button>
+        <button id="recom-oui">Oui</button>
+      </div>
+    </div>
     
   </div>
 </body>
