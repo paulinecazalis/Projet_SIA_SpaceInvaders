@@ -1,4 +1,7 @@
 import * as THREE from '../lib/node_modules/three/build/three.module.js';
+import { EffectComposer } from '../lib/node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from '../lib/node_modules/three/examples/jsm/postprocessing/RenderPass.js';
+import { GlitchPass } from '../lib/node_modules/three/examples/jsm/postprocessing/GlitchPass.js';
 
 import Level from './level.js';
 import gameConfig from './gameConfig.js';
@@ -16,6 +19,9 @@ export default class Alien{
     static alienTab = []; // Tableau qui contient les aliens
     static alienBonusTab = []; //Tableau qui contient l'alien bonus
     static positionAlienBonus = true;
+    static composer;
+    static glitchPass;
+    static boolPostPro = false; //booléen qui permet de savoir si l'effet de postProcessing est activé
 
     //Permet de déterminer la position des aliens
     static isPositionAliens = () => {
@@ -46,6 +52,18 @@ export default class Alien{
     static setMissileAliensTire = (bool) => {
         this._missileAliensTire = bool;
     }
+
+     //Permet de déterminer si l'effet de postProcessing est activé ou non
+     static isPostProcessing = () => {
+        return Alien.boolPostPro;
+    }
+
+    //Permet de changer la valeur du postProcessing
+    static setPostProcessing = (bool) => {
+        Alien.boolPostPro = bool;
+    }
+
+
 
 
     //Permet la création des aliens
@@ -199,7 +217,7 @@ export default class Alien{
     }
 
     //Permet aux aliens de toucher le vaisseau du joueur et de lui faire perdre des vies
-    static aliensTouchSpaceship = (spaceship, nbLives) =>{
+    static aliensTouchSpaceship = (spaceship, nbLives,renderer,scene,camera) =>{
         var ray = new THREE.Raycaster();
         var vect = new THREE.Vector3(0, 0, 1);
         ray.set(Alien._missileAliens.position, vect);
@@ -208,6 +226,11 @@ export default class Alien{
         if(intersect.length > 0){
             Alien.setMissileAliensTire(false);
             Alien._missileAliens.visible = false;
+            Alien.setPostProcessing(!Alien.boolPostPro);
+            if(Alien.isPostProcessing()){
+                Alien.postProcessing(renderer,scene,camera);
+                Alien.setPostProcessing(false);
+            }
             if(!Sound.boolSound){
                 Sound.livesSound(spaceship);
             }
@@ -241,6 +264,17 @@ export default class Alien{
             }
           }
         }
+    }
+
+    static postProcessing = (renderer, scene, camera) =>{
+        /*Alien.composer = new EffectComposer( renderer );
+        Alien.composer.addPass( new RenderPass( scene, camera ) );*/
+        Alien.glitchPass = new GlitchPass();
+        //Alien.composer.renderToScreen = true;
+        Alien.composer.addPass( Alien.glitchPass );
+        setTimeout(() => {
+            Alien.composer.removePass(Alien.glitchPass);
+        }, 2000);
     }
 
 

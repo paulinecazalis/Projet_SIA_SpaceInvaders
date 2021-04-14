@@ -2,6 +2,7 @@
 import {GLTFLoader} from '../lib/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
 import {ColladaLoader} from '../lib/node_modules/three/examples/jsm/loaders/ColladaLoader.js';
 import * as THREE from '../lib/node_modules/three/build/three.module.js';
+
 import Level from './level.js';
 import Menu from './menu.js';
 
@@ -17,6 +18,7 @@ export default class gameConfig{
     static lockCam = true; //Booléen qui permet de bloquer la caméra du joueur
     static pause = false; // pour savoir si le jeu est en pause ou non
     static help = false; //pour savoir si on a appuyé sur la touche h
+
 
     //Permet de charger des modèles 3D de type GLTF
     static chargerModeleGLTF(url){
@@ -111,7 +113,7 @@ export default class gameConfig{
         document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
         document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
         document.getElementById('invincible').style.display = "block";
-        document.getElementById('invincible').innerHTML = "Invincible: " + gameConfig.invincible;
+        document.getElementById('invincible').innerHTML = "Invincible: non" ;
     }
 
     static helpKey = () =>{
@@ -126,5 +128,7 @@ export default class gameConfig{
             }
         })
     }
+
+   
 
 }

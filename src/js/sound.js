@@ -30,18 +30,22 @@ export default class Sound{
         document.getElementById('volume-on').onclick = function(){
             if(Sound.sound.isPlaying){
                 document.getElementById('volume-on').className = 'fas fa-volume-mute';
+                document.getElementById('volume-on-game').className = 'fas fa-volume-mute';
                 Sound.sound.pause();
             }else{
                 document.getElementById('volume-on').className ='fas fa-volume';
+                document.getElementById('volume-on-game').className ='fas fa-volume';
                 Sound.sound.play();
             }
         }
         document.getElementById('volume-on-game').onclick = function(){
             if(Sound.sound.isPlaying){
                 document.getElementById('volume-on-game').className = 'fas fa-volume-mute';
+                document.getElementById('volume-on').className = 'fas fa-volume-mute';
                 Sound.sound.pause();
             }else{
                 document.getElementById('volume-on-game').className ='fas fa-volume';
+                document.getElementById('volume-on').className ='fas fa-volume';
                 Sound.sound.play();
             }
         }
@@ -72,18 +76,22 @@ export default class Sound{
                 Sound.audioAliens.pause();
                 Sound.audioLives.pause();
                 document.getElementById('music-on-game').className = 'fas fa-music-slash';
+                document.getElementById('music-on').className = 'fas fa-music-slash';
             }else{
                 document.getElementById('music-on-game').className ='fas fa-music';
+                document.getElementById('music-on').className ='fas fa-music';
             }
         }
 
-        document.getElementById('music-on-game').onclick = function(){
+        document.getElementById('music-on').onclick = function(){
             Sound.boolSound = !Sound.boolSound;
             if(Sound.boolSound){
                 Sound.audioAliens.pause();
                 Sound.audioLives.pause();
+                document.getElementById('music-on').className = 'fas fa-music-slash';
                 document.getElementById('music-on-game').className = 'fas fa-music-slash';
             }else{
+                document.getElementById('music-on').className ='fas fa-music';
                 document.getElementById('music-on-game').className ='fas fa-music';
             }
         }

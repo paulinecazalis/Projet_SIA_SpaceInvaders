@@ -5,7 +5,6 @@ import { OrbitControls } from '../lib/node_modules/three/examples/jsm/controls/O
 import Stats from '../lib/node_modules/three/examples/jsm/libs/stats.module.js';
 import { EffectComposer } from '../lib/node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from '../lib/node_modules/three/examples/jsm/postprocessing/RenderPass.js';
-import { GlitchPass } from '../lib/node_modules/three/examples/jsm/postprocessing/GlitchPass.js';
 
 import Menu from '../js/menu.js';
 import Player from './player.js';
@@ -13,9 +12,10 @@ import Alien from '../js/alien.js';
 import Level from '../js/level.js';
 import Sound from '../js/sound.js';
 import gameConfig from '../js/gameConfig.js';
+import Decor from '../js/decor.js';
 
 
-import {stade} from '../js/decor.js';
+//import {stade} from '../js/decor.js';
 
 
 //import essai from './essai.js';
@@ -146,6 +146,8 @@ async function init() {
     aliens = value;
     scene.add(value);
   });
+
+  console.log(aliens);
   
   await Alien.createAlienBonus().then((value) => {
     setTimeout(() => {
@@ -160,7 +162,21 @@ async function init() {
     scene.add(value);
   });
 
-  scene.add(stade);
+  //scene.add(stade);
+  let ground = Decor.createGround();
+  scene.add(ground);
+
+  await Decor.createTree().then((value) =>{
+    scene.add(value);
+  })
+
+  await Decor.createTown().then((value) =>{
+    scene.add(value);
+  })
+
+  await Decor.createCedarTree().then((value) =>{
+    scene.add(value);
+  })
 
   const dir = new THREE.Vector3( 0, 0.5, 1 );
 
@@ -181,12 +197,10 @@ async function init() {
   
 
   // postprocessing pour epileptique
+  //Alien.postProcessing(renderer,scene,camera);
+  Alien.composer = new EffectComposer( renderer );
+  Alien.composer.addPass( new RenderPass( scene, camera ) );
 
-  /*composer = new EffectComposer( renderer );
-  composer.addPass( new RenderPass( scene, camera ) );
-
-  glitchPass = new GlitchPass();
-  composer.addPass( glitchPass );*/
 
   scene.add(Player.scoreGroup);
 
@@ -214,9 +228,10 @@ function gameLoop() {
   while(loop.dt > loop.slowStep) {
     loop.dt = loop.dt - loop.slowStep;
     update(loop.step); // déplace les objets d'une fraction de seconde
-    //composer.render();
+    Alien.composer.render();
+    
   }
-  renderer.render(scene, camera);  // rendu de la scène
+  //renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;
 
   requestAnimationFrame(gameLoop); // relance la boucle du jeu
@@ -289,7 +304,7 @@ function playerShoot(){
 function aliensShoot(){
   Alien.moveMissileAliens();
   Alien.aliensTouchBunk();
-  nbLives = Alien.aliensTouchSpaceship(spaceshipObject, nbLives);
+  nbLives = Alien.aliensTouchSpaceship(spaceshipObject, nbLives,renderer,scene,camera);
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
     removeScene();
@@ -320,12 +335,17 @@ function triche(){
     if(e.key == "i" || e.key == 'I'){
       console.log('mode invincible');
       gameConfig.setInvincible(!gameConfig.invincible);
+      Sound.boolSound = !Sound.boolSound;
       if(gameConfig.invincible){
-        document.getElementById('invincible').innerHTML = "Invincible: oui";
+        if(Sound.boolSound){
+          Sound.audioLives.pause();
+          document.getElementById('invincible').innerHTML = "Invincible: oui";
+        }else{
+          Sound.audioLives.play();
+        }
       }else{
         document.getElementById('invincible').innerHTML = "Invincible: non";
       }
-      
     }
   });
 }

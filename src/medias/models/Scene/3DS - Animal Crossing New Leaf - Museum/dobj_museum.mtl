@@ -1,0 +1,30 @@
+# Created by Every File Explorer
+
+newmtl CR00_dobj_museun_main
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.8 0.8 0.8
+d 1
+map_Kd Tex/tex_dobj_museum_main.png
+
+newmtl SH_dobj_museum
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.8 0.8 0.8
+d 1
+map_Kd Tex/tex_dobj_museum_main.png
+
+newmtl SH_dobj_museum_stn
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.8 0.8 0.8
+d 1
+map_Kd Tex/tex_dobj_museum_stone.png
+
+newmtl m_dobj_museum_stn
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.8 0.8 0.8
+d 1
+map_Kd Tex/tex_dobj_museum_stone.png
+
