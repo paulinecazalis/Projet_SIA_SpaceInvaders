@@ -166,6 +166,9 @@ async function init() {
   let ground = Decor.createGround();
   scene.add(ground);
 
+  let groundTownHall = Decor.createGroundTownHall();
+  scene.add(groundTownHall);
+
   await Decor.createTree().then((value) =>{
     scene.add(value);
   })
@@ -174,9 +177,18 @@ async function init() {
     scene.add(value);
   })
 
-  await Decor.createCedarTree().then((value) =>{
+  await Decor.createHouse().then((value) =>{
     scene.add(value);
   })
+
+  await Decor.createTreeTown().then((value) =>{
+    scene.add(value);
+  })
+
+  await Decor.nookShop().then((value) =>{
+    scene.add(value);
+  })
+
 
   const dir = new THREE.Vector3( 0, 0.5, 1 );
 

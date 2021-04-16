@@ -10,7 +10,7 @@ export default class Decor{
     static createGround = () => {
         this.geometry = new THREE.PlaneGeometry( 60, 60, 60, 10);
         let loader = new THREE.TextureLoader();
-        let groundTexture = loader.load( '../src/medias/images/plage3.png' );
+        let groundTexture = loader.load( '../src/medias/images/herbe.png' );
         groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
         groundTexture.repeat.set( 2, 2 );
         //groundTexture.anisotropy = 16;
@@ -20,17 +20,36 @@ export default class Decor{
         plane.rotation.x = THREE.Math.degToRad(-90);
         plane.position.y = -1;
         //stade.add( plane );
-        return plane
+        return plane;
+    }
+
+    static createGroundTownHall = () =>{
+        this.geometry = new THREE.PlaneGeometry( 50, 30, 30, 10);
+        let loader = new THREE.TextureLoader();
+        let groundTexture = loader.load( '../src/medias/images/mairie.png' );
+        groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+        //groundTexture.repeat.set( 2, 2 );
+        //groundTexture.anisotropy = 16;
+        groundTexture.encoding = THREE.sRGBEncoding;
+        this.material = new THREE.MeshLambertMaterial( { map: groundTexture } );
+        let plane = new THREE.Mesh( this.geometry, this.material );
+        plane.rotation.x = THREE.Math.degToRad(-90);
+        plane.position.y = -0.9;
+        plane.position.z = -15;
+        //stade.add( plane );
+        return plane;
     }
 
     static async createTree(){
         let treeGroup = new THREE.Group();
         for(let i = 0; i<= 5; i++){
-            let tree = await gameConfig.chargerModeleDAE('../src/medias/models/Scene/Palm Tree/palmtree.dae');
+            let tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Scene/Tree/tree2.gltf');
             tree.scene.position.x = (i%5 - ((5-1)/2)) * 10;
             tree.scene.position.z = 29;
             tree.scene.position.y = -1;
-            tree.scene.scale.set(0.05,0.05,0.05)
+            tree.scene.rotation.x = 20.4;
+            tree.scene.rotation.z = 9.5;
+            tree.scene.scale.set(35,35,35)
             treeGroup.add(tree.scene);
         }
         return treeGroup;
@@ -44,49 +63,41 @@ export default class Decor{
         return town.scene;
     }
 
-    static async createCedarTree(){
-        let cedar = await gameConfig.chargerModeleDAE('../src/medias/models/Scene/cedar/fg_treeB_4.dae');
-        cedar.scene.position.z = -20;
-        cedar.scene.position.x = 2;
-        cedar.scene.position.y = -1;
-        cedar.scene.scale.set(0.08,0.08,0.08)
-        return cedar.scene;
+    static async createHouse(){
+        let house = await gameConfig.chargerModeleGLTF('../src/medias/models/Scene/animal_crossing_house/scene.gltf');
+        house.scene.position.z = -20;
+        house.scene.position.x = -15;
+        house.scene.position.y = -1;
+        house.scene.rotation.y = 29.8;
+        house.scene.scale.set(0.03,0.03,0.03)
+        return house.scene;
+    }
+
+    static async createTreeTown(){
+        let treeGroup = new THREE.Group();
+        for(let i = 0; i<= 1; i++){
+            let tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Scene/Tree/tree2.gltf');
+            tree.scene.position.x = (i%2 - ((2-1)/2)) * 20;
+            tree.scene.position.z = -15;
+            tree.scene.position.y = -1;
+            tree.scene.rotation.x = 20.4;
+            tree.scene.rotation.z = 0;
+            tree.scene.scale.set(35,35,35)
+            treeGroup.add(tree.scene);
+        }
+        return treeGroup;
+        
+    }
+
+    static async nookShop(){
+        let shop = await gameConfig.chargerModeleGLTF('../src/medias/models/Scene/Nookling Junction/scene.gltf');
+        shop.scene.scale.set(8,8,8);
+        shop.scene.position.y = -5;
+        shop.scene.position.z = -17;
+        shop.scene.position.x = 20;
+        //shop.scene.rotation.y = 4.7;
+        return shop.scene;
     }
 
     
 }
-
-/*let geometry, material;
-let stade;
-
-stade = new THREE.Group();
-
-//Création de la table de jeu
-geometry = new THREE.PlaneGeometry( 60, 60, 60, 10);
-
-//texture du sol
-let loader = new THREE.TextureLoader();
-let groundTexture = loader.load( '../src/medias/images/plage3.png' );
-groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-groundTexture.repeat.set( 2, 2 );
-//groundTexture.anisotropy = 16;
-groundTexture.encoding = THREE.sRGBEncoding;
-let groundMaterial = new THREE.MeshLambertMaterial( { map: groundTexture } );
-let plane = new THREE.Mesh( geometry, groundMaterial );
-plane.rotation.x = THREE.Math.degToRad(-90);
-plane.position.y = -1;
-stade.add( plane );
-let essai2;
-let tree = gameConfig.chargerModeleDAE('../src/medias/models/Scene/Palm Tree/palmtree.dae').then((value) =>{
-    essai2 = value;
-});
-stade.add(essai2);
-
-
-
-
-
-
-
-
-export {stade};*/

@@ -55,9 +55,10 @@ export default class Player{
             bunker.add(cubBunk);
             bunker.position.x = -6;
             bunker.position.z = 2;*/
-            const tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Cedar Tree/scene.gltf');
+            const tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
             const treeBunk = tree.scene;
-            treeBunk.position.x = i * 3;
+            //treeBunk.position.x = i * 3;
+            treeBunk.position.x = (i%4 - ((4-3)/2)) * 5;
             treeBunk.scale.set(0.7,0.7,0.7);
             //treeBunk.rotation.x = 45.5;
             bunker.add(treeBunk);
