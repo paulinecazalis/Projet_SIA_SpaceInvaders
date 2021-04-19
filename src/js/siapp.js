@@ -46,7 +46,7 @@ let element = new Player();
 //let partieFinie = false;
 
 //variable menu
-let menu;
+let menu = new Menu();
 
 //variable pour les niveaux
 let lvl;
@@ -58,7 +58,6 @@ window.addEventListener('load', go);
 window.addEventListener('resize', resize);
 
 function go() {
-  menu = new Menu();
   menu.loadMenu();
   Sound.volumeMusic();
   //Sound.boolSound = !Sound.boolSound;
@@ -72,7 +71,7 @@ async function init() {
   w = container.clientWidth;
   h = container.clientHeight;
 
-  scene = new THREE.Scene();
+  
 
   camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 100);
   camera.position.set(0, 8, -10);
@@ -102,7 +101,7 @@ async function init() {
   /*axis = three_axis;
   scene.add(axis);*/
   light = new THREE.AmbientLight( 0xFFFFFF);
-  scene.add(light);
+  gameConfig.scene.add(light);
 
   //Background scene
   const path = '../src/medias/images/Standard-Cube-Map2/';
@@ -116,22 +115,40 @@ async function init() {
   const reflectionCube = new THREE.CubeTextureLoader().load( urls );
   const refractionCube = new THREE.CubeTextureLoader().load( urls );
   refractionCube.mapping = THREE.CubeRefractionMapping;
-  scene.background = reflectionCube;
+  gameConfig.scene.background = reflectionCube;
+
+  //gameConfig.loadSmokeEffect(gameConfig.scene);
 
   /*spaceshipObject = element.createSpaceship();
   scene.add(spaceshipObject);*/
-  await Player.createSpaceship().then((value) =>{
+  
+  /*await Player.createSpaceship().then((value) =>{
     spaceshipObject = value;
     scene.add(value);
-  })
-  light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+  })*/
+  /*light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
   light.position.set( 10,10,10 ).normalize();
-  scene.add(light);
+  scene.add(light);*/
+
+  /*let hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 4);
+  scene.add(hemiLight);*/
+
+  /*document.getElementById('jouer-menu-perso').onclick = () =>{
+    menu.createTransition("Level "+ gameConfig.level, 3000);
+    document.getElementById('menu-personnage').style.display = "none";
+    gameConfig.loadSpaceshipMenu(scene)
+  }*/
+
+
+  light = new THREE.SpotLight(0xffa95c, 2);
+  light.position.set(-50,50,50);
+  light.castShadow = true;
+  gameConfig.scene.add( light );
 
 
   await Player.createBunker().then((value) => {
     bunkObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
   /*bunkObject = element.createBunker();
@@ -139,54 +156,52 @@ async function init() {
 
   await Player.createMissilePlayer().then((value) => {
     missileObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
 
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
-
-  console.log(aliens);
   
   await Alien.createAlienBonus().then((value) => {
     setTimeout(() => {
       aliensBonus = value;
-      scene.add(value);
+      gameConfig.scene.add(value);
     }, 20000);
   });
 
 
   //scene.add(Alien.createMissileAliens());
   await Alien.createMissileAliens().then((value) => {
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
 
   //scene.add(stade);
   let ground = Decor.createGround();
-  scene.add(ground);
+  gameConfig.scene.add(ground);
 
   let groundTownHall = Decor.createGroundTownHall();
-  scene.add(groundTownHall);
+  gameConfig.scene.add(groundTownHall);
 
   await Decor.createTree().then((value) =>{
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
   await Decor.createTown().then((value) =>{
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
   await Decor.createHouse().then((value) =>{
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
   await Decor.createTreeTown().then((value) =>{
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
   await Decor.nookShop().then((value) =>{
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
 
 
@@ -200,7 +215,7 @@ async function init() {
   const hex = 0xffff00;
 
   const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
-  scene.add( arrowHelper );
+  gameConfig.scene.add( arrowHelper );
   triche();
   pauseMenu();
   gameConfig.helpKey();
@@ -211,10 +226,10 @@ async function init() {
   // postprocessing pour epileptique
   //Alien.postProcessing(renderer,scene,camera);
   Alien.composer = new EffectComposer( renderer );
-  Alien.composer.addPass( new RenderPass( scene, camera ) );
+  Alien.composer.addPass( new RenderPass( gameConfig.scene, camera ) );
 
 
-  scene.add(Player.scoreGroup);
+  gameConfig.scene.add(Player.scoreGroup);
 
 
   
@@ -241,7 +256,7 @@ function gameLoop() {
     loop.dt = loop.dt - loop.slowStep;
     update(loop.step); // déplace les objets d'une fraction de seconde
     Alien.composer.render();
-    
+    gameConfig.evolveSmoke();
   }
   //renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;
@@ -254,12 +269,12 @@ function gameLoop() {
 
 function update(step) {
   if(!Menu.isActive()){
-    gameConfig.cameraBind(camera, controls, spaceshipObject);
+    gameConfig.cameraBind(camera, controls, gameConfig.spaceshipObject);
     if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
-      element.moveSpaceShip(step, camera, controls);
-      Alien.moveAlien(step, aliens);
+      element.moveSpaceShip(step, camera, controls, aliens);
+      Alien.moveAlien(aliens);
       if(Alien.isPositionAliensBonus() && aliensBonus != undefined){
-        Alien.moveAlienBonus(aliensBonus, scene);
+        Alien.moveAlienBonus(aliensBonus, gameConfig.scene);
       }
       if(element.isMissileActive()){
         playerShoot();
@@ -286,15 +301,15 @@ function timestamp() {
 }
 
 function removeScene(){
-  scene.remove(aliens);
+  gameConfig.scene.remove(aliens);
   Alien.alienTab.length = 0;
-  scene.remove(aliensBonus);
+  gameConfig.scene.remove(aliensBonus);
   Alien.alienBonusTab.length = 0;
   Alien.setMissileAliensTire(false);
   Alien._missileAliens.visible = false;
   Player.bunkerTab.length = 0;
-  scene.remove(missileObject);
-  scene.remove(bunkObject);
+  gameConfig.scene.remove(missileObject);
+  gameConfig.scene.remove(bunkObject);
   gameConfig.setPartieActive(true);
 }
 
@@ -316,7 +331,7 @@ function playerShoot(){
 function aliensShoot(){
   Alien.moveMissileAliens();
   Alien.aliensTouchBunk();
-  nbLives = Alien.aliensTouchSpaceship(spaceshipObject, nbLives,renderer,scene,camera);
+  nbLives = Alien.aliensTouchSpaceship(gameConfig.spaceshipObject, nbLives,renderer,gameConfig.scene,camera);
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
     removeScene();
@@ -325,7 +340,7 @@ function aliensShoot(){
     newGameLoose();
     gameConfig.level = 1;
   }
-  else if(aliens.position.z == spaceshipObject.position.z){
+  else if(aliens.position.z == gameConfig.spaceshipObject.position.z){
     console.log('les aliens ont gagnés(raquette)');
     gameConfig.setPartieActive(true);
     //Level.gameOver("Game Over !");
@@ -364,18 +379,18 @@ function triche(){
 
 //Créer une nouvelle vague d'alien + reset position spaceship + enlève triche et affiche bandeau niveau
 async function newGameAlien(){
-  spaceshipObject.position.x = 0;
+  gameConfig.spaceshipObject.position.x = 0;
   await Player.createBunker().then((value) => {
     bunkObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
   await Player.createMissilePlayer().then((value) => {
     missileObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
   /*await Alien.createAlienBonus().then((value) => {
     aliensBonus = value;
@@ -392,18 +407,18 @@ async function newGameAlien(){
 
 //Permet de réinitialiser la scene si la partie est perdue
 async function newGameLoose(){
-  spaceshipObject.position.x = 0;
+  gameConfig.spaceshipObject.position.x = 0;
   await Player.createBunker().then((value) => {
     bunkObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   })
   await Alien.createAlien(6, 30).then((value) => {
     aliens = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
   await Player.createMissilePlayer().then((value) => {
     missileObject = value;
-    scene.add(value);
+    gameConfig.scene.add(value);
   });
   /*await Alien.createAlienBonus().then((value) => {
     aliensBonus = value;
@@ -418,7 +433,6 @@ function pauseMenu(){
     if(e.key == "Escape"){
       if(Level.isActive() && !Menu.isActive()){
         gameConfig.setPauseGame(!gameConfig.pause);
-        console.log(gameConfig.isPauseGame());
         if(gameConfig.pause){
           document.getElementById('pause').style.display = 'block';
 

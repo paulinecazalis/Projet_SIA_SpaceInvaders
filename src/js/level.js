@@ -1,6 +1,5 @@
 import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
-import NewGame from "./newGame.js";
 //Class qui permet de créer les différents niveaux + game over
 export default class Level{
     static levelActive = true; //Booléen qui permet de contrôler si le niveau est actif ou non

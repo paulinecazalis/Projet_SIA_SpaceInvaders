@@ -1,6 +1,6 @@
 import gameConfig from "./gameConfig.js";
 import Level from "./level.js";
-import NewGame from "./newGame.js";
+import Player from "./player.js";
 
 export default class Menu{
     constructor(){
@@ -24,11 +24,47 @@ export default class Menu{
         let btn = document.getElementById("button-play")
         btn.onclick = () => {
             this.discardMenu();
-            gameConfig.interfaceGame();
-            gameConfig.resetLives();
-            //NewGame.loadNewGame();
+            this.menuPerso();
+            //gameConfig.interfaceGame();
+            //gameConfig.resetLives();
             
         }
+    }
+
+    menuPerso(){
+        let space;
+        document.getElementById('menu-personnage').style.display = "block";
+        document.getElementById('checkbox-femme').checked = false;
+        document.getElementById('checkbox-homme').checked = false;
+        document.getElementById('checkbox-femme').onclick = () =>{
+            if(document.getElementById('checkbox-femme').checked == true){
+                document.getElementById('checkbox-homme').checked = false;
+            }else{
+                document.getElementById('checkbox-homme').checked = true;
+            }
+        };
+
+        document.getElementById('checkbox-homme').onclick = () =>{
+            if(document.getElementById('checkbox-homme').checked == true){
+                document.getElementById('checkbox-femme').checked = false;
+            }else{
+                document.getElementById('checkbox-femme').checked = true;
+            }
+        };
+
+        document.getElementById('jouer-menu-perso').onclick = async () =>{
+            this.createTransition("Level "+ gameConfig.level, 3000);
+            document.getElementById('menu-personnage').style.display = "none";
+            await Player.createSpaceship().then((value) =>{
+                //space = value;
+                //scene.remove(value)
+                gameConfig.spaceshipObject = value;
+                gameConfig.scene.add(value);
+            })
+        }
+
+        
+
     }
 
     //Permet le chargement du menu
@@ -40,7 +76,7 @@ export default class Menu{
     //Permet de cacher le menu et de créer la transition du premier niveau
     discardMenu = () => {
         document.getElementById("menu").style.display = "none";
-        this.createTransition("Level "+ gameConfig.level, 3000);
+        //this.createTransition("Level "+ gameConfig.level, 3000);
     }
 
     //Permet la création de la transition pour le premier niveau

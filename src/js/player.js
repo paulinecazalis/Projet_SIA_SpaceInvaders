@@ -15,6 +15,7 @@ export default class Player{
     static missile; //Variable pour le missile du joueur
     static scoreGroup = new THREE.Group(); //groupe de texte pour le score
     static touchAlienBonus = false;
+    static touchAlien = false;
 
     //Permet de déterminer la valeur de this._missilePlayerActive
     isMissileActive = () => {
@@ -31,10 +32,19 @@ export default class Player{
         let geometry = new THREE.BoxGeometry( 2, 0.8, 0.4 );
         let material = new THREE.MeshLambertMaterial( {color: 0x660000, transparent : true, opacity: 0.0} );
         Player.spaceship = new THREE.Mesh( geometry, material );
-        const vill1 = await gameConfig.chargerModeleGLTF('../src/medias/models/villageoise.gltf');
+        //const vill1 = await gameConfig.chargerModeleGLTF('../src/medias/models/villageoise.gltf');
+        let vill1;
+        if(document.getElementById('checkbox-homme').checked == true){
+          vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_boy01.dae');
+
+        }else{
+          vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_girl01.dae');
+        }
+        console.log(vill1.scene);
         const vill1Space = vill1.scene;
         vill1Space.scale.set(0.15,0.15,0.15);
-        vill1Space.rotation.x = 14.2;
+        //vill1Space.rotation.x = 14.2;
+        vill1Space.rotation.x = 0;
         vill1Space.position.y = -1;
         Player.spaceship.add(vill1Space);
         return Player.spaceship;
@@ -44,17 +54,6 @@ export default class Player{
     static async createBunker(){
         let bunker = new THREE.Group();
         for(let i = 0 ; i <= 4; i++){
-            /*let geometry = new THREE.BoxGeometry( 1, 1, 1 );
-            let material = new THREE.MeshLambertMaterial( {color: 'blue', transparent : true, opacity: 1.0} );
-            const cubBunk = new THREE.Mesh( geometry, material );
-            cubBunk.position.x = i * 3;
-            const tree = await this.chargerModele('../src/medias/models/Tree/fg_tree.dae');
-            const treeBunk = tree.scene;
-            treeBunk.scale.set(10,10,10);
-            cubBunk.add(treeBunk);
-            bunker.add(cubBunk);
-            bunker.position.x = -6;
-            bunker.position.z = 2;*/
             const tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
             const treeBunk = tree.scene;
             //treeBunk.position.x = i * 3;
@@ -96,20 +95,21 @@ export default class Player{
     }
 
     //Permet le mouvement du joueur (déplacement latéral + tire)
-    moveSpaceShip = (step, camera, controls) =>{
+    moveSpaceShip = (step, camera, controls, aliens) =>{
         if(gameConfig.keyboard.pressed("right")){
             if(Player.spaceship.position.x - 1.5 > -14){
-                Player.spaceship.position.x -= 5 * step;
+                Player.spaceship.position.x -= 4 * step;
             }
             //this._spaceship.position.x -= 5 * step;
             if(!gameConfig.lockCam){
               camera.position.set(Player.spaceship.position.x, 2.5, -2);
               controls.target = new THREE.Vector3(Player.spaceship.position.x, 0, 20);
+              //Alien.moveAlien(aliens)
             }
         }
         if(gameConfig.keyboard.pressed("left")){
             if(Player.spaceship.position.x + 1.5 < 14){
-                Player.spaceship.position.x += 5 * step;
+                Player.spaceship.position.x += 4 * step;
             }
           
           if(!gameConfig.lockCam){
@@ -138,10 +138,11 @@ export default class Player{
         if(intersect.length > 0){
           intersect[0].object.visible = false;
           Player.missile.visible = false;
+          this.touchAlien = true;
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
           }
-          
+          gameConfig.loadSmokeEffect(aliens);          
           Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
           aliens.remove(intersect[0].object);
           gameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;

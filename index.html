@@ -27,6 +27,7 @@
 </head>
 
 <body>
+  <!-- MENU PRINCIPAL-->
   <div id="menu">
     <div id="title-menu">
       <img src="src/medias/images/menu/Logo-acnh-sp.png" alt="logo">
@@ -43,8 +44,6 @@
       <p><i class="fal fa-arrow-square-left"></i>&nbsp; Gauche |&nbsp;<i class="fal fa-arrow-square-right"></i>&nbsp; Droite &nbsp;| &nbsp;<i class="far fa-horizontal-rule"></i> &nbsp;Tirer</p>
     </div>
     <div id="play-game">
-      <!--<img src="./src/medias/images/menu/buttonBackground.png" alt="" id="background-play">-->
-      <!--<a href="" onclick="mainMenu()">Jouer</a>-->
       <button id="button-play">Jouer</button>
     </div>
     <br>
@@ -55,10 +54,35 @@
       <p><img src="./src/medias/images/menu/rounard.png" alt="" style="width: 90px;"> = 50 points</p>
       <p><img src="./src/medias/images/menu/resetti.png" alt="" style="width: 90px;"> = 70 points</p>
       <p><img src="./src/medias/images/menu/tomnook.png" alt="" style="width: 90px;"> = 90 points</p>
-      
-      
     </div>
   </div>
+
+  <!-- MENU CHOIX PERSONNAGES-->
+  <div id="menu-personnage">
+    <p>Veuillez choisir un personnage : </p>
+    <div id="personnages">
+      <!--<img id="profil-image-femme" src="./src/medias/images/menu-perso/femme.png">-->
+      <!--<img id="profil-image-homme" src="./src/medias/images/menu-perso/homme.png">-->
+      <!--<button>Personnage 1</button>
+      <button>Personnage 2</button>-->
+      <label class="option_item">
+        <input type="checkbox" id="checkbox-femme">
+        <div class="tickmark"></div>
+          <img id="profil-image-femme" src="./src/medias/images/menu-perso/femme.png">
+      </label>
+
+      <label class="option_item">
+        <input type="checkbox" id="checkbox-homme">
+        <div class="tickmark"></div>
+          <img id="profil-image-homme" src="./src/medias/images/menu-perso/homme.png">
+      </label>
+    </div>
+    <div id="btn-jouer-menu-perso">
+      <button id="jouer-menu-perso">Play game</button>
+    </div>
+  </div>
+
+  <!-- RENDU 3D THREE JS-->
   <div id="SIApp">
     <div id="trans">
       <div id="title-trans">

@@ -5,12 +5,14 @@ import * as THREE from '../lib/node_modules/three/build/three.module.js';
 
 import Level from './level.js';
 import Menu from './menu.js';
+import Player from './player.js';
+import Alien from './alien.js';
 
 export default class gameConfig{
 
     static invincible = false; //le joueur n'est pas invincible, il le devient en utilisant la touche de triche
     static level = 1; // initialisation du premier niveau
-    static vitesseAliens = 0.05; //initialisation de la vitesse des aliens
+    static vitesseAliens = 0.06; //initialisation de la vitesse des aliens
     static vitesseMissileAlien = 0.1; //initialisation de la vitesse du missile des aliens
     static scoreTotal = 0; //initialisation du score total du joueur
     static partieFinie = false; //initialisation à faux car la partie n'est pas finie
@@ -18,6 +20,10 @@ export default class gameConfig{
     static lockCam = true; //Booléen qui permet de bloquer la caméra du joueur
     static pause = false; // pour savoir si le jeu est en pause ou non
     static help = false; //pour savoir si on a appuyé sur la touche h
+    static spaceshipObject;
+    static scene = new THREE.Scene();
+    static smokeParticles = new THREE.Group();
+    static particle;
 
 
     //Permet de charger des modèles 3D de type GLTF
@@ -127,6 +133,65 @@ export default class gameConfig{
                 }
             }
         })
+    }
+
+    static async loadSpaceshipMenu(scene){
+        await Player.createSpaceship().then((value) =>{
+            //space = value;
+            //scene.remove(value)
+            gameConfig.spaceshipObject = value;
+            scene.add(value);
+        })
+    }
+
+    static loadSmokeEffect(aliens){
+        let smokeTexture = new THREE.TextureLoader();
+        smokeTexture.load("./src/medias/images/smoke.png", function(texture){
+            let smokeGeo = new THREE.PlaneGeometry(3, 3);
+            let smokeMaterial = new THREE.MeshLambertMaterial({
+                //color: new THREE.Color("rgb(83, 84, 255)"),
+                map: texture,
+                transparent: true,
+                opacity: 0.0
+            });
+            gameConfig.particle = new THREE.Mesh(smokeGeo, smokeMaterial);
+            gameConfig.particle.name = "particle";
+            gameConfig.particle.position.x = Player.missile.position.x;
+            gameConfig.particle.position.z = Player.missile.position.z;
+            gameConfig.particle.position.y = 3;
+            gameConfig.particle.rotation.y = 9.5;
+            gameConfig.particle.material.opacity = 1;
+            gameConfig.smokeParticles.add(gameConfig.particle);
+            setInterval(() => {
+                Player.touchAlien = !Player.touchAlien;
+                gameConfig.scene.add(gameConfig.smokeParticles);
+                if(Player.touchAlien == true){
+                    gameConfig.particle.position.y += 0.05;
+                }else{
+                    if(gameConfig.particle.position.y > 4){
+                        console.log(gameConfig.particle.position.y);
+                      clearInterval(this);
+                      //Player.touchAlien = false;
+                    }
+                }
+                
+                //console.log(gameConfig.particle.position.y);
+                
+            }, 1000/60);
+            setTimeout(() => {
+                gameConfig.smokeParticles.remove(gameConfig.particle)
+                gameConfig.scene.remove(gameConfig.smokeParticles);
+                gameConfig.scene.remove(gameConfig.particle);
+            }, 500);
+        });
+          
+    }
+
+    static evolveSmoke = () => {
+        var sp = this.smokeParticles.length;
+        while(sp--) {
+            this.smokeParticles[sp].rotation.z -= 0.001;
+        }
     }
 
    

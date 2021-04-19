@@ -131,7 +131,7 @@ export default class Alien{
     }
 
     //Permet de bouger les aliens horizontalement et verticalement
-    static moveAlien(step, aliens){
+    static moveAlien(aliens){
         let box = new THREE.Box3().setFromObject(aliens);
         if( box.max.x >= 15 || box.min.x <= -15){
             Alien._positionAlien = !Alien._positionAlien;
