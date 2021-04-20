@@ -151,17 +151,19 @@ export default class Alien{
     //Permet de faire apparaitre et faire bouger l'alien bonus toutes les 10 secondes
     static moveAlienBonus(alienBonus,scene){
         alienBonus.visible = true
-        alienBonus.position.x += 0.2;
+        alienBonus.position.x += 0.13;
         if(Player.touchAlienBonus){ //Si le joueur touche l'alien bonus
             alienBonus.visible = false;
             scene.remove(alienBonus);
             alienBonus.position.x = -30;
             Player.touchAlienBonus = false;
             Alien.setPositionAliensBonus(false);
+            document.getElementById('invincible').innerHTML = "Invincible: oui";
             setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
                 scene.add(alienBonus);
                 alienBonus.visible = true;
                 Alien.setPositionAliensBonus(true);
+                document.getElementById('invincible').innerHTML = "Invincible: non";
             }, 10000);
         }
         if(alienBonus.position.x >= 30){ //Si l'alien bonus sort du terrain
