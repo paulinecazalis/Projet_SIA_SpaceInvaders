@@ -140,9 +140,11 @@ export default class Player{
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
           }
-          gameConfig.loadSmokeEffect(aliens);          
-          Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
-          aliens.remove(intersect[0].object);
+          gameConfig.loadSmokeEffect();          
+          if(intersect[0].object.visible == false){
+            Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
+            aliens.remove(intersect[0].object);
+          }          
           gameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;
           document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
           let score3D = intersect[0].object.position.z * 10 + 10;

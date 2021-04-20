@@ -95,6 +95,13 @@ export default class gameConfig{
           camera.position.set(spaceship.position.x, 2.5, -2);
           controls.target = new THREE.Vector3(spaceship.position.x, 0, 20);
         }
+        if(gameConfig.keyboard.pressed("2")){
+            /*camera.position.set( -10, 30, -5);
+            camera.lookAt(0, Math.PI/2, 0);
+            camera.up.set(0, 90, 0);*/
+            camera.position.set(20, 30, 10);
+            //camera.lookAt(0, 150, 0);
+        }
     }
 
     //Permet d'enlever les vies affichées à l'écran (pommes)
@@ -144,7 +151,7 @@ export default class gameConfig{
         })
     }
 
-    static loadSmokeEffect(aliens){
+    static loadSmokeEffect(){
         let smokeTexture = new THREE.TextureLoader();
         smokeTexture.load("./src/medias/images/smoke.png", function(texture){
             let smokeGeo = new THREE.PlaneGeometry(3, 3);
@@ -164,8 +171,8 @@ export default class gameConfig{
             gameConfig.smokeParticles.add(gameConfig.particle);
             let interval = setInterval(() => {
                 gameConfig.scene.add(gameConfig.smokeParticles);
-                gameConfig.particle.position.y += 0.05;
-                if(gameConfig.particle.position.y > 4){
+                gameConfig.particle.position.y += 0.1;
+                if(gameConfig.particle.position.y > 6){
                     gameConfig.scene.remove(gameConfig.particle);
                     clearInterval(interval);
                 }

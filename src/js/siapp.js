@@ -71,8 +71,6 @@ async function init() {
   w = container.clientWidth;
   h = container.clientHeight;
 
-  
-
   camera = new THREE.PerspectiveCamera(75, w/h, 0.1, 100);
   camera.position.set(0, 8, -10);
   camera.add( Sound.listener );
@@ -80,7 +78,7 @@ async function init() {
   controls = new OrbitControls(camera, container);
   controls.target = new THREE.Vector3(0, 0, 20);
   controls.panSpeed = 0.3;
-  //controls.enabled = false;
+  controls.enabled = false;
 
   const renderConfig = {antialias: true, alpha: true};
   renderer = new THREE.WebGLRenderer(renderConfig);
@@ -256,7 +254,7 @@ function gameLoop() {
     loop.dt = loop.dt - loop.slowStep;
     update(loop.step); // déplace les objets d'une fraction de seconde
     Alien.composer.render();
-    gameConfig.evolveSmoke();
+    //gameConfig.evolveSmoke();
   }
   //renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;

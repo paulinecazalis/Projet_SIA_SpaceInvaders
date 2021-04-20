@@ -25,8 +25,8 @@ export default class Menu{
         btn.onclick = () => {
             this.discardMenu();
             this.menuPerso();
-            //gameConfig.interfaceGame();
-            //gameConfig.resetLives();
+            gameConfig.interfaceGame();
+            gameConfig.resetLives();
             
         }
     }
