@@ -162,26 +162,17 @@ export default class gameConfig{
             gameConfig.particle.rotation.y = 9.5;
             gameConfig.particle.material.opacity = 1;
             gameConfig.smokeParticles.add(gameConfig.particle);
-            setInterval(() => {
-                Player.touchAlien = !Player.touchAlien;
+            let interval = setInterval(() => {
                 gameConfig.scene.add(gameConfig.smokeParticles);
-                if(Player.touchAlien == true){
-                    gameConfig.particle.position.y += 0.05;
-                }else{
-                    if(gameConfig.particle.position.y > 4){
-                        console.log(gameConfig.particle.position.y);
-                      clearInterval(this);
-                      //Player.touchAlien = false;
-                    }
+                gameConfig.particle.position.y += 0.05;
+                if(gameConfig.particle.position.y > 4){
+                    gameConfig.scene.remove(gameConfig.particle);
+                    clearInterval(interval);
                 }
-                
-                //console.log(gameConfig.particle.position.y);
-                
             }, 1000/60);
             setTimeout(() => {
                 gameConfig.smokeParticles.remove(gameConfig.particle)
                 gameConfig.scene.remove(gameConfig.smokeParticles);
-                gameConfig.scene.remove(gameConfig.particle);
             }, 500);
         });
           

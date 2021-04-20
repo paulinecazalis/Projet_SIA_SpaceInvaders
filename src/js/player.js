@@ -15,7 +15,6 @@ export default class Player{
     static missile; //Variable pour le missile du joueur
     static scoreGroup = new THREE.Group(); //groupe de texte pour le score
     static touchAlienBonus = false;
-    static touchAlien = false;
 
     //Permet de déterminer la valeur de this._missilePlayerActive
     isMissileActive = () => {
@@ -138,7 +137,6 @@ export default class Player{
         if(intersect.length > 0){
           intersect[0].object.visible = false;
           Player.missile.visible = false;
-          this.touchAlien = true;
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
           }
