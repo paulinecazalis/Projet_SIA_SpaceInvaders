@@ -39,7 +39,6 @@ export default class Player{
         }else{
           vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_girl01.dae');
         }
-        console.log(vill1.scene);
         const vill1Space = vill1.scene;
         vill1Space.scale.set(0.15,0.15,0.15);
         //vill1Space.rotation.x = 14.2;
@@ -52,7 +51,7 @@ export default class Player{
     //Permet la création des bunkers
     static async createBunker(){
         let bunker = new THREE.Group();
-        for(let i = 0 ; i <= 4; i++){
+        for(let i = 0 ; i < 4; i++){
             const tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
             const treeBunk = tree.scene;
             //treeBunk.position.x = i * 3;
@@ -136,20 +135,36 @@ export default class Player{
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
           intersect[0].object.visible = false;
+          
+          console.log(Alien.alienTab);
+          for(let i = 0; i < Alien.alienTab.length; i++){
+            //console.log(Alien.alienTab[i].length);
+            /*console.log(Alien.alienTab[i].id);
+            console.log(intersect[0].object.id);*/
+
+            if(intersect[0].object.id == Alien.alienTab[i].id){
+              Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object.id),1);
+              aliens.remove(intersect[0].object);
+              console.log(aliens);
+              console.log("ok touch id");
+            }
+            //console.log(Alien.alienTab[i].id);
+          }
+          
           Player.missile.visible = false;
+          //Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1); 
+          
+          //console.log(Alien.alienTab.length);    
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
           }
-          gameConfig.loadSmokeEffect();          
-          if(intersect[0].object.visible == false){
-            Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
-            aliens.remove(intersect[0].object);
-          }          
+          gameConfig.loadSmokeEffect();
+                    
           gameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;
           document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
           let score3D = intersect[0].object.position.z * 10 + 10;
           let convertScore3D = score3D.toString();
-          console.log(gameConfig.scoreTotal);
+          //console.log(gameConfig.scoreTotal);
           this.scoreTouchAlien("+" + convertScore3D);
           this.setMissileActive(false);
         }
@@ -161,18 +176,23 @@ export default class Player{
         var vect = new THREE.Vector3(0, 2, 1); //pour toucher les feuilles de l'arbre et non le tronc
         vect.normalize();
         ray.set(Player.missile.position, vect);
-      
         //Calcule les objets coupant le rayon de prélèvement
         var intersect = ray.intersectObjects(Player.bunkerTab, true);
-        if(intersect.length > 0){
-          if(intersect[0].object.material.opacity != 0){
-            intersect[0].object.material.opacity -= 0.5;
+        /*if(intersect.length > 0){
+          intersect[0].object.material.opacity -= 0.5;
             this.setMissileActive(false);
             Player.missile.visible = false;
             if(intersect[0].object.material.opacity <= 0){
                 intersect[0].object.visible = false;
               //scene.remove(intersect[0].object);
               //bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
+            }
+        }*/
+        if(intersect.length > 0){
+          if(intersect[0].object.material.opacity != 0){
+            intersect[0].object.material.opacity -= 0.5; //On réduit l'opacité des bunkers dès qu'un alien le touche
+            if(intersect[0].object.material.opacity <= 0){ //Si l'opacité est en dessous de 0 on supprime visuellement les bunkers de la scene
+              intersect[0].object.visible = false;
             }
           }
         }

@@ -333,6 +333,7 @@ function aliensShoot(){
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
     removeScene();
+    Alien.composer.removePass(Alien.glitchPass);
     Level.gameOver("Game Over !");
     nbLives = 3;
     newGameLoose();
