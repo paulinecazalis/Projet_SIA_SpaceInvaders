@@ -56,6 +56,7 @@ export default class Level{
             document.getElementById('trans-gameover').style.display = "none";
             document.getElementById('score-final').style.display = "none";
             document.getElementById('score-level').style.display = "none";
+            scoreFinal.innerHTML = "";
             gameConfig.vitesseAliens = gameConfig.level/20;
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;

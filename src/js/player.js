@@ -135,8 +135,6 @@ export default class Player{
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
           intersect[0].object.visible = false;
-          
-          console.log(Alien.alienTab);
           for(let i = 0; i < Alien.alienTab.length; i++){
             //console.log(Alien.alienTab[i].length);
             /*console.log(Alien.alienTab[i].id);
@@ -145,8 +143,6 @@ export default class Player{
             if(intersect[0].object.id == Alien.alienTab[i].id){
               Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object.id),1);
               aliens.remove(intersect[0].object);
-              console.log(aliens);
-              console.log("ok touch id");
             }
             //console.log(Alien.alienTab[i].id);
           }

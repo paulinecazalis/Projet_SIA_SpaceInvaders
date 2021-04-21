@@ -7,6 +7,7 @@ import gameConfig from './gameConfig.js';
 import PlayerClass from './player.js';
 import Player from './player.js';
 import Sound from './sound.js';
+import Level from './level.js';
 
 /*-------------Class pour la gestion des aliens -----------*/
 export default class Alien{
@@ -119,7 +120,7 @@ export default class Alien{
         const alienBns = await gameConfig.chargerModeleGLTF('../src/medias/models/Present/untitled.gltf');
         alienBns.scene.scale.set(0.2,0.2,0.2);
         alienBns.scene.rotation.y = 4;
-        alienBns.scene.position.y = -1;
+        alienBns.scene.position.y = -1.5;
         alienBns.scene.rotation.x = 0.05;
         alienBns.scene.rotation.z = 0.05;
         const cubeAlienB = new THREE.Mesh( geometry, material );
@@ -151,33 +152,39 @@ export default class Alien{
     //Permet de faire apparaitre et faire bouger l'alien bonus toutes les 10 secondes
     static moveAlienBonus(alienBonus,scene){
         alienBonus.visible = true
-        alienBonus.position.x += 0.13;
-        if(Player.touchAlienBonus){ //Si le joueur touche l'alien bonus
-            alienBonus.visible = false;
-            scene.remove(alienBonus);
-            alienBonus.position.x = -30;
-            Player.touchAlienBonus = false;
-            Alien.setPositionAliensBonus(false);
-            document.getElementById('invincible').innerHTML = "Invincible: oui";
-            setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
-                scene.add(alienBonus);
+        alienBonus.position.x += 0.11;
+        let timeouttouch, timeoutpos;
+        Alien.setPositionAliensBonus(true);
+        if(Alien.isPositionAliensBonus()){
+            if(Player.touchAlienBonus){ //Si le joueur touche l'alien bonus
+                alienBonus.visible = false;
+                scene.remove(alienBonus);
+                alienBonus.position.x = -30;
+                Player.touchAlienBonus = false;
+                Alien.setPositionAliensBonus(false);
+                document.getElementById('invincible').innerHTML = "Invincible: oui";
+                timeouttouch = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
+                    scene.add(alienBonus);
+                    alienBonus.visible = true;
+                    Alien.setPositionAliensBonus(true);
+                    document.getElementById('invincible').innerHTML = "Invincible: non";
+                }, 10000);
+            }
+            if(alienBonus.position.x >= 30){ //Si l'alien bonus sort du terrain
+                scene.remove(alienBonus);
                 alienBonus.visible = true;
-                Alien.setPositionAliensBonus(true);
-                document.getElementById('invincible').innerHTML = "Invincible: non";
-            }, 10000);
+                alienBonus.position.x = -30;
+                Player.touchAlienBonus = false;
+                Alien.setPositionAliensBonus(false);
+                timeoutpos = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
+                    scene.add(alienBonus);
+                    alienBonus.visible = true;
+                    Alien.setPositionAliensBonus(true);
+                }, 10000);
+            }
         }
-        if(alienBonus.position.x >= 30){ //Si l'alien bonus sort du terrain
-            scene.remove(alienBonus);
-            alienBonus.visible = true;
-            alienBonus.position.x = -30;
-            Player.touchAlienBonus = false;
-            Alien.setPositionAliensBonus(false);
-            setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
-                scene.add(alienBonus);
-                alienBonus.visible = true;
-                Alien.setPositionAliensBonus(true);
-            }, 10000);
-        }
+        
+        
     }
 
     //Permet de créer le missile des aliens
@@ -226,17 +233,13 @@ export default class Alien{
         if(intersect.length > 0){
             Alien.setMissileAliensTire(false);
             Alien._missileAliens.visible = false;
-            Alien.setPostProcessing(!Alien.boolPostPro);
-            if(Alien.isPostProcessing()){ //Si l'alien touche le vaisseau on active l'effet de post processing (glitch)
-                Alien.postProcessing(renderer,scene,camera);
-                Alien.setPostProcessing(false);
-            }
             if(!Sound.boolSound){ //Activation du son pour le vaisseau
                 Sound.livesSound(spaceship);
             }
             if(!gameConfig.isInvincible()){ //Si le mode invincible n'est pas activé on perd une vie
                 nbLives --;
                 gameConfig.removeLives(nbLives);
+                Alien.postProcessing(renderer,scene,camera);
             }
         }
         return nbLives;
@@ -266,6 +269,7 @@ export default class Alien{
     static postProcessing = (renderer, scene, camera) =>{
         Alien.glitchPass = new GlitchPass();
         Alien.composer.addPass( Alien.glitchPass );
+        console.log("postpro");
         setTimeout(() => { //Au bout de 2 secondes on enlève l'effet
             Alien.composer.removePass(Alien.glitchPass);
         }, 2000);

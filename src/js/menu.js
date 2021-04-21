@@ -34,7 +34,7 @@ export default class Menu{
     menuPerso(){
         let space;
         document.getElementById('menu-personnage').style.display = "block";
-        document.getElementById('checkbox-femme').checked = false;
+        document.getElementById('checkbox-femme').checked = true;
         document.getElementById('checkbox-homme').checked = false;
         document.getElementById('checkbox-femme').onclick = () =>{
             if(document.getElementById('checkbox-femme').checked == true){

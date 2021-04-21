@@ -162,12 +162,15 @@ async function init() {
     gameConfig.scene.add(value);
   });
   
-  await Alien.createAlienBonus().then((value) => {
-    setTimeout(() => {
-      aliensBonus = value;
-      gameConfig.scene.add(value);
-    }, 20000);
-  });
+  if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
+    await Alien.createAlienBonus().then((value) => {
+      setTimeout(() => {
+        aliensBonus = value;
+        gameConfig.scene.add(value);
+      }, 20000);
+    });
+  }
+  
 
 
   //scene.add(Alien.createMissileAliens());
@@ -303,11 +306,14 @@ function removeScene(){
   Alien.alienTab.length = 0;
   gameConfig.scene.remove(aliensBonus);
   Alien.alienBonusTab.length = 0;
+  Alien.setPositionAliensBonus(false);
   Alien.setMissileAliensTire(false);
   Alien._missileAliens.visible = false;
   Player.bunkerTab.length = 0;
   gameConfig.scene.remove(missileObject);
   gameConfig.scene.remove(bunkObject);
+  gameConfig.scene.remove(gameConfig.spaceshipObject);
+  Alien.composer.removePass(Alien.glitchPass);
   gameConfig.setPartieActive(true);
 }
 
@@ -333,15 +339,15 @@ function aliensShoot(){
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
     removeScene();
-    Alien.composer.removePass(Alien.glitchPass);
     Level.gameOver("Game Over !");
     nbLives = 3;
     newGameLoose();
     gameConfig.level = 1;
   }
   else if(aliens.position.z == gameConfig.spaceshipObject.position.z){
+    removeScene();
     console.log('les aliens ont gagnés(raquette)');
-    gameConfig.setPartieActive(true);
+    //gameConfig.setPartieActive(true);
     //Level.gameOver("Game Over !");
   }
 }
@@ -349,7 +355,6 @@ function aliensShoot(){
 function triche(){
   document.addEventListener('keydown', (e) => {
     if(e.key == "k" || e.key == 'K'){
-      console.log(Level.isActive());
       if(Level.isActive()){
         removeScene();
         gameConfig.level++;
@@ -363,14 +368,15 @@ function triche(){
       gameConfig.setInvincible(!gameConfig.invincible);
       Sound.boolSound = !Sound.boolSound;
       if(gameConfig.invincible){
+        document.getElementById('invincible').innerHTML = "Invincible: oui";
         if(Sound.boolSound){
           Sound.audioLives.pause();
-          document.getElementById('invincible').innerHTML = "Invincible: oui";
         }else{
           Sound.audioLives.play();
         }
       }else{
         document.getElementById('invincible').innerHTML = "Invincible: non";
+        //Alien.postProcessing(renderer,scene,camera);
       }
     }
   });
@@ -391,10 +397,18 @@ async function newGameAlien(){
     missileObject = value;
     gameConfig.scene.add(value);
   });
-  /*await Alien.createAlienBonus().then((value) => {
+  await Alien.createAlienBonus().then((value) => {
     aliensBonus = value;
-    scene.add(value);
-  });*/
+    gameConfig.scene.add(value);
+  });
+  await Player.createSpaceship().then((value) =>{
+    //space = value;
+    //scene.remove(value)
+    gameConfig.spaceshipObject = value;
+    gameConfig.scene.add(value);
+  });
+  Alien.setPositionAliensBonus(true);
+
   gameConfig.setPartieActive(false);
   gameConfig.setInvincible(false);
   document.getElementById('invincible').innerHTML = "Invincible: " + gameConfig.invincible;
@@ -419,11 +433,12 @@ async function newGameLoose(){
     missileObject = value;
     gameConfig.scene.add(value);
   });
-  /*await Alien.createAlienBonus().then((value) => {
+  await Alien.createAlienBonus().then((value) => {
     aliensBonus = value;
-    scene.add(value);
-  });*/
+    gameConfig.scene.add(value);
+  });
   gameConfig.setInvincible(false);
+  Alien.setPositionAliensBonus(true);
 }
 
 //Menu Pause 
