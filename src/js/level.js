@@ -60,7 +60,6 @@ export default class Level{
             gameConfig.vitesseAliens = gameConfig.level/20;
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;
-
         }
         document.getElementById('trans-gameover').appendChild(btnMenu);
         

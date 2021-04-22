@@ -439,14 +439,28 @@ canvas{
   visibility: hidden;
   font-family: Fink Heavy;
   position: absolute;
-  top: 90%;
-  left: 71%;
+  top: 85%;
+  left: 68%;
   border: 1px solid #ececeb;
   box-shadow: 5px 5px 10px grey;
   border-radius: 20px;
-  width: 400px;
+  width: 440px;
   height: 40px;
   background-color: #eaeae6;
+}
+
+#camera{
+  visibility: hidden;
+  position: absolute;
+  top: 85%;
+  left: 1%;
+  border: 1px solid #ececeb;
+  box-shadow: 5px 5px 10px grey;
+  border-radius: 20px;
+  width: 320px;
+  height: 40px;
+  background-color: #eaeae6;
+  font-family: Fink Heavy;
 }
 /*-----------------------------------------FIN AFFICHAGE JEU----------------------------------------------*/
 
@@ -535,33 +549,53 @@ canvas{
   height: auto;
   border-radius: 3%;
   box-shadow: 5px 5px 10px grey;
-  border: 1px solid greyk;
+  border: 1px solid grey;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
+
 }
 
 #continuer{
   font-family: Fink Heavy;
   font-size: 20px;
   border: none;
-  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
   text-decoration: none;
   color: #85775A;
   width: 200px;
   height: 90px;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+#continuer:hover{
+  -webkit-transform: scale(1.2);
+	transform: scale(1.2);
 }
 
 #recom{
   font-family: Fink Heavy;
   font-size: 20px;
   border: none;
-  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
   text-decoration: none;
   color: #85775A;
   width: 200px;
   height: 90px;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+#recom:hover{
+  -webkit-transform: scale(1.2);
+	transform: scale(1.2);
 }
 
 #recom-alert{
@@ -585,7 +619,7 @@ canvas{
   font-family: Fink Heavy;
   font-size: 20px;
   border: none;
-  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
   text-decoration: none;
@@ -598,7 +632,7 @@ canvas{
   font-family: Fink Heavy;
   font-size: 20px;
   border: none;
-  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
   text-decoration: none;
@@ -613,7 +647,7 @@ canvas{
   font-family: Fink Heavy;
   font-size: 20px;
   border: none;
-  cursor: url('../medias/images/menu/cursor3-2.png'), default !important;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
   background: url('../medias/images/menu/buttonBackground.png') no-repeat center;
   background-size: 100%;
   text-decoration: none;
@@ -621,5 +655,14 @@ canvas{
   width: 200px;
   height: 90px;
   margin-bottom: 20px;
+  -webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+
+#quit:hover{
+  -webkit-transform: scale(1.2);
+	transform: scale(1.2);
 }
 /*-----------------------------------------FIN PAUSE----------------------------------------------*/

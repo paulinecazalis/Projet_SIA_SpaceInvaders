@@ -123,6 +123,7 @@ export default class gameConfig{
         document.getElementById('game-element').style.visibility = "visible";
         document.getElementById('help-commande').style.visibility = "visible";
         document.getElementById('score-level').style.display = "block";
+        document.getElementById('camera').style.visibility = "visible";
         document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
         document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
         document.getElementById('invincible').style.display = "block";
@@ -135,8 +136,10 @@ export default class gameConfig{
                 gameConfig.sethelpGame(!gameConfig.help);
                 if(gameConfig.help){
                     document.getElementById('help-commande').style.visibility = "hidden";
+                    document.getElementById('camera').style.visibility = "hidden";
                 }else{
                     document.getElementById('help-commande').style.visibility = "visible";
+                    document.getElementById('camera').style.visibility = "visible";
                 }
             }
         })

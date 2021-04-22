@@ -162,14 +162,14 @@ async function init() {
     gameConfig.scene.add(value);
   });
   
-  if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
-    await Alien.createAlienBonus().then((value) => {
-      setTimeout(() => {
-        aliensBonus = value;
-        gameConfig.scene.add(value);
-      }, 20000);
-    });
-  }
+  await Alien.createAlienBonus().then((value) => {
+    setTimeout(() => {
+      aliensBonus = value;
+      gameConfig.scene.add(value);
+    }, 20000);
+    
+    
+  });
   
 
 

@@ -164,10 +164,13 @@ export default class Alien{
                 Alien.setPositionAliensBonus(false);
                 document.getElementById('invincible').innerHTML = "Invincible: oui";
                 timeouttouch = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
-                    scene.add(alienBonus);
+                    if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
+                        scene.add(alienBonus);
                     alienBonus.visible = true;
                     Alien.setPositionAliensBonus(true);
                     document.getElementById('invincible').innerHTML = "Invincible: non";
+                    }
+                    
                 }, 10000);
             }
             if(alienBonus.position.x >= 30){ //Si l'alien bonus sort du terrain
@@ -177,9 +180,12 @@ export default class Alien{
                 Player.touchAlienBonus = false;
                 Alien.setPositionAliensBonus(false);
                 timeoutpos = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
-                    scene.add(alienBonus);
+                    if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
+                        scene.add(alienBonus);
                     alienBonus.visible = true;
                     Alien.setPositionAliensBonus(true);
+                    }
+                    
                 }, 10000);
             }
         }
