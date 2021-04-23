@@ -17,18 +17,19 @@ import Decor from '../js/decor.js';
 
 //import {stade} from '../js/decor.js';
 
-
+//Aurélien le best
 //import essai from './essai.js';
 
 let container, w, h, scene, camera, controls, renderer, stats, light;
 let loop = {}; // info de la boucle du jeu
 let axis, grid
-
+var save = null;
+var firstTime = true;
 //variables pour les aliens
 let aliens;
 let aliensBonus;
 let aliensObject;
-
+let alienArray;
 //variables pour le vaisseau
 let spaceship;
 let spaceshipObject;
@@ -162,6 +163,8 @@ async function init() {
     gameConfig.scene.add(value);
   });
   
+
+  
   await Alien.createAlienBonus().then((value) => {
     aliensBonus = value;
     gameConfig.scene.add(value);
@@ -265,6 +268,16 @@ function gameLoop() {
 }
 
 function update(step) {
+  /*save = [...Alien.alienTab];
+
+  if(Alien.alienTab.length == 29 && firstTime){
+    firstTime = false;
+  }
+
+  if(Alien.alienTab.length && !firstTime){
+    Alien.alienTab = [...save];
+  }*/
+  
   if(!Menu.isActive()){
     gameConfig.cameraBind(camera, controls, gameConfig.spaceshipObject);
     if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
@@ -321,10 +334,8 @@ function playerShoot(){
   element.moveMissilePlayer();
   element.playerTouchBunk();
   element.touchAliens(aliens);
-  console.log("player shoot: " + aliens.children.length);
-  console.log("alientab sia: " + Alien.alienTab.length);
   element.touchAlienBonus();
-  if(aliens.children == 0){
+  if(Alien.alienTab.length == 0){
     removeScene();
     gameConfig.level++;
     document.getElementById('level').innerHTML = "Level: " + gameConfig.level;

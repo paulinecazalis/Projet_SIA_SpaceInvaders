@@ -66,6 +66,9 @@ export default class Sound{
 			alien.add( Sound.audioAliens );
             Sound.audioAliens.setVolume( 0.2 );
             Sound.audioAliens.play();
+            setTimeout(() => {
+                alien.remove(Sound.audioAliens);
+            }, 500);
         });
     }
 

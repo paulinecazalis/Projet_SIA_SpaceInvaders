@@ -135,20 +135,15 @@ export default class Player{
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
           //console.log("group: " + aliens.children.length);
-          intersect[0].object.visible = false;
-          console.log("before :"  + Alien.alienTab.length);
-          Alien.alienTab[Alien.alienTab.indexOf(intersect[0].object)].statut = "mort";
-          Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
-          console.log("after: " + Alien.alienTab.length);
-          aliens.remove(intersect[0].object);
-          console.log("remove group: " + aliens.children.length);
           
-          Player.missile.visible = false;
-          //Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1); 
-          
-          //console.log(Alien.alienTab.length);    
+
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
+            intersect[0].object.visible = false;
+            Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
+            aliens.remove(intersect[0].object);
+            console.log(Alien.alienTab);
+            Player.missile.visible = false;
           }
           gameConfig.loadSmokeEffect();
                     

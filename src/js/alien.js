@@ -22,6 +22,7 @@ export default class Alien{
     static boolPostPro = false; //booléen qui permet de savoir si l'effet de postProcessing est activé
     static timeouttouch;
     static timeoutpos;
+    static saveAlien;
 
     //Permet de déterminer la position des aliens
     static isPositionAliens = () => {
@@ -216,8 +217,9 @@ export default class Alien{
     static aliensAttack = (aliens) =>{
         //Permet de générer un chiffre entre 0 à n aliens --> correspond au nb d'aliens
         var generAliens = Math.floor(Math.random() * Alien.alienTab.length);
+        /*console.log(generAliens);
         console.log("dans alien.js");
-        console.log(Alien.alienTab);
+        console.log(Alien.alienTab);*/
         var random = Math.random();
         if(Alien.alienTab[generAliens] != undefined){
           if(random > 0.8){
@@ -229,6 +231,8 @@ export default class Alien{
           }
         }
     }
+
+    
 
     //Permet aux aliens de toucher le vaisseau du joueur et de lui faire perdre des vies
     static aliensTouchSpaceship = (spaceship, nbLives,renderer,scene,camera) =>{
