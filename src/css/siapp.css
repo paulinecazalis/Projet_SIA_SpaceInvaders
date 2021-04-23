@@ -706,3 +706,96 @@ canvas{
 	transform: scale(1.2);
 }
 /*-----------------------------------------FIN PAUSE----------------------------------------------*/
+/*-----------------------------------------ALERT MODE INVINCIBLE----------------------------------------------*/
+.alert{
+  font-family: Fink Heavy;
+  background: #ffdb9b;
+  padding: 20px 40px;
+  min-width: 200px;
+  position: absolute;
+  right: 0px;
+  top: 40%;
+  overflow: hidden;
+  border-radius: 4px;
+  border-left: 8px solid #ffa502;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.alert.hide{
+  animation: hide_slide 1s ease forwards;
+}
+
+.alert.show{
+  animation: show_slide 1s ease forwards;
+}
+
+@keyframes show_slide{
+  0%{
+    transform: translateX(100%);
+  }
+  40%{
+    transform: translateX(-10%);
+  }
+  80%{
+    transform: translateX(0%);
+  }
+  100%{
+    transform: translateX(-10%);
+  }
+}
+
+@keyframes hide_slide{
+  0%{
+    transform: translateX(-10%);
+  }
+  40%{
+    transform: translateX(0%);
+  }
+  80%{
+    transform: translateX(-10%);
+  }
+  100%{
+    transform: translateX(100%);
+  }
+}
+
+.alert .fa-exclamation-circle{
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ce8500;
+  font-size: 30px;
+}
+
+.alert .msg{
+  position: absolute;
+  top: 10px;
+  padding: 0 30px;
+  font-size: 20px;
+  color: #ce8500;
+}
+
+.alert .close-btn{
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffd080;
+  padding: 20px 18px;
+  
+}
+
+.close-btn:hover{
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
+}
+
+
+.close-btn .fa-times{
+  color: #ce8500;
+  font-size: 22px;
+  line-height: 40px;
+  cursor: url('../medias/images/menu/cursor.png'), default !important;
+}
+/*-----------------------------------------FIN ALERT MODE INVINCIBLE----------------------------------------------*/

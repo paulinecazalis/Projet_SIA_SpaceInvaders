@@ -381,6 +381,17 @@ function triche(){
       Sound.boolSound = !Sound.boolSound;
       if(gameConfig.invincible){
         document.getElementById('invincible').innerHTML = "Invincible: oui";
+        let alert = document.getElementsByClassName('alert');
+        alert[0].classList.remove('hide');
+        alert[0].classList.add('show');
+        alert[0].style.opacity = 1;
+        document.getElementsByClassName('msg')[0].innerHTML = "Mode invincible";
+        setTimeout(() => {
+          alert[0].classList.remove('show');
+          alert[0].classList.add('hide');
+          //alert[0].style.opacity = 0;
+        }, 5000);
+        
         if(Sound.boolSound){
           Sound.audioLives.pause();
         }else{
@@ -388,6 +399,16 @@ function triche(){
         }
       }else{
         document.getElementById('invincible').innerHTML = "Invincible: non";
+        let alert = document.getElementsByClassName('alert');
+        alert[0].classList.remove('hide');
+        alert[0].classList.add('show');
+        alert[0].style.opacity = 1;
+        document.getElementsByClassName('msg')[0].innerHTML = "Mode normal";
+        setTimeout(() => {
+          alert[0].classList.remove('show');
+          alert[0].classList.add('hide');
+          //alert[0].style.opacity = 0;
+        }, 5000);
         //Alien.postProcessing(renderer,scene,camera);
       }
     }

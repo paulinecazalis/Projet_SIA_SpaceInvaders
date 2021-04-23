@@ -135,15 +135,15 @@ export default class Player{
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
           //console.log("group: " + aliens.children.length);
-          
-
-          if(!Sound.boolSound){
-            Sound.alienSound(aliens);
-            intersect[0].object.visible = false;
+          intersect[0].object.visible = false;
             Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
             aliens.remove(intersect[0].object);
             console.log(Alien.alienTab);
             Player.missile.visible = false;
+
+          if(!Sound.boolSound){
+            Sound.alienSound(aliens);
+            
           }
           gameConfig.loadSmokeEffect();
                     
@@ -197,9 +197,29 @@ export default class Player{
         Player.missile.visible = false;
         this.setMissileActive(false);
         gameConfig.setInvincible(true);
+        let alert = document.getElementsByClassName('alert');
+        alert[0].classList.remove('hide');
+        alert[0].classList.add('show');
+        alert[0].style.opacity = 1;
+        document.getElementsByClassName('msg')[0].innerHTML = "Mode invincible";
+        setTimeout(() => {
+          alert[0].classList.remove('show');
+          alert[0].classList.add('hide');
+          //alert[0].style.opacity = 0;
+        }, 5000);
         setTimeout(() => {
           console.log('plus invincible');
           gameConfig.setInvincible(false);
+          let alert = document.getElementsByClassName('alert');
+          alert[0].classList.remove('hide');
+          alert[0].classList.add('show');
+          alert[0].style.opacity = 1;
+          document.getElementsByClassName('msg')[0].innerHTML = "Mode normal";
+          setTimeout(() => {
+            alert[0].classList.remove('show');
+            alert[0].classList.add('hide');
+          //alert[0].style.opacity = 0;
+          }, 5000);
         }, 10000);
       }
     }
