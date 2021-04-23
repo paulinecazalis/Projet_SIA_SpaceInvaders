@@ -1,5 +1,4 @@
 import gameConfig from "./gameConfig.js";
-import Level from "./level.js";
 import Player from "./player.js";
 
 export default class Menu{

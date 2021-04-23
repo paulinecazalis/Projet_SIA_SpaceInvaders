@@ -1,13 +1,10 @@
-import * as THREE from '../lib/node_modules/three/build/three.module.js';
-import { EffectComposer } from '../lib/node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from '../lib/node_modules/three/examples/jsm/postprocessing/RenderPass.js';
-import { GlitchPass } from '../lib/node_modules/three/examples/jsm/postprocessing/GlitchPass.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
+import { GlitchPass } from 'https://threejs.org/examples/jsm/postprocessing/GlitchPass.js';
 
 import gameConfig from './gameConfig.js';
 import PlayerClass from './player.js';
 import Player from './player.js';
 import Sound from './sound.js';
-import Level from './level.js';
 
 /*-------------Class pour la gestion des aliens -----------*/
 export default class Alien{
@@ -23,6 +20,8 @@ export default class Alien{
     static composer; //Variable pour l'effet de post processing
     static glitchPass; //Variable pour l'effet de post processing 
     static boolPostPro = false; //booléen qui permet de savoir si l'effet de postProcessing est activé
+    static timeouttouch;
+    static timeoutpos;
 
     //Permet de déterminer la position des aliens
     static isPositionAliens = () => {
@@ -153,7 +152,7 @@ export default class Alien{
     static moveAlienBonus(alienBonus,scene){
         alienBonus.visible = true
         alienBonus.position.x += 0.11;
-        let timeouttouch, timeoutpos;
+        
         Alien.setPositionAliensBonus(true);
         if(Alien.isPositionAliensBonus()){
             if(Player.touchAlienBonus){ //Si le joueur touche l'alien bonus
@@ -163,7 +162,7 @@ export default class Alien{
                 Player.touchAlienBonus = false;
                 Alien.setPositionAliensBonus(false);
                 document.getElementById('invincible').innerHTML = "Invincible: oui";
-                timeouttouch = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
+                Alien.timeouttouch = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
                     if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
                         scene.add(alienBonus);
                     alienBonus.visible = true;
@@ -179,13 +178,12 @@ export default class Alien{
                 alienBonus.position.x = -30;
                 Player.touchAlienBonus = false;
                 Alien.setPositionAliensBonus(false);
-                timeoutpos = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
+                Alien.timeoutpos = setTimeout(() => { //Réapparition de l'alien bonus au bout de 10 secondes
                     if(!gameConfig.isPartieActive() && !gameConfig.isPauseGame()){
                         scene.add(alienBonus);
-                    alienBonus.visible = true;
-                    Alien.setPositionAliensBonus(true);
+                        alienBonus.visible = true;
+                        Alien.setPositionAliensBonus(true);
                     }
-                    
                 }, 10000);
             }
         }
@@ -218,6 +216,8 @@ export default class Alien{
     static aliensAttack = (aliens) =>{
         //Permet de générer un chiffre entre 0 à n aliens --> correspond au nb d'aliens
         var generAliens = Math.floor(Math.random() * Alien.alienTab.length);
+        console.log("dans alien.js");
+        console.log(Alien.alienTab);
         var random = Math.random();
         if(Alien.alienTab[generAliens] != undefined){
           if(random > 0.8){

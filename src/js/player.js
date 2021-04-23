@@ -1,5 +1,5 @@
-import * as THREE from '../lib/node_modules/three/build/three.module.js';
-import Level from './level.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
+
 import gameConfig from './gameConfig.js';
 import Alien from './alien.js';
 import Sound from './sound.js';
@@ -134,18 +134,14 @@ export default class Player{
         //Calcule les objets coupant le rayon de prélèvement
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
+          //console.log("group: " + aliens.children.length);
           intersect[0].object.visible = false;
-          for(let i = 0; i < Alien.alienTab.length; i++){
-            //console.log(Alien.alienTab[i].length);
-            /*console.log(Alien.alienTab[i].id);
-            console.log(intersect[0].object.id);*/
-
-            if(intersect[0].object.id == Alien.alienTab[i].id){
-              Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object.id),1);
-              aliens.remove(intersect[0].object);
-            }
-            //console.log(Alien.alienTab[i].id);
-          }
+          console.log("before :"  + Alien.alienTab.length);
+          Alien.alienTab[Alien.alienTab.indexOf(intersect[0].object)].statut = "mort";
+          Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
+          console.log("after: " + Alien.alienTab.length);
+          aliens.remove(intersect[0].object);
+          console.log("remove group: " + aliens.children.length);
           
           Player.missile.visible = false;
           //Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1); 
@@ -245,4 +241,4 @@ export default class Player{
     }
 
     
-}
+}//Merci aurélien

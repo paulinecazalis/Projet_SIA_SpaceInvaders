@@ -1,4 +1,4 @@
-import * as THREE from '../lib/node_modules/three/build/three.module.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 import gameConfig from './gameConfig.js';
 
 export default class Decor{

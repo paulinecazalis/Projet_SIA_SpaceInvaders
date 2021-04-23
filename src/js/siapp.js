@@ -1,10 +1,10 @@
 //import {three_axis} from '../../objects/axis.js';
 //import {stade} from '../js/stade.js';
-import * as THREE from '../lib/node_modules/three/build/three.module.js';
-import { OrbitControls } from '../lib/node_modules/three/examples/jsm/controls/OrbitControls.js';
-import Stats from '../lib/node_modules/three/examples/jsm/libs/stats.module.js';
-import { EffectComposer } from '../lib/node_modules/three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from '../lib/node_modules/three/examples/jsm/postprocessing/RenderPass.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
+import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+import Stats from 'https://threejs.org/examples/jsm/libs/stats.module.js';
+import { EffectComposer } from 'https://threejs.org/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://threejs.org/examples/jsm/postprocessing/RenderPass.js';
 
 import Menu from '../js/menu.js';
 import Player from './player.js';
@@ -163,12 +163,8 @@ async function init() {
   });
   
   await Alien.createAlienBonus().then((value) => {
-    setTimeout(() => {
-      aliensBonus = value;
-      gameConfig.scene.add(value);
-    }, 20000);
-    
-    
+    aliensBonus = value;
+    gameConfig.scene.add(value);
   });
   
 
@@ -311,10 +307,13 @@ function removeScene(){
   Alien._missileAliens.visible = false;
   Player.bunkerTab.length = 0;
   gameConfig.scene.remove(missileObject);
+  element.setMissileActive(false);
   gameConfig.scene.remove(bunkObject);
   gameConfig.scene.remove(gameConfig.spaceshipObject);
   Alien.composer.removePass(Alien.glitchPass);
   gameConfig.setPartieActive(true);
+  clearTimeout(Alien.timeoutpos);
+  clearTimeout(Alien.timeouttouch);
 }
 
 
@@ -322,8 +321,10 @@ function playerShoot(){
   element.moveMissilePlayer();
   element.playerTouchBunk();
   element.touchAliens(aliens);
+  console.log("player shoot: " + aliens.children.length);
+  console.log("alientab sia: " + Alien.alienTab.length);
   element.touchAlienBonus();
-  if(Alien.alienTab == 0){
+  if(aliens.children == 0){
     removeScene();
     gameConfig.level++;
     document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
@@ -408,7 +409,8 @@ async function newGameAlien(){
     gameConfig.scene.add(value);
   });
   Alien.setPositionAliensBonus(true);
-
+  clearTimeout(Alien.timeoutpos);
+  clearTimeout(Alien.timeouttouch);
   gameConfig.setPartieActive(false);
   gameConfig.setInvincible(false);
   document.getElementById('invincible').innerHTML = "Invincible: " + gameConfig.invincible;

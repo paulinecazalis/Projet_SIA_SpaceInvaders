@@ -1,12 +1,9 @@
 //Class de configuration du jeu
-import {GLTFLoader} from '../lib/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
-import {ColladaLoader} from '../lib/node_modules/three/examples/jsm/loaders/ColladaLoader.js';
-import * as THREE from '../lib/node_modules/three/build/three.module.js';
+import {GLTFLoader} from 'https://threejs.org/examples/jsm/loaders/GLTFLoader.js';
+import {ColladaLoader} from 'https://threejs.org/examples/jsm/loaders/ColladaLoader.js';
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 
-import Level from './level.js';
-import Menu from './menu.js';
 import Player from './player.js';
-import Alien from './alien.js';
 
 export default class gameConfig{
 
