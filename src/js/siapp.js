@@ -214,8 +214,8 @@ async function init() {
   const length = 1;
   const hex = 0xffff00;
 
-  const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
-  gameConfig.scene.add( arrowHelper );
+  /*const arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+  gameConfig.scene.add( arrowHelper );*/
   triche();
   pauseMenu();
   gameConfig.helpKey();

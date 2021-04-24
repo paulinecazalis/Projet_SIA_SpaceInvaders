@@ -282,7 +282,7 @@ export default class Alien{
         console.log("postpro");
         setTimeout(() => { //Au bout de 2 secondes on enlève l'effet
             Alien.composer.removePass(Alien.glitchPass);
-        }, 2000);
+        }, 1000);
     }
 
 

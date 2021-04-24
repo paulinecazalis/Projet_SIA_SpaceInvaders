@@ -143,7 +143,6 @@ export default class Player{
 
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
-            
           }
           gameConfig.loadSmokeEffect();
                     

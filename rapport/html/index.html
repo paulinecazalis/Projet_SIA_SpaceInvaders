@@ -1,0 +1,79 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    
+    <title>Document</title>
+</head>
+<body>
+    <header id="header">
+        <a href="#" class="logo">Animal Crossing</a>
+        <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Home</a></li>
+        </ul>
+    </header>
+    <section>
+        <img src="../images/pageprincipale/Logo-acnh-sp.png" alt="logo" id="text">
+        <img src="../images/pageprincipale/bird1.png" alt="" id="bird1">
+        <img src="../images/pageprincipale/bird2.png" alt="" id="bird2">
+        <img src="../images/pageprincipale/forest.png" alt="" id="forest">
+        <a href="#" id="btn">Explorez</a>
+        <img src="../images/pageprincipale/rocks.png" alt="" id="rocks">
+        <img src="../images/pageprincipale/water.png" alt="" id="water">
+    </section>
+    <div class="sec">
+        <h2>Déroulement du jeu</h2>
+        <br>
+        <br>
+        <p>Dans ce jeu, le joueur incarne un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
+        <p>Pour cela, il doit leur tirer dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
+        <p>Attention, ceux-ci tirent des plans de bricolage! Il faut donc les éviter ou autrement le joueur perd une vie.</p>
+        <p>Heureusement, des rochers sont la pour protéger! Cependant ils ne sont pas éternels...</p>
+        <p>Un cadeau apparait de temps en temps et peut rendre invincible pendant un certains temps.</p>
+        <br>
+        <br>
+        <p>Le joueur possède 3 vies sur l'ensemble de la partie. Une partie comporte plusieurs niveaux allant de 1 à l'infini.</p>
+        <div class="img-sec1">
+            <img src="../images/pageprincipale/jeu1.png" alt="jeu1" id="img-jeu1">
+        </div>
+    </div>
+
+    <div class="sec">
+        <h2>Déroulement du jeu</h2>
+        <p>Dans ce jeu, nous incarnons un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
+        <p>Pour cela nous leur tirons dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
+        <p>Attention, ceux-ci tirent des plans de bricolage sur nous ! Il faut donc les éviter.</p>
+        <p>Heureusement, des rochers sont la pour nous protéger ! Cependant ils ne sont pas éternels...</p>
+
+    </div>
+    
+    <script>
+        let text = document.getElementById('text');
+        let bird1 = document.getElementById('bird1');
+        let bird2 = document.getElementById('bird2');
+        let btn = document.getElementById('btn');
+        let rocks = document.getElementById('rocks');
+        let forest = document.getElementById('forest');
+        let water = document.getElementById('water');
+        let header = document.getElementById('header');
+
+        window.addEventListener('scroll', function(){
+            let value = window.scrollY;
+            text.style.top = 50 + value * -0.5 + '%';
+            bird1.style.top = value * -1.5 + 'px';
+            bird1.style.left = value * 2 + 'px';
+            bird2.style.top = value * -1.5 + 'px';
+            bird2.style.left = value * -5 + 'px';
+            btn.style.marginTop = value * 1.5 + 'px';
+            rocks.style.top = value * -0.12 + 'px';
+            forest.style.top = value * 0.25 + 'px';
+            header.style.top = value * 0.5 + 'px';
+        })
+    </script>
+</body>
+</html>
