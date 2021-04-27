@@ -182,10 +182,6 @@ async function init() {
     gameConfig.scene.add(value);
   })
 
-  await Decor.createHouse().then((value) =>{
-    gameConfig.scene.add(value);
-  })
-
   await Decor.createTreeTown().then((value) =>{
     gameConfig.scene.add(value);
   })
@@ -427,8 +423,6 @@ async function newGameAlien(){
     gameConfig.scene.add(value);
   });
   await Player.createSpaceship().then((value) =>{
-    //space = value;
-    //scene.remove(value)
     gameConfig.spaceshipObject = value;
     gameConfig.scene.add(value);
   });

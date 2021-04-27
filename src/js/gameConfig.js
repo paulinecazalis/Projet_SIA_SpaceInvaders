@@ -94,11 +94,7 @@ export default class gameConfig{
         }
         if(gameConfig.keyboard.pressed("2")){
             gameConfig.lockCam = true;
-            /*camera.position.set( -10, 30, -5);
-            camera.lookAt(0, Math.PI/2, 0);
-            camera.up.set(0, 90, 0);*/
             camera.position.set(30, 20, 10);
-            //camera.lookAt(0, 150, 0);
         }
     }
 
@@ -127,7 +123,7 @@ export default class gameConfig{
         document.getElementById('invincible').style.display = "block";
         document.getElementById('invincible').innerHTML = "Invincible: non" ;
         document.getElementById('postpro').style.display = "block";
-        document.getElementById('postpro').innerHTML = "Post-processing: non" ;
+        document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
     }
 
     static helpKey = () =>{
@@ -147,8 +143,6 @@ export default class gameConfig{
 
     static async loadSpaceshipMenu(scene){
         await Player.createSpaceship().then((value) =>{
-            //space = value;
-            //scene.remove(value)
             gameConfig.spaceshipObject = value;
             scene.add(value);
         })

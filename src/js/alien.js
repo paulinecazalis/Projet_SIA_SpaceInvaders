@@ -71,27 +71,27 @@ export default class Alien{
         let geometry = new THREE.BoxGeometry( 1.5, 2, 0.5 );
         let material = new THREE.MeshLambertMaterial( {color: 0x00ff00, transparent : true, opacity: 0.0} );
         /*----------Chargement des modèles 3D----------*/
-        const tm = await gameConfig.chargerModeleGLTF('../src/medias/models/Tom Nook/scene.gltf');
+        const tm = await gameConfig.chargerModeleGLTF('../src/medias/models/Aliens/Tom Nook/scene.gltf');
         tm.scene.scale.set(18,18,18);
         tm.scene.rotation.x = 45.5;
         tm.scene.rotation.z = 15.7;
 
-        const daisy = await gameConfig.chargerModeleGLTF('../src/medias/models/Daisy Mae/scene.gltf');
+        const daisy = await gameConfig.chargerModeleGLTF('../src/medias/models/Aliens/Daisy Mae/scene.gltf');
         daisy.scene.scale.set(18,18,18);
         daisy.scene.rotation.x = 45.5;
         daisy.scene.rotation.z = 15.7;
 
-        const rounard = await gameConfig.chargerModeleGLTF('../src/medias/models/Crazy Redd/scene.gltf');
+        const rounard = await gameConfig.chargerModeleGLTF('../src/medias/models/Aliens/Crazy Redd/scene.gltf');
         rounard.scene.scale.set(18, 18, 18);
         rounard.scene.rotation.x = 45.5;
         rounard.scene.rotation.z = 15.7;
 
-        const pascal = await gameConfig.chargerModeleGLTF('../src/medias/models/Pascal 2/scene2.gltf');
+        const pascal = await gameConfig.chargerModeleGLTF('../src/medias/models/Aliens/Pascal 2/scene2.gltf');
         pascal.scene.scale.set(18,18,18);
         pascal.scene.rotation.x = 45.5;
         pascal.scene.rotation.z = 15.7;
 
-        const reseti = await gameConfig.chargerModeleGLTF('../src/medias/models/Mr. Resetti/scene.gltf');
+        const reseti = await gameConfig.chargerModeleGLTF('../src/medias/models/Aliens/Mr. Resetti/scene.gltf');
         reseti.scene.scale.set(0.06,0.06,0.06);
         reseti.scene.rotation.x = 45.5;
         reseti.scene.rotation.z = 15.7;
@@ -250,9 +250,9 @@ export default class Alien{
                 nbLives --;
                 gameConfig.removeLives(nbLives);
                 if(!Alien.isPostProcessing()){
-                    Alien.composer.removePass(Alien.glitchPass);
-                }else{
                     Alien.postProcessing(renderer,scene,camera);
+                }else{
+                    Alien.composer.removePass(Alien.glitchPass);
                 }
             }
         }
@@ -294,9 +294,31 @@ export default class Alien{
             if(e.key == "p" || e.key == "P"){
                 Alien.setPostProcessing(!Alien.boolPostPro);
                 if(!Alien.isPostProcessing()){
-                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
-                }else{
                     document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
+                    let alert = document.getElementsByClassName('alert');
+                    alert[0].classList.remove('hide');
+                    alert[0].classList.add('show');
+                    alert[0].style.opacity = 1;
+                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing activé";
+                    document.getElementsByClassName('msg')[0].style.fontSize = "16px";
+                    setTimeout(() => {
+                        alert[0].classList.remove('show');
+                        alert[0].classList.add('hide');
+                        //alert[0].style.opacity = 0;
+                    }, 5000);
+                }else{
+                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
+                    let alert = document.getElementsByClassName('alert');
+                    alert[0].classList.remove('hide');
+                    alert[0].classList.add('show');
+                    alert[0].style.opacity = 1;
+                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing désactivé";
+                    document.getElementsByClassName('msg')[0].style.fontSize = "16px";
+                    setTimeout(() => {
+                        alert[0].classList.remove('show');
+                        alert[0].classList.add('hide');
+                        //alert[0].style.opacity = 0;
+                    }, 5000);
                 }
 
             }

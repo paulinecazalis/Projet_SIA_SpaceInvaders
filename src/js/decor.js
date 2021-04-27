@@ -81,16 +81,6 @@ export default class Decor{
         return town.scene;
     }
 
-    static async createHouse(){
-        let house = await gameConfig.chargerModeleGLTF('../src/medias/models/Scene/animal_crossing_house/scene.gltf');
-        house.scene.position.z = -20;
-        house.scene.position.x = -15;
-        house.scene.position.y = -1;
-        house.scene.rotation.y = 29.8;
-        house.scene.scale.set(0.03,0.03,0.03)
-        return house.scene;
-    }
-
     static async createTreeTown(){
         let treeGroup = new THREE.Group();
         for(let i = 0; i<= 1; i++){

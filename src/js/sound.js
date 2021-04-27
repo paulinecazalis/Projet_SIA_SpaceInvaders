@@ -66,7 +66,7 @@ export default class Sound{
     }
 
     static alienSound = (alien) =>{
-        Sound.audioLoad.load( '../src/medias/sounds/sound.wav', function( buffer ) {
+        Sound.audioLoad.load( '../src/medias/sounds/alien.wav', function( buffer ) {
 		    Sound.audioAliens.setBuffer( buffer );
 			alien.add( Sound.audioAliens );
             //Sound.audioAliens.setVolume( 0.2 );
