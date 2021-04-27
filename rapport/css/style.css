@@ -4,6 +4,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
 }
 
 body{
@@ -208,6 +209,24 @@ section #text{
 
 #img-jeu11{
     width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
+}
+
+#img-jeu12{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
+}
+
+#img-jeu13{
+    width: 10%;
     border-radius: 20px;
     border: 5px solid transparent;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
