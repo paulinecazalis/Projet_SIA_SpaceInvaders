@@ -1,3 +1,4 @@
+import Decor from "./decor.js";
 import gameConfig from "./gameConfig.js";
 import Player from "./player.js";
 
@@ -26,7 +27,6 @@ export default class Menu{
             this.menuPerso();
             gameConfig.interfaceGame();
             gameConfig.resetLives();
-            
         }
     }
 

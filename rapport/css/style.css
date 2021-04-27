@@ -107,12 +107,11 @@ section #text{
 
 .sec{
     position: relative;
-    padding: 150px;
+    padding: 100px;
     background: #094b65;
 }
 
 .sec h2{
-    font-size: 3.5em;
     color: #fff;
     margin-bottom: 10px;
 
@@ -121,15 +120,97 @@ section #text{
 .sec p{
     font-size: 1em;
     color: #fff;
+    width: 100%;
 }
 
 
 #img-jeu1{
-    width: 30%;
-    position: absolute;
-    right: 120px;
-    top: 130px;
+    width: 100%;
+    margin-left: 50px;
     border-radius: 20px;
     border: 5px solid transparent;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+#img-jeu2{
+    width: 90%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+#img-jeu3{
+    width: 90%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+}
+
+#img-jeu4{
+    width: 90%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+#img-jeu5{
+    width: 90%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
+}
+
+#img-jeu6{
+    width: 90%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-top: 90px;
+}
+
+#img-jeu7{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
+}
+
+#img-jeu8{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
+}
+
+#img-jeu9{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 20px;
+}
+
+#img-jeu10{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+}
+
+#img-jeu11{
+    width: 80%;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    margin-left: 60px;
+    margin-top: 70px;
 }

@@ -249,7 +249,11 @@ export default class Alien{
             if(!gameConfig.isInvincible()){ //Si le mode invincible n'est pas activé on perd une vie
                 nbLives --;
                 gameConfig.removeLives(nbLives);
-                Alien.postProcessing(renderer,scene,camera);
+                if(!Alien.isPostProcessing()){
+                    Alien.composer.removePass(Alien.glitchPass);
+                }else{
+                    Alien.postProcessing(renderer,scene,camera);
+                }
             }
         }
         return nbLives;
@@ -283,6 +287,20 @@ export default class Alien{
         setTimeout(() => { //Au bout de 2 secondes on enlève l'effet
             Alien.composer.removePass(Alien.glitchPass);
         }, 1000);
+    }
+
+    static postproKey = (renderer,scene,camera) =>{
+        document.addEventListener('keydown', (e) => {
+            if(e.key == "p" || e.key == "P"){
+                Alien.setPostProcessing(!Alien.boolPostPro);
+                if(!Alien.isPostProcessing()){
+                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
+                }else{
+                    document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
+                }
+
+            }
+        })
     }
 
 

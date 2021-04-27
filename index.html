@@ -2,27 +2,14 @@
 <html>
 
 <head>
-  <title>Space Invaders</title>
+  <title>Animal Crossing - spaceinvaders</title>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="/src/medias/images/favicon.ico" />
   <link href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="src/css/siapp.css" />
-  
-
-  <!--<script type="application/javascript" src="src/lib/three.js"></script>-->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r125/three.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r17/Stats.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.js"></script>
-	<script src="http://threejs.org/examples/jsm/controls/OrbitControls.js"></script>
   <script type="application/javascript" src="src/lib/threex.keyboardstate.js"></script>
-  <script src="http://threejs.org/examples/jsm/loaders/GLTFLoader.js"></script>
-  <script src="http://threejs.org/examples/jsm/loaders/ColladaLoader.js"></script>
-  <script type="text/javascript" src="src/lib/ColladaLoader.js"></script>-->
-  <script type="application/javascript" src="src/lib/threex.keyboardstate.js"></script>
-  <!--<script src="src/js/menu.js"></script>
-  <script src="src/js/level.js"></script>
-  <script src="src/js/alien.js"></script>-->
   <script type="module"src="src/js/siapp.js"></script>
 </head>
 
@@ -35,6 +22,7 @@
     <div id="music-menu">
       <i class="fas fa-volume" id="volume-on"></i>
       <i class="fas fa-music" id="music-on"></i>
+      <i class="fas fa-cog" id="option"></i>
     </div>
     <div id="auteur">
       <h2>Cazalis Pauline</h2>
@@ -55,6 +43,50 @@
       <p><img src="./src/medias/images/menu/resetti.png" alt="" style="width: 90px;"> = 70 points</p>
       <p><img src="./src/medias/images/menu/tomnook.png" alt="" style="width: 90px;"> = 90 points</p>
     </div>
+    <div id="menu-option">
+      <h2>Options</h2>
+      <i class="fal fa-times" id="close-option"></i>
+      <div id="choix-decor">
+        <p>Choisir le décor :</p>
+        <ul>
+          <!--<li><a href="#" id="ile" class="active">Ile</a></li>
+          <li><a href="#" id="espace">Espace</a></li>-->
+          <li>
+            <label class="option_item">
+              <input type="checkbox" id="checkbox-ile">
+              <div class="tickmark"></div>
+              <p id="ile">Ile</p>
+            </label>
+          </li>
+          <li>
+            <label class="option_item">
+              <input type="checkbox" id="checkbox-espace">
+              <div class="tickmark"></div>
+              <p id="espace">Espace</p>
+            </label>
+          </li>
+          
+        </ul>
+      </div>
+      <div id="volume-audio">
+        <p>Volume: </p>
+        <i class="fa fa-volume-down"></i>
+        <input type="range" min="0" max="100" value="30" step="10" id="option-sound" class="slider">
+        <i class="fa fa-volume-up"></i>
+      </div>
+      <div id="volume-alien">
+        <p>Volume son alien: </p>
+        <i class="fa fa-volume-down" id="volume-dw-alien"></i>
+        <input type="range" min="0" max="100" value="30" step="10" id="option-sound-alien" class="slider-alien">
+        <i class="fa fa-volume-up" id="volume-up-alien"></i>
+      </div>
+      <div id="volume-lives">
+        <p>Volume son joueur: </p>
+        <i class="fa fa-volume-down" id="volume-dw-lives"></i>
+        <input type="range" min="0" max="100" value="30" step="10" id="option-sound-lives" class="slider-lives">
+        <i class="fa fa-volume-up" id="volume-up-lives"></i>
+      </div>
+    </div>
   </div>
 
   <!-- MENU CHOIX PERSONNAGES-->
@@ -70,7 +102,6 @@
         <div class="tickmark"></div>
           <img id="profil-image-femme" src="./src/medias/images/menu-perso/femme.png">
       </label>
-
       <label class="option_item">
         <input type="checkbox" id="checkbox-homme">
         <div class="tickmark"></div>
@@ -106,8 +137,10 @@
         </div>
       </div>
       <div id="invincible"></div>
+      <div id="postpro"></div>
       <i class="fas fa-volume" id="volume-on-game"></i>
       <i class="fas fa-music" id="music-on-game"></i>
+      
     </div>
     
     <div id="score-level">
@@ -116,7 +149,7 @@
     </div>
     
     <div id="help-commande">
-      <p style="position: absolute; top: -10%; left: 5%;">h: help &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k: kill all &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i: invincible mode &nbsp;&nbsp;&nbsp;&nbsp; echap: pause</p>
+      <p style="position: absolute; top: -10%; left: 5%; font-size: 15px;">h: help &nbsp;| &nbsp; k: kill all &nbsp;| &nbsp; i: invincible &nbsp;| &nbsp; p: post-processing &nbsp;| &nbsp;echap: pause</p>
     </div>
 
     <div id="camera">
@@ -144,9 +177,6 @@
     <div class="alert hide">
       <span class="fas fa-exclamation-circle"></span>
       <span class="msg"></span>
-      <!--<span class="close-btn">
-        <span class="fas fa-times"></span>
-      </span>-->
     </div>
     
   </div>

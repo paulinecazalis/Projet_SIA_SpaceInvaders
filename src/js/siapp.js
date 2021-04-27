@@ -79,7 +79,7 @@ async function init() {
   controls = new OrbitControls(camera, container);
   controls.target = new THREE.Vector3(0, 0, 20);
   controls.panSpeed = 0.3;
-  controls.enabled = false;
+  //controls.enabled = false;
 
   const renderConfig = {antialias: true, alpha: true};
   renderer = new THREE.WebGLRenderer(renderConfig);
@@ -102,19 +102,7 @@ async function init() {
   light = new THREE.AmbientLight( 0xFFFFFF);
   gameConfig.scene.add(light);
 
-  //Background scene
-  const path = '../src/medias/images/Standard-Cube-Map2/';
-  const format = '.png';
-  const urls = [
-    path + 'px' + format, path + 'nx' + format,
-    path + 'py' + format, path + 'ny' + format,
-    path + 'pz' + format, path + 'nz' + format,
-  ];
-
-  const reflectionCube = new THREE.CubeTextureLoader().load( urls );
-  const refractionCube = new THREE.CubeTextureLoader().load( urls );
-  refractionCube.mapping = THREE.CubeRefractionMapping;
-  gameConfig.scene.background = reflectionCube;
+  
 
   //gameConfig.loadSmokeEffect(gameConfig.scene);
 
@@ -177,16 +165,18 @@ async function init() {
     gameConfig.scene.add(value);
   });
 
-  //scene.add(stade);
-  let ground = Decor.createGround();
+  /*let background = Decor.createBackground();
+  gameConfig.scene.background = background;*/
+  let background = Decor.createBackground('../src/medias/images/skybox/ile/');
+  gameConfig.scene.background = background;
+  let ground = Decor.createGround('../src/medias/images/herbe.png');
   gameConfig.scene.add(ground);
+  Decor.chooseBackground();
+  gameConfig.optionMenu();
 
-  let groundTownHall = Decor.createGroundTownHall();
-  gameConfig.scene.add(groundTownHall);
-
-  await Decor.createTree().then((value) =>{
+  /*await Decor.createTree().then((value) =>{
     gameConfig.scene.add(value);
-  })
+  })*/
 
   await Decor.createTown().then((value) =>{
     gameConfig.scene.add(value);
@@ -219,8 +209,11 @@ async function init() {
   triche();
   pauseMenu();
   gameConfig.helpKey();
-
+  Alien.postproKey(renderer, gameConfig.scene, camera);
   Sound.audioLoader();
+  Sound.sliderVolumeAlien();
+  Sound.sliderVolumeLives();
+  //Sound.sliderVolume();
   
 
   // postprocessing pour epileptique
@@ -256,7 +249,6 @@ function gameLoop() {
     loop.dt = loop.dt - loop.slowStep;
     update(loop.step); // déplace les objets d'une fraction de seconde
     Alien.composer.render();
-    //gameConfig.evolveSmoke();
   }
   //renderer.render(scene, camera);  // rendu de la scène
   loop.last = loop.now;
@@ -351,7 +343,7 @@ function aliensShoot(){
   if(nbLives == 0){
     console.log('les aliens ont gagnés');
     removeScene();
-    Level.gameOver("Game Over !");
+    Level.gameOver("Game Over !", camera, controls);
     nbLives = 3;
     newGameLoose();
     gameConfig.level = 1;
@@ -499,17 +491,25 @@ function pauseMenu(){
               document.getElementById('recom-alert').style.display = "none";
               document.getElementById('pause').style.display = 'none';
               removeScene();
+              nbLives = 3;
               gameConfig.resetLives();
               gameConfig.level = 1;
               Level.changementLevel(gameConfig.level);
               gameConfig.scoreTotal = 0;
               newGameAlien();
               gameConfig.setPauseGame(false);
+              camera.position.set(0, 8, -10);
+              controls.target = new THREE.Vector3(0, 0, 20);
             }
           };
 
           document.getElementById('quit').onclick = () =>{
             document.getElementById('pause').style.display = 'none';
+            document.getElementById('score-level').style.display = "none";
+            document.getElementById('game-element').style.visibility = "hidden";
+            document.getElementById('lives').style.display = "none";
+            document.getElementById('help-commande').style.visibility = "hidden";
+            document.getElementById('camera').style.visibility = "hidden";
             let menu = new Menu();
             menu.loadMenu();
             removeScene();
@@ -520,6 +520,8 @@ function pauseMenu(){
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;
             gameConfig.setPauseGame(false);
+            camera.position.set(0, 8, -10);
+            controls.target = new THREE.Vector3(0, 0, 20);
           };
         }else{
           document.getElementById('pause').style.display = 'none';

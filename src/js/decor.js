@@ -7,10 +7,28 @@ export default class Decor{
         this.material;
     }
 
-    static createGround = () => {
+    static createBackground = (path) =>{
+        //Background scene
+        //const path = '../src/medias/images/skybox/ile/';
+        //const path = '../src/medias/images/skybox/espace/';
+        const format = '.png';
+        const urls = [
+            path + 'px' + format, path + 'nx' + format,
+            path + 'py' + format, path + 'ny' + format,
+            path + 'pz' + format, path + 'nz' + format,
+        ];
+
+        const reflectionCube = new THREE.CubeTextureLoader().load( urls );
+        const refractionCube = new THREE.CubeTextureLoader().load( urls );
+        refractionCube.mapping = THREE.CubeRefractionMapping;
+        return reflectionCube;
+    }
+
+    static createGround = (path) => {
         this.geometry = new THREE.PlaneGeometry( 60, 60, 60, 10);
         let loader = new THREE.TextureLoader();
-        let groundTexture = loader.load( '../src/medias/images/herbe.png' );
+        //let groundTexture = loader.load( '../src/medias/images/herbe.png' );
+        let groundTexture = loader.load(path);
         groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
         groundTexture.repeat.set( 2, 2 );
         //groundTexture.anisotropy = 16;
@@ -97,6 +115,51 @@ export default class Decor{
         shop.scene.position.x = 20;
         //shop.scene.rotation.y = 4.7;
         return shop.scene;
+    }
+
+    static async chooseBackground(){
+        document.getElementById('checkbox-ile').checked = true;
+        document.getElementById('checkbox-espace').checked = false;
+        let groundTownHall = Decor.createGroundTownHall();
+        let tree;
+        if(document.getElementById('checkbox-ile').checked == true){
+            gameConfig.scene.add(groundTownHall);
+            await Decor.createTree().then((value) =>{
+                tree = value;
+                gameConfig.scene.add(tree);
+            })
+        }else{
+            gameConfig.scene.remove(groundTownHall);
+        }
+        
+        document.getElementById('checkbox-ile').onclick = () =>{
+            if(document.getElementById('checkbox-ile').checked == true){
+                document.getElementById('checkbox-espace').checked = false;
+                let background = Decor.createBackground('../src/medias/images/skybox/ile/');
+                gameConfig.scene.background = background;
+                let ground = Decor.createGround('../src/medias/images/herbe.png');
+                gameConfig.scene.add(ground);
+                gameConfig.scene.add(groundTownHall);
+                gameConfig.scene.add(tree);
+            }else{
+                document.getElementById('checkbox-espace').checked = true;
+            }
+        };
+
+        document.getElementById('checkbox-espace').onclick = () =>{
+            if(document.getElementById('checkbox-espace').checked == true){
+                document.getElementById('checkbox-ile').checked = false;
+                let background = Decor.createBackground('../src/medias/images/skybox/espace/');
+                gameConfig.scene.background = background;
+                let ground = Decor.createGround('../src/medias/images/plage3.png');
+                gameConfig.scene.add(ground);
+                gameConfig.scene.remove(groundTownHall)
+                gameConfig.scene.remove(tree);
+            }else{
+                document.getElementById('checkbox-ile').checked = true;
+            }
+        };
+        
     }
 
     

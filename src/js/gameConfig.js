@@ -4,6 +4,7 @@ import {ColladaLoader} from 'https://threejs.org/examples/jsm/loaders/ColladaLoa
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 
 import Player from './player.js';
+import Alien from './alien.js';
 
 export default class gameConfig{
 
@@ -21,7 +22,6 @@ export default class gameConfig{
     static scene = new THREE.Scene();
     static smokeParticles = new THREE.Group();
     static particle;
-
 
     //Permet de charger des modèles 3D de type GLTF
     static chargerModeleGLTF(url){
@@ -93,30 +93,31 @@ export default class gameConfig{
           controls.target = new THREE.Vector3(spaceship.position.x, 0, 20);
         }
         if(gameConfig.keyboard.pressed("2")){
+            gameConfig.lockCam = true;
             /*camera.position.set( -10, 30, -5);
             camera.lookAt(0, Math.PI/2, 0);
             camera.up.set(0, 90, 0);*/
-            camera.position.set(20, 30, 10);
+            camera.position.set(30, 20, 10);
             //camera.lookAt(0, 150, 0);
         }
     }
 
     //Permet d'enlever les vies affichées à l'écran (pommes)
     static removeLives = (nbLives) =>{
-        nbLives == 2 ? document.getElementById('life3').style.visibility = 'hidden' : nbLives == 1 ? document.getElementById('life2').style.visibility = 'hidden' : document.getElementById('life1').style.visibility = 'hidden'
+        nbLives == 2 ? document.getElementById('life3').style.display = 'none' : nbLives == 1 ? document.getElementById('life2').style.display = 'none' : document.getElementById('life1').style.display = 'none';
     }
 
     //Permet de re afficher les vies à l'écran (pommes)
     static resetLives = () =>{
-        document.getElementById('life3').style.visibility = 'visible';
-        document.getElementById('life2').style.visibility = 'visible';
-        document.getElementById('life1').style.visibility = 'visible';
+        document.getElementById('life3').style.display = 'block';
+        document.getElementById('life2').style.display = 'block';
+        document.getElementById('life1').style.display = 'block';
         document.getElementById('score').innerHTML = "Score: " +  0;
     }
 
     //Permet de faire l'interface du jeu (vies, affichage des commandes...)
     static interfaceGame = () =>{
-        document.getElementById('lives').style.visibility = "visible";
+        document.getElementById('lives').style.display = "block";
         document.getElementById('game-element').style.visibility = "visible";
         document.getElementById('help-commande').style.visibility = "visible";
         document.getElementById('score-level').style.display = "block";
@@ -125,6 +126,8 @@ export default class gameConfig{
         document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
         document.getElementById('invincible').style.display = "block";
         document.getElementById('invincible').innerHTML = "Invincible: non" ;
+        document.getElementById('postpro').style.display = "block";
+        document.getElementById('postpro').innerHTML = "Post-processing: non" ;
     }
 
     static helpKey = () =>{
@@ -185,10 +188,17 @@ export default class gameConfig{
           
     }
 
-    static evolveSmoke = () => {
-        var sp = this.smokeParticles.length;
-        while(sp--) {
-            this.smokeParticles[sp].rotation.z -= 0.001;
+    static optionMenu = () =>{
+        document.getElementById('option').onclick = () =>{
+            document.getElementById('menu-option').style.display = "block"
+            document.getElementById('menu').style.background = "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../src/medias/images/menu/page1.jpg') no-repeat center center fixed";
+            document.getElementById('menu').style.backgroundSize = "100%"
+        }
+
+        document.getElementById('close-option').onclick = () =>{
+            document.getElementById('menu-option').style.display = "none"
+            document.getElementById('menu').style.background = "linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('../src/medias/images/menu/page1.jpg') no-repeat center center fixed";
+            document.getElementById('menu').style.backgroundSize = "100%"
         }
     }
 

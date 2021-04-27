@@ -1,3 +1,4 @@
+import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
 //Class qui permet de créer les différents niveaux + game over
@@ -36,7 +37,7 @@ export default class Level{
     }
 
     //Permet de faire le bandeau lorsque la partie est finie (perdue)
-    static gameOver = (text) =>{
+    static gameOver = (text, camera, controls) =>{
         document.getElementById('title-trans-gameover').innerHTML = text;
         //document.getElementById('trans').id = "trans";
         document.getElementById('trans-gameover').style.display = "block";
@@ -63,6 +64,8 @@ export default class Level{
             gameConfig.vitesseAliens = gameConfig.level/20;
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;
+            camera.position.set(0, 8, -10);
+            controls.target = new THREE.Vector3(0, 0, 20);
         }
         document.getElementById('trans-gameover').appendChild(btnMenu);
         

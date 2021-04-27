@@ -138,7 +138,6 @@ export default class Player{
           intersect[0].object.visible = false;
             Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
             aliens.remove(intersect[0].object);
-            console.log(Alien.alienTab);
             Player.missile.visible = false;
 
           if(!Sound.boolSound){

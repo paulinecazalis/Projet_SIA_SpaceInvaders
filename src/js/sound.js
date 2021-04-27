@@ -21,7 +21,8 @@ export default class Sound{
         Sound.audioLoad.load( '../src/medias/sounds/ac_nh.mp3', function( buffer ) {
             Sound.sound.setBuffer( buffer );
             Sound.sound.setLoop( true );
-            Sound.sound.setVolume( 0.1 );
+            Sound.sound.setVolume( 0.3 );
+            Sound.sliderVolume();
             Sound.sound.play();
         });
     }
@@ -55,8 +56,12 @@ export default class Sound{
         Sound.audioLoad.load( '../src/medias/sounds/lives.mp3', function( buffer ) {
 		    Sound.audioLives.setBuffer( buffer );
 			spaceship.add( Sound.audioLives );
-            Sound.audioLives.setVolume( 0.2 );
+            //Sound.audioLives.setVolume( 0.2 );
+            Sound.sliderVolumeLives();
             Sound.audioLives.play();
+            setTimeout(() => {
+                spaceship.remove(Sound.audioLives);
+            }, 500);
         });
     }
 
@@ -64,7 +69,8 @@ export default class Sound{
         Sound.audioLoad.load( '../src/medias/sounds/sound.wav', function( buffer ) {
 		    Sound.audioAliens.setBuffer( buffer );
 			alien.add( Sound.audioAliens );
-            Sound.audioAliens.setVolume( 0.2 );
+            //Sound.audioAliens.setVolume( 0.2 );
+            Sound.sliderVolumeAlien();
             Sound.audioAliens.play();
             setTimeout(() => {
                 alien.remove(Sound.audioAliens);
@@ -98,6 +104,69 @@ export default class Sound{
                 document.getElementById('music-on-game').className ='fas fa-music';
             }
         }
+    }
+
+    static sliderVolume = () =>{
+        let slider = document.getElementById('option-sound');
+        slider.value = 50;
+        slider.addEventListener('mousemove', () =>{
+            var x = slider.value;
+            var color = 'linear-gradient(90deg, rgb(117,252,117)' + x + '%, rgb(214,214,214)' + x + '%)';
+            slider.style.background = color;
+            if(x >= 1 && x <= 20){
+                Sound.sound.setVolume( 0.05 );
+            }else if(x > 21 && x <= 40){
+                Sound.sound.setVolume( 0.2 );
+            }else if(x > 41 && x <= 60){
+                Sound.sound.setVolume( 0.3 );
+            }else if(x > 61 && x <= 80){
+                Sound.sound.setVolume( 0.4 );
+            }else if(x > 81 && x <= 100){
+                Sound.sound.setVolume( 0.5 );
+            }
+        })
+    }
+
+    static sliderVolumeAlien = () => {
+        let slider = document.getElementById('option-sound-alien');
+        slider.value = 70;
+        slider.addEventListener('mousemove', () =>{
+            var x = slider.value;
+            var color = 'linear-gradient(90deg, rgb(117,252,117)' + x + '%, rgb(214,214,214)' + x + '%)';
+            slider.style.background = color;
+            if(x >= 1 && x <= 20){
+                Sound.audioAliens.setVolume( 0.1 );
+            }else if(x > 21 && x <= 40){
+                Sound.audioAliens.setVolume( 0.2 );
+            }else if(x > 41 && x <= 60){
+                Sound.audioAliens.setVolume( 0.4 );
+            }else if(x > 61 && x <= 80){
+                Sound.audioAliens.setVolume( 0.8 );
+            }else if(x > 81 && x <= 100){
+                Sound.audioAliens.setVolume( 1 );
+            }
+        })
+    }
+
+    static sliderVolumeLives = () => {
+        let slider = document.getElementById('option-sound-lives');
+        slider.value = 70;
+        slider.addEventListener('mousemove', () =>{
+            var x = slider.value;
+            var color = 'linear-gradient(90deg, rgb(117,252,117)' + x + '%, rgb(214,214,214)' + x + '%)';
+            slider.style.background = color;
+            if(x >= 1 && x <= 20){
+                Sound.audioLives.setVolume( 0.1 );
+            }else if(x > 21 && x <= 40){
+                Sound.audioLives.setVolume( 0.2 );
+            }else if(x > 41 && x <= 60){
+                Sound.audioLives.setVolume( 0.4 );
+            }else if(x > 61 && x <= 80){
+                Sound.audioLives.setVolume( 0.8 );
+            }else if(x > 81 && x <= 100){
+                Sound.audioLives.setVolume( 1 );
+            }
+        })
     }
 
 

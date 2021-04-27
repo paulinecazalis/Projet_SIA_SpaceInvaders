@@ -9,12 +9,10 @@
 </head>
 <body>
     <header id="header">
-        <a href="#" class="logo">Animal Crossing</a>
+        <a href="#" class="logo">PAULINE CAZALIS</a>
         <ul>
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Home</a></li>
+            <li><a href="#" class="active">M1 TECHNOLOGIE DE L'INTERNET</a></li>
+
         </ul>
     </header>
     <section>
@@ -22,26 +20,317 @@
         <img src="../images/pageprincipale/bird1.png" alt="" id="bird1">
         <img src="../images/pageprincipale/bird2.png" alt="" id="bird2">
         <img src="../images/pageprincipale/forest.png" alt="" id="forest">
-        <a href="#" id="btn">Explorez</a>
+        <a href="#" id="btn">Explorez le rapport</a>
         <img src="../images/pageprincipale/rocks.png" alt="" id="rocks">
         <img src="../images/pageprincipale/water.png" alt="" id="water">
     </section>
     <div class="sec">
-        <h2>Déroulement du jeu</h2>
-        <br>
-        <br>
-        <p>Dans ce jeu, le joueur incarne un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
-        <p>Pour cela, il doit leur tirer dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
-        <p>Attention, ceux-ci tirent des plans de bricolage! Il faut donc les éviter ou autrement le joueur perd une vie.</p>
-        <p>Heureusement, des rochers sont la pour protéger! Cependant ils ne sont pas éternels...</p>
-        <p>Un cadeau apparait de temps en temps et peut rendre invincible pendant un certains temps.</p>
-        <br>
-        <br>
-        <p>Le joueur possède 3 vies sur l'ensemble de la partie. Une partie comporte plusieurs niveaux allant de 1 à l'infini.</p>
-        <div class="img-sec1">
-            <img src="../images/pageprincipale/jeu1.png" alt="jeu1" id="img-jeu1">
+        <div id="text-section1">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; float: left;"><h2>Déroulement du jeu</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <p>Dans ce jeu, le joueur incarne un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
+                        <p>Pour cela, il doit leur tirer dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
+                        <p>Attention, ceux-ci tirent des plans de bricolage! Il faut donc les éviter ou autrement le joueur perd une vie.</p>
+                        <p>Heureusement, des rochers sont la pour protéger! Cependant ils ne sont pas éternels...</p>
+                        <p>Un cadeau apparait de temps en temps et peut rendre invincible pendant un certains temps.</p>
+                    </td>
+                    <td>
+                        <img src="../images/pageprincipale/jeu1.png" alt="jeu1" id="img-jeu1">
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Technologie logicielle</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>La construction en 3D du jeu a été faite en utilisant la bibliotheque Three.js.</p>
+                        <p>Ainsi, nous avions accès à différentes librairies comme par exemple GLTFLoader qui permet de générer des modèles 3D au format gltf</p>
+                        <p>L'affichage du graphique de performances se fait en utilisant la bibliotheque Stats.js</p>
+                        <p>Pour ce qui est des touches d'actions (déplacements et tire du missile) pendant la partie, la bibliotheque threex.keyboardstate.js est utilisée pour recuperer "l'etat" du clavier a n'importe quel instant (comme par exemple la touche qui est pressée).</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: left;" colspan="2"><h2>Architecture logicielle</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>L'arborescence du projet est la suivante : </p>
+                        <p>
+                            <br/>
+                            <p></p>
+                            ├── Projet_Cazalis_Pauline/
+                            <br/>
+                            └── space_invaders_3D.html
+                            <br/>
+                            #rapport
+                            ##css
+                            ###style.css
+                            ##html
+                            ###index.html
+                            ##images
+                            #src
+                            ##css
+                            ###siapp.css
+                            ##html
+                            ##js
+                            ###aliens.js
+                            ###decor.js
+                            ###gameConfig.js
+                            ###level.js
+                            ###menu.js
+                            ###player.js
+                            ###siapp.js
+                            ###sound.js
+                            ##medias
+                            ###font
+                            ####transfonter.org-20210219-140631
+                            #####FinkHeavy.woff
+                            #####FinkHeavy.woff2
+                            #####stylesheet.css
+                            ####IndieFlower.json
+                            ###images
+
+                            ###models
+
+                            ###sounds
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Graphisme</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <img src="../images/pageprincipale/jeu2.png" alt="jeu1" id="img-jeu2">
+                    </td>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Pour ce jeu, un seul décor a été réalisé. Il représente l'île dans le jeu Animal Crossing.</p>
+                        <p>Les modèles 3D ont été trouvé sur ce <a href="https://www.models-resource.com/">site</a>.</p>
+                        <p>Il y a 30 aliens sur la scène représentant des personnages de Animal Crossing</p>
+                        <p>Avant de commencer la partie, le joueur à la choix entre deux personnages.</p>
+                        <p>Le missile du joueur est représenté par un sac de "clochettes", la monnaie virtuelle du jeu, modélisé en 3D.</p>
+                        <p>Les boucliers sont des rochers, eux aussi modélisé en 3D.</p>
+                        <p>Concernant le fond de la scène, l'image à été découpé en plusieurs carrés. Ainsi, elles ont pu être appliqué pour faire la texture du cube.</p>
+                        <p>L'effet de post-processing (glitch) est inclu dans ce jeu. Quand le joueur se fait toucher par un alien, celui s'active pendant 1 seconde.</p>
+                        <p>Si le joueur est en mode invincible, celui-ci ne s'active pas. De même, il peut le désactiver en appuyant sur la touche p</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: left;" colspan="2"><h2>Dialogue avec l'utilisateur</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Lors de la transition d'un niveau à l'autre, un bandeau avec le niveau actuel apparait pendant 3 secondes.</p>
+                        <p>La touche "h" permet l'affichage ou non des touches utilisables par le joueur pendant la partie.</p>
+                        <p>Les vies du joueur sont représentées par des pommes et disparaissent une par une si le joueur perd une vie.</p>
+                    </td>
+                    <td>
+                        <img src="../images/pageprincipale/level.png" alt="jeu1" id="img-jeu3">
+                    </td>
+                    
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Point de vue caméra</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <img src="../images/pageprincipale/vue1.png" alt="jeu1" id="img-jeu4">
+                    </td>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Le jeu propose 3 vues de caméra :</p>
+                        <p>- La première est fixe par rapport au plateau. On l'obtient en appuyant sur la touche '0'.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>- La seconde est attachée au personnage du joueur. On l'obtient en appuyant sur la touche '1'.</p>
+                    </td>
+                    <td>
+                        <img src="../images/pageprincipale/vue2.png" alt="jeu1" id="img-jeu5">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="../images/pageprincipale/vue3.png" alt="jeu1" id="img-jeu6">
+                    </td>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>- La troisième est une vue latérale du jeu. On l'obtient en appuyant sur la touche '2'.</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: left;" colspan="2"><h2>Gestion des collisions</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Quand le missile du joueur touche un alien, celui-ci disparait de la scène et l'alien aussi.</p>
+                        <p>Le nombre de point que vaut l'alien est affiché au dessus de lui et une fumée matérialisant sa mort apparait.</p>
+                        <p>Concernant les abris, ceux-ci possèdent 3 vies. L'opacité baisse à chaque coup et au bout du 3ème coups, l'abris disparait de la scène.</p>
+                        <p>Le joueur, lui, possède 3 vies. Si un alien le touche, il perd une vie et l'effet de post-processing est activé.</p>
+                    </td>
+                    <td>
+                        <img src="../images/pageprincipale/degat-aliens.png" alt="jeu1" id="img-jeu7">
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Dynamique</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%; text-align: right;">
+                        <br><br>
+                        <p>Les aliens se déplace de gauche à droite (axe X) et avance petit à petit vers le joueur (axe Z).</p>
+                        <p>Plus les aliens approchent du joueur, plus la vitesse du missile des aliens augmente.</p>
+                        <p>De même pour un changement de niveau, la vitesse des aliens augmente ainsi que la vitesse de son missile.</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: left;" colspan="2"><h2>Intelligence artificielle de l'adversaire</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Une intelligence artificielle est implémentée pour pouvoir jouer à un 1 joueur.</p>
+                        <p>Les aliens et leur missile augmentent de vitesse à chaque niveau.</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Musique et sons</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <img src="../images/pageprincipale/sound.png" alt="jeu1" id="img-jeu8">
+                        <img src="../images/pageprincipale/menu-sound.png" alt="jeu1" id="img-jeu9">
+                    </td>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Lors du lancement du jeu, une musique se lance. C'est un remix de la musique officielle du jeu.</p>
+                        <p>Aussi, quand le joueur touche un alien, un son dans le langage des personnages du jeu officiel retentit.</p>
+                        <p>Le joueur possède aussi un son lorsque un alien le touche.</p>
+                        <p>La musique du jeu et les sons peuvent êtres désactivés à tout moment par le joueur: soit dans le menu principal du jeu ou soit pendant la partie.</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: left;" colspan="2"><h2>Triche</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Plusieurs touches de triche sont présentes dans le jeu :</p>
+                        <p> --> Touche 'i': mode invincible. Les aliens ne s'approchent plus du joueur et leur missile ne font plus perdre de vie au joueur.</p>
+                        <p> --> Touche 'k': tue tout les aliens d'un coup et passe au niveau suivant. Cependant, le joueur ne gagne pas de points.</p>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="font-size: 30px; text-align: right;" colspan="2"><h2>Les petits plus !</h2></th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <img src="../images/pageprincipale/joueurs.png" alt="jeu1" id="img-jeu10">
+                    </td>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Le joueur à la possibilité de choisir son personnage avant de commencer à jouer.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%;">
+                        <br><br>
+                        <p>Un menu pour mettre en pause le jeu est disponible en appuyant sur la touche 'echap'</p>
+                        <p>Il permet de continuer, recommencer ou encore quitter la partie en cours.</p>
+                    </td>
+                    <td>
+                        <img src="../images/pageprincipale/pause.png" alt="jeu1" id="img-jeu11">
+                    </td>
+                </tr>
+            </table>
+
+            
+
+            <!--<h2>Déroulement du jeu</h2>
+            <br>
+            <br>
+            <p>Dans ce jeu, le joueur incarne un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
+            <p>Pour cela, il doit leur tirer dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
+            <p>Attention, ceux-ci tirent des plans de bricolage! Il faut donc les éviter ou autrement le joueur perd une vie.</p>
+            <p>Heureusement, des rochers sont la pour protéger! Cependant ils ne sont pas éternels...</p>
+            <p>Un cadeau apparait de temps en temps et peut rendre invincible pendant un certains temps.</p>
+            <br>
+            <br>
+            <p>Le joueur possède 3 vies sur l'ensemble de la partie. Une partie comporte plusieurs niveaux allant de 1 à l'infini.</p>-->
         </div>
+        <!--<div class="img-sec1">
+            <img src="../images/pageprincipale/jeu1.png" alt="jeu1" id="img-jeu1">
+        </div>-->
     </div>
+    
 
     <div class="sec">
         <h2>Déroulement du jeu</h2>
