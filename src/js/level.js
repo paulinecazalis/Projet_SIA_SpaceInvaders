@@ -1,8 +1,10 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 import Alien from './alien.js';
+import GameConfig from './gameConfig.js';
 import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
-//Class qui permet de créer les différents niveaux + game over
+
+/*-------------Class pour la gestion des niveaux -----------*/
 export default class Level{
     static levelActive = true; //Booléen qui permet de contrôler si le niveau est actif ou non
     
@@ -20,27 +22,23 @@ export default class Level{
     static changementLevel = (level) =>{
         Level.createTransition("Level " + level, 3000);
         gameConfig.vitesseAliens = level/20;
-        gameConfig.vitesseMissileAlien = level/10;
-        
+        gameConfig.vitesseMissileAlien = level/10; 
     }
 
     //Permet de créer le bandeau de transition entre chaque niveaux
     static createTransition = (text, duration) => {
         document.getElementById('title-trans').innerHTML = text;
-        //document.getElementById('trans').id = "trans";
         document.getElementById('trans').style.display = "block";
         Level.setActive(false);
         setTimeout(() => {
             document.getElementById('trans').style.display = "none";
             Level.setActive(true);
         }, duration);
-
     }
 
-    //Permet de faire le bandeau lorsque la partie est finie (perdue)
+    //Permet de faire le bandeau de transition lorsque la partie est finie (perdu)
     static gameOver = (text, camera, controls) =>{
         document.getElementById('title-trans-gameover').innerHTML = text;
-        //document.getElementById('trans').id = "trans";
         document.getElementById('trans-gameover').style.display = "block";
         document.getElementById('trans-gameover').style.minHeight = "30%";
 
@@ -69,12 +67,11 @@ export default class Level{
             gameConfig.vitesseAliens = gameConfig.level/20;
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;
-            Alien.setPostProcessing(false);
+            GameConfig.setPostProcessing(false);
             camera.position.set(0, 8, -10);
             controls.target = new THREE.Vector3(0, 0, 20);
         }
         document.getElementById('trans-gameover').appendChild(btnMenu);
-        
     }
 
 

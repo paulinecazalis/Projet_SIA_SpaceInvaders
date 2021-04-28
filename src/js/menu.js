@@ -2,6 +2,7 @@ import Decor from "./decor.js";
 import gameConfig from "./gameConfig.js";
 import Player from "./player.js";
 
+/*-------------Class pour la gestion du menu principal -----------*/
 export default class Menu{
     constructor(){
         this._active = true; //Booléen qui permet de déterminer si le menu est actif ou non
@@ -30,8 +31,8 @@ export default class Menu{
         }
     }
 
+    //Permet de gérer le menu des personnages, lorsque le joueur à le choix entre les deux personnages pour jouer
     menuPerso(){
-        let space;
         document.getElementById('menu-personnage').style.display = "block";
         document.getElementById('checkbox-femme').checked = true;
         document.getElementById('checkbox-homme').checked = false;
@@ -55,27 +56,21 @@ export default class Menu{
             this.createTransition("Level "+ gameConfig.level, 3000);
             document.getElementById('menu-personnage').style.display = "none";
             await Player.createSpaceship().then((value) =>{
-                //space = value;
-                //scene.remove(value)
                 gameConfig.spaceshipObject = value;
                 gameConfig.scene.add(value);
             })
         }
-
-        
-
     }
 
-    //Permet le chargement du menu
+    //Permet le chargement du menu principal
     loadMenu = () => {
         Menu.setActive(true);
         document.getElementById("menu").style.display = "block";
     }
 
-    //Permet de cacher le menu et de créer la transition du premier niveau
+    //Permet de cacher le menu principal
     discardMenu = () => {
         document.getElementById("menu").style.display = "none";
-        //this.createTransition("Level "+ gameConfig.level, 3000);
     }
 
     //Permet la création de la transition pour le premier niveau
@@ -90,6 +85,21 @@ export default class Menu{
                 Menu.setActive(false);
                 gameConfig.setPartieActive(false);
             }, duration);
+        }
+    }
+
+     //Permet d'afficher le menu option dans le menu principal
+    optionMenu = () =>{
+        document.getElementById('option').onclick = () =>{
+            document.getElementById('menu-option').style.display = "block"
+            document.getElementById('menu').style.background = "linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../src/medias/images/menu/page1.jpg') no-repeat center center fixed";
+            document.getElementById('menu').style.backgroundSize = "100%"
+        }
+
+        document.getElementById('close-option').onclick = () =>{
+            document.getElementById('menu-option').style.display = "none"
+            document.getElementById('menu').style.background = "linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('../src/medias/images/menu/page1.jpg') no-repeat center center fixed";
+            document.getElementById('menu').style.backgroundSize = "100%"
         }
     }
 }

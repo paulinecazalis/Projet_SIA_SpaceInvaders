@@ -4,17 +4,18 @@ import gameConfig from './gameConfig.js';
 import Alien from './alien.js';
 import Sound from './sound.js';
 
+/*-------------Class pour la gestion du joueur -----------*/
 export default class Player{
     constructor(){
-        this.moveSpaceShip();
+        this.moveSpaceShip(); //Permet de faire bouger le personnage du joueur
     }
 
     static bunkerTab = []; //Tableau qui contient les bunkers
     static spaceship; //Variable pour le vaiseau du joueur
     static missilePlayerActive = false; //Booléen qui détermine si le missile du joueur est présent
     static missile; //Variable pour le missile du joueur
-    static scoreGroup = new THREE.Group(); //groupe de texte pour le score
-    static touchAlienBonus = false;
+    static touchAlienBonus = false; //Booléen pour l'alien bonus
+    static nbLives = 3; //Variable pour le nombre de vie de 
 
     //Permet de déterminer la valeur de this._missilePlayerActive
     isMissileActive = () => {
@@ -31,17 +32,16 @@ export default class Player{
         let geometry = new THREE.BoxGeometry( 2, 0.8, 0.4 );
         let material = new THREE.MeshLambertMaterial( {color: 0x660000, transparent : true, opacity: 0.0} );
         Player.spaceship = new THREE.Mesh( geometry, material );
-        //const vill1 = await gameConfig.chargerModeleGLTF('../src/medias/models/villageoise.gltf');
         let vill1;
         if(document.getElementById('checkbox-homme').checked == true){
+          /*----------Chargement du modèle 3D----------*/
           vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_boy01.dae');
-
         }else{
+          /*----------Chargement du modèle 3D----------*/
           vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_girl01.dae');
         }
         const vill1Space = vill1.scene;
         vill1Space.scale.set(0.15,0.15,0.15);
-        //vill1Space.rotation.x = 14.2;
         vill1Space.rotation.x = 0;
         vill1Space.position.y = -1;
         Player.spaceship.add(vill1Space);
@@ -52,13 +52,12 @@ export default class Player{
     static async createBunker(){
         let bunker = new THREE.Group();
         for(let i = 0 ; i < 4; i++){
-            const tree = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
-            const treeBunk = tree.scene;
-            //treeBunk.position.x = i * 3;
-            treeBunk.position.x = (i%4 - ((4-3)/2)) * 5;
-            treeBunk.scale.set(0.7,0.7,0.7);
-            //treeBunk.rotation.x = 45.5;
-            bunker.add(treeBunk);
+          /*----------Chargement du modèle 3D----------*/
+            const stone = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
+            const stoneBunk = stone.scene;
+            stoneBunk.position.x = (i%4 - ((4-3)/2)) * 5;
+            stoneBunk.scale.set(0.7,0.7,0.7);
+            bunker.add(stoneBunk);
             bunker.position.x = -6;
             bunker.position.z = 2;
             bunker.position.y = -1;
@@ -71,18 +70,18 @@ export default class Player{
     static async createMissilePlayer(){
         let geometry = new THREE.BoxGeometry(0.3,0.3,0.6);
         let material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)', transparent : true, opacity: 0.0} );
+        /*----------Chargement du modèle 3D----------*/
         const loadedData4 = await gameConfig.chargerModeleDAE('../src/medias/models/Bell_bag/Bell_Bag.dae');
         Player.missile = new THREE.Mesh(geometry, material);
         const geoMissile = loadedData4.scene;
         geoMissile.scale.set(0.08,0.08,0.08);
-        //geoMissile.visible = false;
         Player.missile.add(geoMissile);
         Player.missile.visible = false;
         return Player.missile;
-        //this._missile = new THREE.Mesh(geometry, material);
     }
 
-    //Permet le mouvement du missile du joueur
+    //Permet le mouvement du missile du joueur sur l'axe z
+    //Si celui-ci dépasse la zone il disparait et revient à sa position initiale
     moveMissilePlayer = () =>{
         Player.missile.position.z += 0.5;
         if(Player.missile.position.z >= 28){
@@ -98,18 +97,15 @@ export default class Player{
             if(Player.spaceship.position.x - 1.5 > -14){
                 Player.spaceship.position.x -= 4 * step;
             }
-            //this._spaceship.position.x -= 5 * step;
             if(!gameConfig.lockCam){
               camera.position.set(Player.spaceship.position.x, 2.5, -2);
               controls.target = new THREE.Vector3(Player.spaceship.position.x, 0, 20);
-              //Alien.moveAlien(aliens)
             }
         }
         if(gameConfig.keyboard.pressed("left")){
             if(Player.spaceship.position.x + 1.5 < 14){
                 Player.spaceship.position.x += 4 * step;
             }
-          
           if(!gameConfig.lockCam){
             camera.position.set(Player.spaceship.position.x, 2.5, -2);
             controls.target = new THREE.Vector3(Player.spaceship.position.x, 0, 20);
@@ -134,23 +130,22 @@ export default class Player{
         //Calcule les objets coupant le rayon de prélèvement
         var intersect = ray.intersectObjects(Alien.alienTab);
         if(intersect.length > 0){
-          //console.log("group: " + aliens.children.length);
           intersect[0].object.visible = false;
-            Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
-            aliens.remove(intersect[0].object);
-            Player.missile.visible = false;
-
+          Alien.alienTab.splice(Alien.alienTab.indexOf(intersect[0].object),1);
+          aliens.remove(intersect[0].object);
+          Player.missile.visible = false;
+          //Son de l'alien
           if(!Sound.boolSound){
             Sound.alienSound(aliens);
           }
+          //Fumée de l'alien
           gameConfig.loadSmokeEffect();
-                    
           gameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;
+          //Affichage du score en 3D
           document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
           let score3D = intersect[0].object.position.z * 10 + 10;
           let convertScore3D = score3D.toString();
-          //console.log(gameConfig.scoreTotal);
-          this.scoreTouchAlien("+" + convertScore3D);
+          gameConfig.scoreTouchAlien("+" + convertScore3D);
           this.setMissileActive(false);
         }
     }
@@ -158,21 +153,11 @@ export default class Player{
     //Permet au joueur de toucher les bunker
     playerTouchBunk = () =>{
         var ray = new THREE.Raycaster();
-        var vect = new THREE.Vector3(0, 2, 1); //pour toucher les feuilles de l'arbre et non le tronc
+        var vect = new THREE.Vector3(0, 2, 1);
         vect.normalize();
         ray.set(Player.missile.position, vect);
         //Calcule les objets coupant le rayon de prélèvement
         var intersect = ray.intersectObjects(Player.bunkerTab, true);
-        /*if(intersect.length > 0){
-          intersect[0].object.material.opacity -= 0.5;
-            this.setMissileActive(false);
-            Player.missile.visible = false;
-            if(intersect[0].object.material.opacity <= 0){
-                intersect[0].object.visible = false;
-              //scene.remove(intersect[0].object);
-              //bunkTab.splice(bunkTab.indexOf(intersect[0].object),1);
-            }
-        }*/
         if(intersect.length > 0){
           if(intersect[0].object.material.opacity != 0){
             intersect[0].object.material.opacity -= 0.5; //On réduit l'opacité des bunkers dès qu'un alien le touche
@@ -183,6 +168,7 @@ export default class Player{
         }
     }
 
+    //Permet au joueur de toucher l'alien bonus (rend invinsible)
     touchAlienBonus = () =>{
       var ray = new THREE.Raycaster();
       var vect = new THREE.Vector3(0, 0.4, 1);
@@ -195,6 +181,7 @@ export default class Player{
         Player.missile.visible = false;
         this.setMissileActive(false);
         gameConfig.setInvincible(true);
+        //Alerte à droite de l'écran qui annonce le mode invincible ou non
         let alert = document.getElementsByClassName('alert');
         alert[0].classList.remove('hide');
         alert[0].classList.add('show');
@@ -203,7 +190,6 @@ export default class Player{
         setTimeout(() => {
           alert[0].classList.remove('show');
           alert[0].classList.add('hide');
-          //alert[0].style.opacity = 0;
         }, 5000);
         setTimeout(() => {
           console.log('plus invincible');
@@ -216,42 +202,11 @@ export default class Player{
           setTimeout(() => {
             alert[0].classList.remove('show');
             alert[0].classList.add('hide');
-          //alert[0].style.opacity = 0;
           }, 5000);
         }, 10000);
       }
     }
 
-    scoreTouchAlien = (score) =>{
-      //console.log(gameConfig.scoreTotal);
-
-      var fontLoader = new THREE.FontLoader();
-      fontLoader.load('../src/medias/font/IndieFlower.json', (font) => {
-        var textMaterial = new THREE.MeshBasicMaterial({color: "rgb(255,255,255)"});
-        var textGeometry = new THREE.TextGeometry(score, {
-          font: font,
-          size: 0.7,
-          height: 0.2
-        });
-        //textGeometry.center();
-        var textMesh = new THREE.Mesh(textGeometry, textMaterial);
-        textMesh.position.x = Player.missile.position.x;
-        textMesh.position.y = 3;
-        textMesh.position.z = Player.missile.position.z;
-        textMesh.rotation.y = THREE.Math.degToRad(-180);
-        //scene.add(textMesh);
-        Player.scoreGroup.add(textMesh);
-        setInterval(() => {
-          textMesh.position.y += 0.05;
-          if(textMesh.position.y > 4){
-            clearInterval(this);
-          }
-        }, 1000/60);
-        setTimeout(() => {
-          Player.scoreGroup.remove(textMesh);
-        }, 1000);
-      });
-    }
-
+    //Gameconfig
     
-}//Merci aurélien
+}

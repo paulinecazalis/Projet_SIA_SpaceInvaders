@@ -1,5 +1,5 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
-import { GlitchPass } from 'https://threejs.org/examples/jsm/postprocessing/GlitchPass.js';
+import GameConfig from './gameConfig.js';
 
 import gameConfig from './gameConfig.js';
 import PlayerClass from './player.js';
@@ -12,17 +12,12 @@ export default class Alien{
         this._positionAlien = true; //Booléen qui permet de déterminer la position des aliens
         this._missileAliens; // Variable pour le missile des aliens
         this._missileAliensTire = false; //Booléen pour le missile des aliens, si il est tiré
-        
     }
     static alienTab = []; // Tableau qui contient les aliens
     static alienBonusTab = []; //Tableau qui contient l'alien bonus
     static positionAlienBonus = true; //Booléen pour la position de l'alien bonus
-    static composer; //Variable pour l'effet de post processing
-    static glitchPass; //Variable pour l'effet de post processing 
-    static boolPostPro = false; //booléen qui permet de savoir si l'effet de postProcessing est activé
-    static timeouttouch;
-    static timeoutpos;
-    static saveAlien;
+    static timeouttouch; //Permet de manipuler le setTimeout de l'alien bonus, si le joueur le touche
+    static timeoutpos; //Permet de manipuler le setTimeout de la position de l'alien bonus
 
     //Permet de déterminer la position des aliens
     static isPositionAliens = () => {
@@ -52,16 +47,6 @@ export default class Alien{
     //Permet de changer la valeur du missile des aliens
     static setMissileAliensTire = (bool) => {
         this._missileAliensTire = bool;
-    }
-
-     //Permet de déterminer si l'effet de postProcessing est activé ou non
-     static isPostProcessing = () => {
-        return Alien.boolPostPro;
-    }
-
-    //Permet de changer la valeur du postProcessing
-    static setPostProcessing = (bool) => {
-        Alien.boolPostPro = bool;
     }
 
     //Permet la création des aliens
@@ -153,7 +138,6 @@ export default class Alien{
     static moveAlienBonus(alienBonus,scene){
         alienBonus.visible = true
         alienBonus.position.x += 0.11;
-        
         Alien.setPositionAliensBonus(true);
         if(Alien.isPositionAliensBonus()){
             if(Player.touchAlienBonus){ //Si le joueur touche l'alien bonus
@@ -203,7 +187,7 @@ export default class Alien{
         return Alien._missileAliens;
     }
 
-    //Permet de bouger le missile des aliens
+    //Permet de bouger le missile des aliens sur l'axe z. Si celui-ci sort du terrain il devient invisible et retrouve sa position initiale
     static moveMissileAliens = () =>{
         Alien._missileAliens.position.z -= gameConfig.vitesseMissileAlien;
         if(Alien._missileAliens.position.z <= -3){
@@ -229,10 +213,8 @@ export default class Alien{
         }
     }
 
-    
-
     //Permet aux aliens de toucher le vaisseau du joueur et de lui faire perdre des vies
-    static aliensTouchSpaceship = (spaceship, nbLives,renderer,scene,camera) =>{
+    static aliensTouchSpaceship = (spaceship, nbLives) =>{
         var ray = new THREE.Raycaster();
         var vect = new THREE.Vector3(0, 0, 1);
         ray.set(Alien._missileAliens.position, vect);
@@ -246,10 +228,10 @@ export default class Alien{
             if(!gameConfig.isInvincible()){ //Si le mode invincible n'est pas activé on perd une vie
                 nbLives --;
                 gameConfig.removeLives(nbLives);
-                if(!Alien.isPostProcessing()){
-                    Alien.postProcessing(renderer,scene,camera);
+                if(!GameConfig.isPostProcessing()){ //L'effet de post-processing est activé si le joueur n'est pas invincible
+                    GameConfig.postProcessing();
                 }else{
-                    Alien.composer.removePass(Alien.glitchPass);
+                    GameConfig.composer.removePass(GameConfig.glitchPass);
                 }
             }
         }
@@ -276,53 +258,9 @@ export default class Alien{
         }
     }
 
-    //Création de l'effet de post processing (glitch)
-    static postProcessing = (renderer, scene, camera) =>{
-        Alien.glitchPass = new GlitchPass();
-        Alien.composer.addPass( Alien.glitchPass );
-        console.log("postpro");
-        setTimeout(() => { //Au bout de 2 secondes on enlève l'effet
-            Alien.composer.removePass(Alien.glitchPass);
-        }, 1000);
-    }
+    
 
-    static postproKey = (renderer,scene,camera) =>{
-        document.addEventListener('keydown', (e) => {
-            if(e.key == "p" || e.key == "P"){
-                Alien.setPostProcessing(!Alien.boolPostPro);
-                console.log(Alien.boolPostPro);
-                if(Alien.isPostProcessing()){
-                    console.log(Alien.isPostProcessing());
-                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
-                    let alert = document.getElementsByClassName('alert');
-                    alert[0].classList.remove('hide');
-                    alert[0].classList.add('show');
-                    alert[0].style.opacity = 1;
-                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing désactivé";
-                    document.getElementsByClassName('msg')[0].style.fontSize = "16px";
-                    setTimeout(() => {
-                        alert[0].classList.remove('show');
-                        alert[0].classList.add('hide');
-                        //alert[0].style.opacity = 0;
-                    }, 5000);
-                }else{
-                    document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
-                    let alert = document.getElementsByClassName('alert');
-                    alert[0].classList.remove('hide');
-                    alert[0].classList.add('show');
-                    alert[0].style.opacity = 1;
-                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing activé";
-                    document.getElementsByClassName('msg')[0].style.fontSize = "16px";
-                    setTimeout(() => {
-                        alert[0].classList.remove('show');
-                        alert[0].classList.add('hide');
-                        //alert[0].style.opacity = 0;
-                    }, 5000);
-                }
-
-            }
-        })
-    }
+    
 
 
 
