@@ -217,9 +217,6 @@ export default class Alien{
     static aliensAttack = (aliens) =>{
         //Permet de générer un chiffre entre 0 à n aliens --> correspond au nb d'aliens
         var generAliens = Math.floor(Math.random() * Alien.alienTab.length);
-        /*console.log(generAliens);
-        console.log("dans alien.js");
-        console.log(Alien.alienTab);*/
         var random = Math.random();
         if(Alien.alienTab[generAliens] != undefined){
           if(random > 0.8){
@@ -293,13 +290,15 @@ export default class Alien{
         document.addEventListener('keydown', (e) => {
             if(e.key == "p" || e.key == "P"){
                 Alien.setPostProcessing(!Alien.boolPostPro);
-                if(!Alien.isPostProcessing()){
-                    document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
+                console.log(Alien.boolPostPro);
+                if(Alien.isPostProcessing()){
+                    console.log(Alien.isPostProcessing());
+                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
                     let alert = document.getElementsByClassName('alert');
                     alert[0].classList.remove('hide');
                     alert[0].classList.add('show');
                     alert[0].style.opacity = 1;
-                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing activé";
+                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing désactivé";
                     document.getElementsByClassName('msg')[0].style.fontSize = "16px";
                     setTimeout(() => {
                         alert[0].classList.remove('show');
@@ -307,12 +306,12 @@ export default class Alien{
                         //alert[0].style.opacity = 0;
                     }, 5000);
                 }else{
-                    document.getElementById('postpro').innerHTML = "Post-processing: non" ;
+                    document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
                     let alert = document.getElementsByClassName('alert');
                     alert[0].classList.remove('hide');
                     alert[0].classList.add('show');
                     alert[0].style.opacity = 1;
-                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing désactivé";
+                    document.getElementsByClassName('msg')[0].innerHTML = "Post-processing activé";
                     document.getElementsByClassName('msg')[0].style.fontSize = "16px";
                     setTimeout(() => {
                         alert[0].classList.remove('show');

@@ -698,7 +698,7 @@ canvas{
   border: 1px solid #ececeb;
   box-shadow: 5px 5px 10px grey;
   border-radius: 20px;
-  width: 250px;
+  width: 400px;
   height: 40px;
   background-color: #eaeae6;
 }
@@ -706,17 +706,25 @@ canvas{
 #score{
   position: absolute;
   font-family: Fink Heavy;
-  font-size: 23px;
-  top: 15%;
+  font-size: 20px;
+  top: 25%;
   left: 6%;
 }
 
 #level{
   position: absolute;
   font-family: Fink Heavy;
-  font-size: 23px;
-  top: 15%;
-  left: 55%;
+  font-size: 20px;
+  top: 25%;
+  left: 33%;
+}
+
+#best-score{
+  position: absolute;
+  font-family: Fink Heavy;
+  font-size: 20px;
+  top: 25%;
+  left: 57%;
 }
 
 #help-commande{

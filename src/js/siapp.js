@@ -102,8 +102,6 @@ async function init() {
   light = new THREE.AmbientLight( 0xFFFFFF);
   gameConfig.scene.add(light);
 
-  
-
   //gameConfig.loadSmokeEffect(gameConfig.scene);
 
   /*spaceshipObject = element.createSpaceship();

@@ -1,4 +1,5 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
+import Alien from './alien.js';
 import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
 //Class qui permet de créer les différents niveaux + game over
@@ -47,6 +48,10 @@ export default class Level{
         scoreFinal.innerHTML = "Score final : " + gameConfig.scoreTotal;
         scoreFinal.id = "score-final";
         document.getElementById('trans-gameover').appendChild(scoreFinal);
+        if(gameConfig.bestScore <= gameConfig.scoreTotal){
+            gameConfig.bestScore = gameConfig.scoreTotal;
+        }
+        document.getElementById('best-score').innerHTML = "Meilleur score: " + gameConfig.bestScore;
 
         var btnMenu = document.createElement('button');
         btnMenu.innerHTML = 'Retour menu';
@@ -64,6 +69,7 @@ export default class Level{
             gameConfig.vitesseAliens = gameConfig.level/20;
             gameConfig.vitesseMissileAlien = gameConfig.level/10;
             gameConfig.scoreTotal = 0;
+            Alien.setPostProcessing(false);
             camera.position.set(0, 8, -10);
             controls.target = new THREE.Vector3(0, 0, 20);
         }

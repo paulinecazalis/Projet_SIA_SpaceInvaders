@@ -22,6 +22,7 @@ export default class gameConfig{
     static scene = new THREE.Scene();
     static smokeParticles = new THREE.Group();
     static particle;
+    static bestScore = 0;
 
     //Permet de charger des modèles 3D de type GLTF
     static chargerModeleGLTF(url){
@@ -109,6 +110,7 @@ export default class gameConfig{
         document.getElementById('life2').style.display = 'block';
         document.getElementById('life1').style.display = 'block';
         document.getElementById('score').innerHTML = "Score: " +  0;
+        //document.getElementById('best-score').innerHTML = "Meilleur score: " +  0;
     }
 
     //Permet de faire l'interface du jeu (vies, affichage des commandes...)
@@ -120,6 +122,7 @@ export default class gameConfig{
         document.getElementById('camera').style.visibility = "visible";
         document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
         document.getElementById('level').innerHTML = "Level: " + gameConfig.level;
+        document.getElementById('best-score').innerHTML = "Meilleur score: " + gameConfig.bestScore;
         document.getElementById('invincible').style.display = "block";
         document.getElementById('invincible').innerHTML = "Invincible: non" ;
         document.getElementById('postpro').style.display = "block";
