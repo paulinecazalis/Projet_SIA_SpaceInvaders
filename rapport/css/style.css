@@ -148,6 +148,14 @@ section #text{
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
+#img-tree{
+    width: 50%;
+    margin-left: 60px;
+    border-radius: 20px;
+    border: 5px solid transparent;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
 
 #img-jeu3{
     width: 80%;

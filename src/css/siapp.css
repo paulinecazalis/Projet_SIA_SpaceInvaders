@@ -151,9 +151,6 @@ canvas{
   text-align: center;
   justify-content: center;
   padding-top: 10px;
-  /*opacity: 1;
-	-webkit-transition: .3s ease-in-out;
-	transition: .3s ease-in-out;*/
   -webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .3s ease-in-out;
@@ -161,7 +158,6 @@ canvas{
 }
 
 #play-game button:hover{
-  /*opacity: .5;*/
   -webkit-transform: scale(1.2);
 	transform: scale(1.2);
 }
@@ -568,9 +564,6 @@ canvas{
   text-align: center;
   justify-content: center;
   padding-top: 10px;
-  /*opacity: 1;
-	-webkit-transition: .3s ease-in-out;
-	transition: .3s ease-in-out;*/
   -webkit-transform: scale(1);
 	transform: scale(1);
 	-webkit-transition: .3s ease-in-out;
@@ -586,7 +579,6 @@ canvas{
 /*-----------------------------------------LEVEL TRANSITION----------------------------------------------*/
 #trans{
   display: none;
-  /*background: rgba(0,191,255,0.3);*/
   background: rgba( 174, 229, 160, 0.6);
   font-family: Fink Heavy;
   z-index:5;
@@ -606,7 +598,6 @@ canvas{
   text-align:center;
   display: table-cell;
   color:black ;
-  /*vertical-align:middle;*/
   font-size: 80px;
 }
 /*-----------------------------------------FIN LEVEL TRANSITION----------------------------------------------*/
@@ -616,7 +607,6 @@ canvas{
   visibility: hidden;
   position: absolute;
   top: 2%;
-  /*left: 64%;*/
   right: 0;
   border: 1px solid #ececeb;
   box-shadow: 5px 5px 10px grey;
@@ -627,11 +617,10 @@ canvas{
 }
 
 #lives{
-  /*visibility: hidden;*/
   display: none;
   position: absolute;
   top: -5%;
-  left: 13%;
+  left: 12%;
   width: 200px;
   height: 70px;
   
@@ -661,7 +650,7 @@ canvas{
   font-family: Fink Heavy; 
   position: absolute; 
   top: 29%; 
-  left: 39%;
+  left: 38%;
 }
 
 #postpro{
@@ -724,7 +713,7 @@ canvas{
   font-family: Fink Heavy;
   font-size: 20px;
   top: 25%;
-  left: 57%;
+  left: 56%;
 }
 
 #help-commande{
@@ -779,7 +768,6 @@ canvas{
   text-align:center;
   display: table-cell;
   color:black ;
-  /*vertical-align:middle;*/
   font-size: 80px;
 }
 
@@ -977,7 +965,8 @@ canvas{
 	transform: scale(1.2);
 }
 /*-----------------------------------------FIN PAUSE----------------------------------------------*/
-/*-----------------------------------------ALERT MODE INVINCIBLE----------------------------------------------*/
+
+/*-----------------------------------------ALERT MODE INVINCIBLE + POST-PROCESSING----------------------------------------------*/
 .alert{
   font-family: Fink Heavy;
   background: #ffdb9b;
@@ -1061,7 +1050,6 @@ canvas{
 .close-btn:hover{
   cursor: url('../medias/images/menu/cursor.png'), default !important;
 }
-
 
 .close-btn .fa-times{
   color: #ce8500;

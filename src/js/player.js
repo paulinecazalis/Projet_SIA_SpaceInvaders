@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 
-import gameConfig from './gameConfig.js';
+import GameConfig from './gameConfig.js';
 import Alien from './alien.js';
 import Sound from './sound.js';
 
@@ -15,7 +15,8 @@ export default class Player{
     static missilePlayerActive = false; //Booléen qui détermine si le missile du joueur est présent
     static missile; //Variable pour le missile du joueur
     static touchAlienBonus = false; //Booléen pour l'alien bonus
-    static nbLives = 3; //Variable pour le nombre de vie de 
+    static nbLives = 3; //Variable pour le nombre de vie du joueur
+    static invincible = false; //le joueur n'est pas invincible, il le devient en utilisant la touche de triche
 
     //Permet de déterminer la valeur de this._missilePlayerActive
     isMissileActive = () => {
@@ -27,6 +28,16 @@ export default class Player{
         Player.missilePlayerActive = bool;
     }
 
+    //Permet de savoir si le joueur est invincible
+    static isInvincible = () =>{
+      return Player.invincible;
+    }
+
+    //Permet de changer la valeur invincible
+    static setInvincible = (bool) =>{
+      Player.invincible = bool;
+    }
+
     //Permet la création du joueur
     static async createSpaceship(){
         let geometry = new THREE.BoxGeometry( 2, 0.8, 0.4 );
@@ -35,10 +46,10 @@ export default class Player{
         let vill1;
         if(document.getElementById('checkbox-homme').checked == true){
           /*----------Chargement du modèle 3D----------*/
-          vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_boy01.dae');
+          vill1 = await GameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_boy01.dae');
         }else{
           /*----------Chargement du modèle 3D----------*/
-          vill1 = await gameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_girl01.dae');
+          vill1 = await GameConfig.chargerModeleDAE('../src/medias/models/Villagers/dys_guest_girl01.dae');
         }
         const vill1Space = vill1.scene;
         vill1Space.scale.set(0.15,0.15,0.15);
@@ -53,7 +64,7 @@ export default class Player{
         let bunker = new THREE.Group();
         for(let i = 0 ; i < 4; i++){
           /*----------Chargement du modèle 3D----------*/
-            const stone = await gameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
+            const stone = await GameConfig.chargerModeleGLTF('../src/medias/models/Stone/stone.gltf');
             const stoneBunk = stone.scene;
             stoneBunk.position.x = (i%4 - ((4-3)/2)) * 5;
             stoneBunk.scale.set(0.7,0.7,0.7);
@@ -71,7 +82,7 @@ export default class Player{
         let geometry = new THREE.BoxGeometry(0.3,0.3,0.6);
         let material = new THREE.MeshLambertMaterial( {color: 'rgb(255, 255, 0)', transparent : true, opacity: 0.0} );
         /*----------Chargement du modèle 3D----------*/
-        const loadedData4 = await gameConfig.chargerModeleDAE('../src/medias/models/Bell_bag/Bell_Bag.dae');
+        const loadedData4 = await GameConfig.chargerModeleDAE('../src/medias/models/Bell_bag/Bell_Bag.dae');
         Player.missile = new THREE.Mesh(geometry, material);
         const geoMissile = loadedData4.scene;
         geoMissile.scale.set(0.08,0.08,0.08);
@@ -93,25 +104,25 @@ export default class Player{
 
     //Permet le mouvement du joueur (déplacement latéral + tire)
     moveSpaceShip = (step, camera, controls, aliens) =>{
-        if(gameConfig.keyboard.pressed("right")){
+        if(GameConfig.keyboard.pressed("right")){
             if(Player.spaceship.position.x - 1.5 > -14){
                 Player.spaceship.position.x -= 4 * step;
             }
-            if(!gameConfig.lockCam){
+            if(!GameConfig.lockCam){
               camera.position.set(Player.spaceship.position.x, 2.5, -2);
               controls.target = new THREE.Vector3(Player.spaceship.position.x, 0, 20);
             }
         }
-        if(gameConfig.keyboard.pressed("left")){
+        if(GameConfig.keyboard.pressed("left")){
             if(Player.spaceship.position.x + 1.5 < 14){
                 Player.spaceship.position.x += 4 * step;
             }
-          if(!gameConfig.lockCam){
+          if(!GameConfig.lockCam){
             camera.position.set(Player.spaceship.position.x, 2.5, -2);
             controls.target = new THREE.Vector3(Player.spaceship.position.x, 0, 20);
           }
         }
-        if(gameConfig.keyboard.pressed("space")){
+        if(GameConfig.keyboard.pressed("space")){
           if(!Player.missilePlayerActive){
             this.setMissileActive(true);
             Player.missile.position.z = 0;
@@ -139,13 +150,13 @@ export default class Player{
             Sound.alienSound(aliens);
           }
           //Fumée de l'alien
-          gameConfig.loadSmokeEffect();
-          gameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;
+          Alien.loadSmokeEffect();
+          GameConfig.scoreTotal += intersect[0].object.position.z * 10 + 10;
           //Affichage du score en 3D
-          document.getElementById('score').innerHTML = "Score: " + gameConfig.scoreTotal;
+          document.getElementById('score').innerHTML = "Score: " + GameConfig.scoreTotal;
           let score3D = intersect[0].object.position.z * 10 + 10;
           let convertScore3D = score3D.toString();
-          gameConfig.scoreTouchAlien("+" + convertScore3D);
+          GameConfig.scoreTouchAlien("+" + convertScore3D);
           this.setMissileActive(false);
         }
     }
@@ -180,7 +191,7 @@ export default class Player{
         Player.touchAlienBonus = true;
         Player.missile.visible = false;
         this.setMissileActive(false);
-        gameConfig.setInvincible(true);
+        Player.setInvincible(true);
         //Alerte à droite de l'écran qui annonce le mode invincible ou non
         let alert = document.getElementsByClassName('alert');
         alert[0].classList.remove('hide');
@@ -192,8 +203,7 @@ export default class Player{
           alert[0].classList.add('hide');
         }, 5000);
         setTimeout(() => {
-          console.log('plus invincible');
-          gameConfig.setInvincible(false);
+          Player.setInvincible(false);
           let alert = document.getElementsByClassName('alert');
           alert[0].classList.remove('hide');
           alert[0].classList.add('show');
@@ -206,7 +216,5 @@ export default class Player{
         }, 10000);
       }
     }
-
-    //Gameconfig
     
 }

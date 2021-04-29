@@ -1,22 +1,23 @@
 import Decor from "./decor.js";
-import gameConfig from "./gameConfig.js";
+import GameConfig from "./gameConfig.js";
+import Level from "./level.js";
 import Player from "./player.js";
 
 /*-------------Class pour la gestion du menu principal -----------*/
 export default class Menu{
     constructor(){
-        this._active = true; //Booléen qui permet de déterminer si le menu est actif ou non
         this.buttonEvent();
     }
+    static actif = true;//Booléen qui permet de déterminer si le menu est actif ou non
 
-    //Permet de déterminer la valeur de this._active
+    //Permet de déterminer la valeur actif
     static isActive = () => {
-        return this._active;
+        return Menu.actif;
     }
 
-    //Permet de changer la valeur de this._active
+    //Permet de changer la valeur de actif
     static setActive = (bool) => {
-        this._active = bool;
+        Menu.actif = bool;
     }
 
     //Evenement du bouton "jouer" sur le menu principal
@@ -26,8 +27,8 @@ export default class Menu{
         btn.onclick = () => {
             this.discardMenu();
             this.menuPerso();
-            gameConfig.interfaceGame();
-            gameConfig.resetLives();
+            GameConfig.interfaceGame();
+            GameConfig.resetLives();
         }
     }
 
@@ -53,11 +54,11 @@ export default class Menu{
         };
 
         document.getElementById('jouer-menu-perso').onclick = async () =>{
-            this.createTransition("Level "+ gameConfig.level, 3000);
+            this.createTransition("Level "+ Level.level, 3000);
             document.getElementById('menu-personnage').style.display = "none";
             await Player.createSpaceship().then((value) =>{
-                gameConfig.spaceshipObject = value;
-                gameConfig.scene.add(value);
+                GameConfig.spaceshipObject = value;
+                GameConfig.scene.add(value);
             })
         }
     }
@@ -83,7 +84,7 @@ export default class Menu{
             setTimeout(() => {
                 document.getElementById('trans').style.display = "none";
                 Menu.setActive(false);
-                gameConfig.setPartieActive(false);
+                GameConfig.setPartieActive(false);
             }, duration);
         }
     }

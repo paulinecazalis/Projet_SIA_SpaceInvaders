@@ -10,7 +10,6 @@ import Player from './player.js';
 import Alien from '../js/alien.js';
 import Level from '../js/level.js';
 import Sound from '../js/sound.js';
-//import gameConfig from '../js/gameConfig.js';
 import Decor from '../js/decor.js';
 import GameConfig from '../js/gameConfig.js';
 
@@ -128,8 +127,8 @@ async function init() {
 
   triche();
   pauseMenu();
-  GameConfig.helpKey();
-  GameConfig.postproKey();
+  helpKey();
+  postproKey();
 
   /*----------Chargement des sons----------*/
   Sound.audioLoader();
@@ -231,9 +230,9 @@ function playerShoot(){
   joueur.touchAlienBonus();
   if(Alien.alienTab.length == 0){
     removeScene();
-    GameConfig.level++;
-    document.getElementById('level').innerHTML = "Level: " + GameConfig.level;
-    Level.changementLevel(GameConfig.level);
+    Level.level++;
+    document.getElementById('level').innerHTML = "Level: " + Level.level;
+    Level.changementLevel(Level.level);
     newGameAlien();
   }
 }
@@ -247,11 +246,10 @@ function aliensShoot(){
     Level.gameOver("Game Over !", camera, controls);
     Player.nbLives = 3;
     newGameLoose();
-    GameConfig.level = 1;
+    Level.level = 1;
   }
   else if(aliens.position.z == GameConfig.spaceshipObject.position.z){
     removeScene();
-    console.log('les aliens ont gagnés(raquette)');
     GameConfig.setPartieActive(true);
     Level.gameOver("Game Over !");
   }
@@ -262,17 +260,16 @@ function triche(){
     if(e.key == "k" || e.key == 'K'){
       if(Level.isActive()){
         removeScene();
-        GameConfig.level++;
-        document.getElementById('level').innerHTML = "Level: " + GameConfig.level;
-        Level.changementLevel(GameConfig.level);
+        Level.level++;
+        document.getElementById('level').innerHTML = "Level: " + Level.level;
+        Level.changementLevel(Level.level);
         newGameAlien();
       }
     }
     if(e.key == "i" || e.key == 'I'){
-      console.log('mode invincible');
-      GameConfig.setInvincible(!GameConfig.invincible);
+      Player.setInvincible(!Player.invincible);
       Sound.boolSound = !Sound.boolSound;
-      if(GameConfig.invincible){
+      if(Player.invincible){
         document.getElementById('invincible').innerHTML = "Invincible: oui";
         let alert = document.getElementsByClassName('alert');
         alert[0].classList.remove('hide');
@@ -334,8 +331,8 @@ async function newGameAlien(){
   clearTimeout(Alien.timeoutpos);
   clearTimeout(Alien.timeouttouch);
   GameConfig.setPartieActive(false);
-  GameConfig.setInvincible(false);
-  document.getElementById('invincible').innerHTML = "Invincible: " + GameConfig.invincible;
+  Player.setInvincible(false);
+  document.getElementById('invincible').innerHTML = "Invincible: " + Player.invincible;
   Menu.setActive(true);
   setTimeout(() => {
     Menu.setActive(false);
@@ -361,12 +358,11 @@ async function newGameLoose(){
     aliensBonus = value;
     GameConfig.scene.add(value);
   });
-  GameConfig.setInvincible(false);
+  Player.setInvincible(false);
   Alien.setPositionAliensBonus(true);
 }
 
-//GameConfig
-//Menu Pause 
+//Permet d'afficher le menu pause du jeu 
 function pauseMenu(){
   document.addEventListener('keydown', (e) => {
     if(e.key == "Escape"){
@@ -374,14 +370,13 @@ function pauseMenu(){
         GameConfig.setPauseGame(!GameConfig.pause);
         if(GameConfig.pause){
           document.getElementById('pause').style.display = 'block';
-
+          //Bouton pour continuer la partie
           document.getElementById('continuer').onclick = () =>{
             document.getElementById('pause').style.display = 'none';
             GameConfig.setPauseGame(false);
           };
-
+          //Bouton pour recommencer la partie
           document.getElementById('recom').onclick = () =>{
-            //document.getElementById('pause').style.display = 'none';
             document.getElementById('recom-alert').style.display = "block";
             document.getElementById('recom-non').onclick = () =>{
               document.getElementById('recom-alert').style.display = "none";
@@ -392,8 +387,11 @@ function pauseMenu(){
               removeScene();
               Player.nbLives = 3;
               GameConfig.resetLives();
-              GameConfig.level = 1;
-              Level.changementLevel(GameConfig.level);
+              Level.level = 1;
+              document.getElementById('level').innerHTML = "Level: " + Level.level;
+              menu.createTransition("Level "+ Level.level, 3000);
+              Alien.vitesseAliens = 0.05;
+              Alien.vitesseMissileAlien = 0.1;
               GameConfig.scoreTotal = 0;
               newGameAlien();
               GameConfig.setPauseGame(false);
@@ -401,7 +399,7 @@ function pauseMenu(){
               controls.target = new THREE.Vector3(0, 0, 20);
             }
           };
-
+          //Bouton pour quitter la partie
           document.getElementById('quit').onclick = () =>{
             document.getElementById('pause').style.display = 'none';
             document.getElementById('score-level').style.display = "none";
@@ -414,9 +412,9 @@ function pauseMenu(){
             removeScene();
             Player.nbLives = 3;
             newGameLoose();
-            GameConfig.level = 1;
-            GameConfig.vitesseAliens = GameConfig.level/20;
-            GameConfig.vitesseMissileAlien = GameConfig.level/10;
+            Level.level = 1;
+            Alien.vitesseAliens = Level.level/30;
+            Alien.vitesseMissileAlien = Level.level/10;
             GameConfig.scoreTotal = 0;
             GameConfig.setPauseGame(false);
             camera.position.set(0, 8, -10);
@@ -428,6 +426,58 @@ function pauseMenu(){
       }
     }
   });
+}
+
+//Permet d'afficher les commandes d'aide au joueur
+function helpKey(){
+  let help = false;
+  document.addEventListener('keydown', (e) => {
+      if(e.key == "h" || e.key == "H"){
+          help = !help;
+          if(help){
+              document.getElementById('help-commande').style.visibility = "hidden";
+              document.getElementById('camera').style.visibility = "hidden";
+          }else{
+              document.getElementById('help-commande').style.visibility = "visible";
+              document.getElementById('camera').style.visibility = "visible";
+          }
+      }
+  })
+}
+
+//Permet d'activer ou désactiver l'effet de post-processing en appuyant sur la touche p
+function postproKey(){
+  document.addEventListener('keydown', (e) => {
+      if(e.key == "p" || e.key == "P"){
+          GameConfig.setPostProcessing(!GameConfig.boolPostPro);
+          if(GameConfig.isPostProcessing()){
+              document.getElementById('postpro').innerHTML = "Post-processing: non" ;
+              let alert = document.getElementsByClassName('alert');
+              alert[0].classList.remove('hide');
+              alert[0].classList.add('show');
+              alert[0].style.opacity = 1;
+              document.getElementsByClassName('msg')[0].innerHTML = "Post-processing désactivé";
+              document.getElementsByClassName('msg')[0].style.fontSize = "16px";
+              setTimeout(() => {
+                  alert[0].classList.remove('show');
+                  alert[0].classList.add('hide');
+              }, 5000);
+          }else{
+              document.getElementById('postpro').innerHTML = "Post-processing: oui" ;
+              let alert = document.getElementsByClassName('alert');
+              alert[0].classList.remove('hide');
+              alert[0].classList.add('show');
+              alert[0].style.opacity = 1;
+              document.getElementsByClassName('msg')[0].innerHTML = "Post-processing activé";
+              document.getElementsByClassName('msg')[0].style.fontSize = "16px";
+              setTimeout(() => {
+                  alert[0].classList.remove('show');
+                  alert[0].classList.add('hide');
+              }, 5000);
+          }
+
+      }
+  })
 }
 
 

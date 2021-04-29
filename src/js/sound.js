@@ -2,6 +2,7 @@ import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/thr
 
 /*-------------Class pour la gestion des sons -----------*/
 export default class Sound{
+    
     static listener = new THREE.AudioListener(); //représente une ecoute virtuelle pour les sons
     static sound = new THREE.Audio( Sound.listener ); //Variable pour le son du jeu
     static audioLives = new THREE.Audio( Sound.listener ); //Variable pour le son du joueur

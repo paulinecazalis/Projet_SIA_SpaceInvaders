@@ -1,11 +1,11 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.module.js';
 import Alien from './alien.js';
 import GameConfig from './gameConfig.js';
-import gameConfig from "./gameConfig.js";
 import Menu from "./menu.js";
 
 /*-------------Class pour la gestion des niveaux -----------*/
 export default class Level{
+    static level = 1; //initialisation du premier niveau
     static levelActive = true; //Booléen qui permet de contrôler si le niveau est actif ou non
     
     //Permet de savoir l'état de levelActive
@@ -21,8 +21,8 @@ export default class Level{
     //Permet la transition de changement de niveau
     static changementLevel = (level) =>{
         Level.createTransition("Level " + level, 3000);
-        gameConfig.vitesseAliens = level/20;
-        gameConfig.vitesseMissileAlien = level/10; 
+        Alien.vitesseAliens = level/30;
+        Alien.vitesseMissileAlien = level/10; 
     }
 
     //Permet de créer le bandeau de transition entre chaque niveaux
@@ -36,20 +36,20 @@ export default class Level{
         }, duration);
     }
 
-    //Permet de faire le bandeau de transition lorsque la partie est finie (perdu)
+    //Permet de faire le bandeau de transition lorsque la partie est finie (perdu) et de revenir au menu principal
     static gameOver = (text, camera, controls) =>{
         document.getElementById('title-trans-gameover').innerHTML = text;
         document.getElementById('trans-gameover').style.display = "block";
         document.getElementById('trans-gameover').style.minHeight = "30%";
 
         var scoreFinal = document.createElement('p');
-        scoreFinal.innerHTML = "Score final : " + gameConfig.scoreTotal;
+        scoreFinal.innerHTML = "Score final : " + GameConfig.scoreTotal;
         scoreFinal.id = "score-final";
         document.getElementById('trans-gameover').appendChild(scoreFinal);
-        if(gameConfig.bestScore <= gameConfig.scoreTotal){
-            gameConfig.bestScore = gameConfig.scoreTotal;
+        if(GameConfig.bestScore <= GameConfig.scoreTotal){
+            GameConfig.bestScore = GameConfig.scoreTotal;
         }
-        document.getElementById('best-score').innerHTML = "Meilleur score: " + gameConfig.bestScore;
+        document.getElementById('best-score').innerHTML = "Meilleur score: " + GameConfig.bestScore;
 
         var btnMenu = document.createElement('button');
         btnMenu.innerHTML = 'Retour menu';
@@ -64,9 +64,9 @@ export default class Level{
             document.getElementById('help-commande').style.visibility = "hidden";
             document.getElementById('camera').style.visibility = "hidden";
             scoreFinal.innerHTML = "";
-            gameConfig.vitesseAliens = gameConfig.level/20;
-            gameConfig.vitesseMissileAlien = gameConfig.level/10;
-            gameConfig.scoreTotal = 0;
+            Alien.vitesseAliens = Level.level/30;
+            Alien.vitesseMissileAlien = Level.level/10;
+            GameConfig.scoreTotal = 0;
             GameConfig.setPostProcessing(false);
             camera.position.set(0, 8, -10);
             controls.target = new THREE.Vector3(0, 0, 20);
