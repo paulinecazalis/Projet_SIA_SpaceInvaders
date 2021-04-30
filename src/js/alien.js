@@ -209,7 +209,6 @@ export default class Alien{
             Alien.setMissileAliensTire(true);
             Alien._missileAliens.position.z = aliens.position.z + Alien.alienTab[generAliens].position.z;
             Alien._missileAliens.position.x = aliens.position.x + Alien.alienTab[generAliens].position.x;
-            //Alien.vitesseMissileAlien += 0.01;
           }
         }
     }
@@ -223,12 +222,12 @@ export default class Alien{
         if(intersect.length > 0){
             Alien.setMissileAliensTire(false);
             Alien._missileAliens.visible = false;
-            if(!Sound.boolSound){ //Activation du son pour le vaisseau
-                Sound.livesSound(spaceship);
-            }
             if(!Player.isInvincible()){ //Si le mode invincible n'est pas activé on perd une vie
                 nbLives --;
                 GameConfig.removeLives(nbLives);
+                if(!Sound.boolSound){ //Activation du son pour le vaisseau
+                    Sound.livesSound(spaceship);
+                }
                 if(!GameConfig.isPostProcessing()){ //L'effet de post-processing est activé si le joueur n'est pas invincible
                     GameConfig.postProcessing();
                 }else{

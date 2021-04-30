@@ -88,6 +88,8 @@ export default class Sound{
                 document.getElementById('music-on-game').className = 'fas fa-music-slash';
                 document.getElementById('music-on').className = 'fas fa-music-slash';
             }else{
+                //Sound.audioAliens.play();
+                //Sound.audioLives.play();
                 document.getElementById('music-on-game').className ='fas fa-music';
                 document.getElementById('music-on').className ='fas fa-music';
             }
@@ -101,6 +103,8 @@ export default class Sound{
                 document.getElementById('music-on').className = 'fas fa-music-slash';
                 document.getElementById('music-on-game').className = 'fas fa-music-slash';
             }else{
+                //Sound.audioAliens.play();
+                //Sound.audioLives.play();
                 document.getElementById('music-on').className ='fas fa-music';
                 document.getElementById('music-on-game').className ='fas fa-music';
             }

@@ -35,10 +35,10 @@
                 <tr>
                     <td style="width: 50%;">
                         <br><br>
-                        <p>Pour lancer le jeu, il faut se placer dans le dossier ProjetSIA_Cazalis_Pauline, ouvrir un terminal et taper la commande "python3 -m http.server 8000".</p>
+                        <p>Avant de lancer le jeu, il faut installer python sur son ordinateur.</p>
+                        <p>Ensuite, il suffit de se placer dans le dossier ProjetSIA_Cazalis_Pauline, ouvrir un terminal et taper la commande "python3 -m http.server 8000".</p>
                         <p>Le terminal annonce qu'une connexion est ouverte au port 8000.</p>
-                        <p>Il suffit d'ouvrir le navigateur est taper "localhost:8000" et sélectionner "space_invaders_3D.html".</p>
-                        
+                        <p>Il suffit d'ouvrir le navigateur et taper "localhost:8000" et sélectionner "space_invaders_3D.html".</p>
                     </td>
                 </tr>
             </table>
@@ -54,7 +54,8 @@
                         <p>Le but du jeu est de tuer les aliens, représentés par des personnages du jeu "Animal Crossing".</p>
                         <p>Ceux-ci oscillent horizontalement et se rapprochent de plus en plus du joueur.</p>
                         <p>Le joueur possède un missile et gagne des points dès qu'un alien est touché. </p>
-                        <p>Cependant, les aliens tirent eux aussi des missiles. Si ils touchent le joueur, alors une vie est perdue.</p>
+                        <p>Cependant, les aliens tirent eux aussi des missiles. Si le joueur est touché, alors une vie est perdue.</p>
+                        <p>Le jeu possède un nombre infini de niveau.</p>
                         <p>La partie continue tant que les 3 vies du joueur n'ont pas été perdues.</p>
                         <p>La fin de la partie affiche "Game Over" ainsi que le score du joueur pendant la partie.</p>
                     </td>
@@ -127,7 +128,7 @@
                 <tr>
                     <td style="width: 50%;">
                         <br><br>
-                        <p>Lors de la transition d'un niveau à un autre, un bandeau avec le niveau actuel apparait pendant 3 secondes.</p>
+                        <p>Lors du passage à un niveau supérieur, un bandeau affiche pendant 3 secondes le niveau actuel.</p>
                         <p>La touche "h" permet l'affichage ou non des touches utilisables par le joueur pendant la partie.</p>
                     </td>
                     <td>
@@ -181,9 +182,9 @@
                 <tr>
                     <td style="width: 50%;">
                         <br><br>
-                        <p>Quand le missile du joueur touche un alien, celui-ci disparait de la scène et l'alien aussi.</p>
-                        <p>Concernant les boucliers (rochers), ceux-ci possèdent 3 vies. L'opacité baisse à chaque coup et au bout du 3ème coup, le bouclier disparait de la scène.</p>
-                        <p>Le joueur possède lui aussi 3 vies. Si un alien le touche, il en perd une et l'effet de post-processing est activé.</p>
+                        <p>Quand un alien est touché, celui-ci disparait de la scène.</p>
+                        <p>Les boucliers (rochers) possèdent 3 vies. Leur opacité baisse à chaque choc et disparaissent de la scène au 3ème impact.</p>
+                        <p>Le joueur possède lui aussi 3 vies. A chaque impact, l'effet de post-processing est activé.</p>
                     </td>
                     <td>
                         <img src="../images/pageprincipale/degat-aliens.png" alt="jeu1" id="img-jeu1">
@@ -201,7 +202,7 @@
                     <td style="width: 50%; text-align: right;">
                         <br><br>
                         <p>Les aliens se déplacent de gauche à droite (axe X) et avancent petit à petit vers le joueur (axe Z).</p>
-                        <p>Plus ceux-ci s'approchent du joueur, plus la vitesse de leur missile augmente.</p>
+                        <p>Plus les aliens s'approchent du joueur, plus la vitesse de leur missile augmente.</p>
                         <p>De même pour un changement de niveau, la vitesse des aliens augmente ainsi que la vitesse du missile tiré.</p>
                     </td>
                 </tr>
@@ -217,13 +218,8 @@
                     <td style="width: 50%;">
                         <br><br>
                         <p>Une intelligence artificielle est implémentée pour pouvoir jouer à un 1 joueur. C'est elle qui permet le tir du missile par les aliens.</p>
-                        <!--<p>Les ennemis tirent automatiquement des missiles.</p>
-                        <p>Un nombre aléatoire est généré suivant le nombre d'aliens présents sur la scène et un second qui va de 0 à 1.</p>
-                        <p>Un alien lancera son missile si le second nombre généré est atteint.</p>
-                        <p>Les aliens et leur missile augmentent de vitesse à chaque niveau.</p>-->
-                        <p>Cette dernière génère un nombre aléatoire suivant le nombre d'aliens présent sur la scène (de 1 à "nombre d'alien"). Le missile est tiré par l'alien correspondant au nombre aléatoire tiré.</p>
+                        <p>Elle génère un nombre aléatoire en fonction du nombre d'aliens présent sur la scène (de 1 à x aliens). L'alien désigné par ce nombre, tire le missile.</p>
                         <p>Chaque fois que le joueur élimine un alien, il y a un nombre aléatoire de moins disponible pour l'IA.</p>
-                        <p>Par exemple, en début de partie, il y a 30 aliens donc l'IA choisi un nombre entre 1 et 30. Si en cours de partie le joueur à éliminé 15 aliens, celle-ci choisit un nombre entre 1 et 15.</p>
                     </td>
                 </tr>
             </table>
@@ -242,8 +238,8 @@
                     <td style="width: 50%;">
                         <br><br>
                         <p>Lors du lancement du jeu, une musique se lance. C'est un remix de la musique officielle du jeu.</p>
-                        <p>Aussi, quand le joueur touche un alien, un son dans le langage des personnages retentit.</p>
-                        <p>Le joueur possède aussi un son lorsque un alien le touche.</p>
+                        <p>Quand le joueur touche un alien, celui-ci exprime son dernier souffle.</p>
+                        <p>Le joueur émet lui aussi un son lorsque un alien le touche.</p>
                         <p>La musique du jeu et les sons peuvent êtres désactivés à tout moment par le joueur: soit dans le menu principal du jeu soit pendant la partie.</p>
                     </td>
                 </tr>
@@ -303,7 +299,7 @@
                     <td style="width: 50%;">
                         <br><br>
                         <p>De la fumée sort des aliens lorsque que le joueur tire sur eux.</p>
-                        <p>Le nombre de point que vaut un alien s'affiche également à coté de la fumée.</p>
+                        <p>Le nombre de point s'affiche à coté de la fumée à chaque fois qu'un alien est touché.</p>
                     </td>
                     <td>
                         <img src="../images/pageprincipale/degat-aliens.png" alt="jeu1" id="img-jeu3">
@@ -323,8 +319,8 @@
                 <tr>
                     <td style="width: 50%;">
                         <br><br>
-                        <p>Un bandeau apparait à l'écran lorsque le mode invincible est activé (par la touche 'i' ou par le bonus).</p>
-                        <p>De même pour l'effet de post-processing la touche 'p' permet de l'activer ou de le désactiver.</p>
+                        <p>Un bandeau apparait à l'écran lorsque le mode invincible est activé (par la touche 'i' ou par le bonus), ainsi que l'effet de post-processing (par la touche 'p').</p>
+                        <p></p>
                         <p>Ce bandeau disparait de l'écran après 5 secondes.</p>
                     </td>
                     <td>
@@ -338,8 +334,8 @@
                     </td>
                     <td style="width: 50%;">
                         <br><br>
-                        <p>A la fin de la partie, le joueur a son meilleur score qui est enregistré.</p>
-                        <p>Si il décide de recommencer une partie, il pourra alors essayer de le battre.</p>
+                        <p>A la fin de la partie, le score du joueur est gardé en mémoire.</p>
+                        <p>Cela lui permet de l'améliorer lors de la partie suivante.</p>
                     </td>
                 </tr>
 
@@ -353,24 +349,7 @@
                     </td>
                 </tr>
             </table>
-
-            
-
-            <!--<h2>Déroulement du jeu</h2>
-            <br>
-            <br>
-            <p>Dans ce jeu, le joueur incarne un villageois ou une villageoise qui doit tuer les ennemis arrivant sur notre île.</p>
-            <p>Pour cela, il doit leur tirer dessus des 'clochettes' (monnaie du jeu) pour les arrêter.</p>
-            <p>Attention, ceux-ci tirent des plans de bricolage! Il faut donc les éviter ou autrement le joueur perd une vie.</p>
-            <p>Heureusement, des rochers sont la pour protéger! Cependant ils ne sont pas éternels...</p>
-            <p>Un cadeau apparait de temps en temps et peut rendre invincible pendant un certains temps.</p>
-            <br>
-            <br>
-            <p>Le joueur possède 3 vies sur l'ensemble de la partie. Une partie comporte plusieurs niveaux allant de 1 à l'infini.</p>-->
         </div>
-        <!--<div class="img-sec1">
-            <img src="../images/pageprincipale/jeu1.png" alt="jeu1" id="img-jeu1">
-        </div>-->
     </div>
     
     <script>
@@ -398,61 +377,3 @@
     </script>
 </body>
 </html>
-
-<!--
-    ProjetSIA_Cazalis_Pauline
-  rapport
-    css
-      style.css
-    html
-      index.html
-    images
-      pageprincipale
-        Images pour le rapport
-  space_invaders_3D.html
-  Server.py
-  src
-    css
-      siapp.css
-    html
-    js
-      alien.js
-      decor.js
-      gameConfig.js
-      level.js
-      menu.js
-      player.js
-      siapp.js
-      sound.js
-    lib
-      threex.keyboardstate.js
-    medias
-      font
-        Polices d'écriture pour le jeu
-      images
-        menu
-          Images pour le menu principal du jeu
-        menu-perso
-          Images pour le menu du choix du personnage
-        skybox
-          Images pour le fond du jeu
-        Autres images pour le jeu (sol...)
-      models
-        Aliens
-          Modèle 3D des aliens
-        Bell_Bag
-          Modèle 3D pour le missile du joueur
-        DIY_Recipe
-          Modèle 3D pour le missile des aliens
-        Present
-          Modèle 3D pour le bonus
-        Scene
-          Modèles 3D pour le décor (arbres, batiments)
-        Stone
-           Modèle 3D pour les abris du joueur
-        Villagers
-           Modèles 3D pour le joueur
-     sounds
-       Sons du jeu (ambient, aliens et joueur)
-  
--->

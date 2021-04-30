@@ -837,7 +837,7 @@ canvas{
   height: auto;
   border-radius: 3%;
   box-shadow: 5px 5px 10px grey;
-  border: 1px solid grey;
+  border: 1px solid black;
   cursor: url('../medias/images/menu/cursor.png'), default !important;
 
 }
@@ -897,10 +897,11 @@ canvas{
   transform: translate(-50%, -50%);
   background: url('../medias/images/wood.jpg');
   text-align: center;
-  width: 60%;
+  width: 90%;
   height: auto;
   border-radius: 3%;
   box-shadow: 5px 5px 10px grey;
+  border: 1px solid black;
 }
 
 #recom-non{

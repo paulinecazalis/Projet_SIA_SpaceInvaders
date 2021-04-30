@@ -125,19 +125,21 @@ async function init() {
   //Chargement du menu option dans le menu principal
   menu.optionMenu();
 
-  triche();
-  pauseMenu();
-  helpKey();
-  postproKey();
+  triche(); //Fonction pour les touches de triche
+  pauseMenu(); //Fonction pour le menu pause
+  helpKey(); //Fonction pour le menu help
+  postproKey(); //Fonction pour l'activation ou la désactivation de l'effet de post-processing
 
   /*----------Chargement des sons----------*/
   Sound.audioLoader();
   Sound.sliderVolumeAlien();
   Sound.sliderVolumeLives();
 
+  /*----------Chargement pour l'effet de post-processing----------*/
   GameConfig.composer = new EffectComposer( renderer );
   GameConfig.composer.addPass( new RenderPass( GameConfig.scene, camera ) );
 
+  /*----------Affichage du score en 3D à côté des aliens----------*/
   GameConfig.scene.add(GameConfig.scoreGroup);
 
   const fps  = 30;
@@ -203,6 +205,7 @@ function timestamp() {
   return window.performance.now();
 }
 
+//Permet de supprimer de la scène les différents modèlès 3D...
 function removeScene(){
   GameConfig.scene.remove(aliens);
   Alien.alienTab.length = 0;
@@ -222,13 +225,13 @@ function removeScene(){
   clearTimeout(Alien.timeouttouch);
 }
 
-
+//Permet de gérer les fonctions du joueur
 function playerShoot(){
   joueur.moveMissilePlayer();
   joueur.playerTouchBunk();
   joueur.touchAliens(aliens);
   joueur.touchAlienBonus();
-  if(Alien.alienTab.length == 0){
+  if(Alien.alienTab.length == 0){ //Si il n'y a plus d'aliens sur la scène
     removeScene();
     Level.level++;
     document.getElementById('level').innerHTML = "Level: " + Level.level;
@@ -237,24 +240,26 @@ function playerShoot(){
   }
 }
 
+//Permet de gérer les fonctions des aliens
 function aliensShoot(){
   Alien.moveMissileAliens();
   Alien.aliensTouchBunk();
   Player.nbLives = Alien.aliensTouchSpaceship(GameConfig.spaceshipObject, Player.nbLives);
-  if(Player.nbLives == 0){
+  if(Player.nbLives == 0){ //Si le joueur n'a plus de vies
     removeScene();
     Level.gameOver("Game Over !", camera, controls);
     Player.nbLives = 3;
     newGameLoose();
     Level.level = 1;
   }
-  else if(aliens.position.z == GameConfig.spaceshipObject.position.z){
+  else if(aliens.position.z == GameConfig.spaceshipObject.position.z){ //Si les aliens atteignent le joueur
     removeScene();
     GameConfig.setPartieActive(true);
     Level.gameOver("Game Over !");
   }
 }
 
+//Permet l'activation ou la désactivation des touches de triche
 function triche(){
   document.addEventListener('keydown', (e) => {
     if(e.key == "k" || e.key == 'K'){
@@ -268,7 +273,6 @@ function triche(){
     }
     if(e.key == "i" || e.key == 'I'){
       Player.setInvincible(!Player.invincible);
-      Sound.boolSound = !Sound.boolSound;
       if(Player.invincible){
         document.getElementById('invincible').innerHTML = "Invincible: oui";
         let alert = document.getElementsByClassName('alert');
@@ -279,14 +283,8 @@ function triche(){
         setTimeout(() => {
           alert[0].classList.remove('show');
           alert[0].classList.add('hide');
-          //alert[0].style.opacity = 0;
         }, 5000);
-        
-        if(Sound.boolSound){
-          Sound.audioLives.pause();
-        }else{
-          Sound.audioLives.play();
-        }
+        Sound.audioLives.pause();
       }else{
         document.getElementById('invincible').innerHTML = "Invincible: non";
         let alert = document.getElementsByClassName('alert');
@@ -298,7 +296,6 @@ function triche(){
           alert[0].classList.remove('show');
           alert[0].classList.add('hide');
         }, 5000);
-        //Alien.postProcessing(renderer,scene,camera);
       }
     }
   });
